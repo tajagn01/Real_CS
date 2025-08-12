@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { dsaData, aimlData, webdevData, cybersecurityData } from '../api/mockData';
 import WhatIsDSA from './WhatIsDSA';
-import UsesInIndustry from './UsesInIndustry';
+import UsesInIndustry from './usesInIndustry';
 import LearningRoadmap from './LearningRoadmap'; // <-- Import the component
 import ArrayPage from './Array'; // Make sure this import exists
 
