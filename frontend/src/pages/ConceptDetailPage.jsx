@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { dsaData, aimlData, webdevData, cybersecurityData } from '../api/mockData';
 import WhatIsDSA from './WhatIsDSA';
 import UsesInIndustry from './UsesInIndustry';
+import LearningRoadmap from './LearningRoadmap'; // <-- Import the component
+import ArrayPage from './Array'; // Make sure this import exists
 
 const dataMapping = {
   dsa: dsaData,
@@ -15,6 +17,11 @@ const ConceptDetailPage = () => {
   const { domain, conceptId } = useParams();
   const domainData = dataMapping[domain];
   const concept = domainData?.concepts.find(c => c.id === conceptId);
+
+  // Special case: show LearningRoadmap for /dsa/learningRoadmap
+  if (domain === 'dsa' && conceptId === 'learningRoadmap') {
+    return <LearningRoadmap />;
+  }
 
   if (!concept) {
     return (
@@ -31,10 +38,20 @@ const ConceptDetailPage = () => {
 
   // Render a different component for each concept
   switch (conceptId) {
+    case 'learningRoadmap':
+      if (domain === 'dsa') {
+        return <LearningRoadmap />;
+      }
+      break;
     case 'what-is-dsa':
       return <WhatIsDSA concept={concept} domain={domain} domainData={domainData} />;
     case 'usesInIndustry':
       return <UsesInIndustry concept={concept} domain={domain} domainData={domainData} />;
+    case 'array':
+      if (domain === 'dsa') {
+        return <ArrayPage />;
+      }
+      break;
     // Add more cases for other custom pages
     default:
       // fallback: use your existing generic layout for other concepts

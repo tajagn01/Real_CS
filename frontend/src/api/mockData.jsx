@@ -3,17 +3,15 @@
 export const dsaData = {
   "title": "Data Structures & Algorithms",
   "concepts": [
-{
-  "id": "what-is-dsa",
-  "name": "What is DSA?",
-  "description": "An introduction to Data Structures and Algorithms — the essential building blocks of computer science used to solve problems efficiently.",
-  "definition": "DSA (Data Structures and Algorithms) provides structured ways to store, retrieve, and manipulate data to solve computational problems efficiently. Mastering DSA improves problem-solving skills, optimizes code performance, and is essential for software development.",
-  "useCase": "Store data: Arrays, linked lists, stacks, and queues organize data for quick access.\nSearch data: Algorithms like binary search find elements in logarithmic time.\nProcess data: Sorting algorithms arrange data for efficient retrieval.\nNavigate connections: Graph algorithms like Dijkstra’s find shortest paths in navigation apps.\nAnalyze performance: Complexity analysis helps choose the most efficient approach for a given problem.",
-  "code": null,
-  "questions": []
-}
-,
-
+    {
+      "id": "what-is-dsa",
+      "name": "What is DSA?",
+      "description": "An introduction to Data Structures and Algorithms — the essential building blocks of computer science used to solve problems efficiently.",
+      "definition": "DSA (Data Structures and Algorithms) provides structured ways to store, retrieve, and manipulate data to solve computational problems efficiently. Mastering DSA improves problem-solving skills, optimizes code performance, and is essential for software development.",
+      "useCase": "Store data: Arrays, linked lists, stacks, and queues organize data for quick access.\nSearch data: Algorithms like binary search find elements in logarithmic time.\nProcess data: Sorting algorithms arrange data for efficient retrieval.\nNavigate connections: Graph algorithms like Dijkstra’s find shortest paths in navigation apps.\nAnalyze performance: Complexity analysis helps choose the most efficient approach for a given problem.",
+      "code": null,
+      "questions": []
+    },
     {
       "id": "usesInIndustry",
       "name": "Industry Applications of DSA",
@@ -31,6 +29,36 @@ export const dsaData = {
       "useCase": "Begin with basic data structures: Arrays, Linked Lists, Stacks, and Queues.\nLearn core algorithms: Sorting (Bubble, Merge, Quick), Searching (Linear, Binary).\nMove to non-linear data structures: Trees (Binary Tree, BST), Graphs.\nStudy advanced topics: Heaps, Hash Maps, Tries, and dynamic programming.\nPractice consistently by solving problems on platforms like LeetCode or HackerRank.",
       "code": null,
       "questions": []
+    },
+    {
+      "id": "array",
+      "name": "Array",
+      "description": "A fundamental data structure that stores a collection of elements at contiguous memory locations.",
+      "definition": "An array is a linear data structure that holds a fixed-size sequence of elements of the same type. Elements are accessed using an index, which provides O(1) access time. It's one of the most basic and widely used data structures.",
+      "useCase": "Arrays are used for storing lists of items, implementing other data structures like stacks and queues, and in algorithms that require random access to elements, such as sorting and searching.",
+      "code": "// Creating and initializing an array\nlet fruits = ['apple', 'banana', 'cherry'];\n\n// Accessing elements by index\nconsole.log(fruits[0]); // 'apple'\n\n// Modifying an element\nfruits[1] = 'blueberry';\nconsole.log(fruits); // ['apple', 'blueberry', 'cherry']\n\n// Iterating through an array\nfor (let i = 0; i < fruits.length; i++) {\n  console.log(fruits[i]);\n}",
+      "questions": [
+        {
+          "question": "How do you find a duplicate element in an array?",
+          "hint": "You could use a hash set or sort the array first.",
+          "answer": "One way is to use a hash set (or map) to store elements as you iterate. If you encounter an element that is already in the set, it's a duplicate. Another way is to sort the array and then iterate through it, checking if any adjacent elements are the same."
+        }
+      ]
+    },
+    {
+      "id": "recursion",
+      "name": "Recursion",
+      "description": "An algorithmic technique where a function calls itself to solve a problem.",
+      "definition": "Recursion is a programming technique where a function solves a problem by calling a smaller version of itself. A recursive function must have a base case to stop the recursion and a recursive step to call itself with a modified input.",
+      "useCase": "Recursion is often used to solve problems that can be broken down into smaller, identical subproblems. Examples include tree and graph traversals (DFS), the factorial calculation, and the Fibonacci sequence.",
+      "code": "// Calculating factorial using recursion\nfunction factorial(n) {\n  // Base case: the condition to stop the recursion\n  if (n === 0) {\n    return 1;\n  }\n  // Recursive step: call the function with a smaller input\n  return n * factorial(n - 1);\n}\n\n// Usage\nconsole.log(factorial(5)); // 120",
+      "questions": [
+        {
+          "question": "What are the two key components of a recursive function?",
+          "hint": "One is for the problem, the other is for stopping.",
+          "answer": "A recursive function must have a **base case** that defines the terminating condition to prevent infinite recursion, and a **recursive step** where the function calls itself to solve a smaller version of the problem."
+        }
+      ]
     },
     {
       "id": "stack",
@@ -138,7 +166,7 @@ export const dsaData = {
       "description": "A tree-like data structure used to store a dynamic set of strings",
       "definition": "A Trie, or Prefix Tree, is an ordered tree data structure used to store a dynamic set of strings. Each node represents a common prefix, and edges represent characters. Traversing from the root to a node spells out a string prefix.",
       "useCase": "Tries are excellent for applications involving autocomplete, spell checkers, and IP routing. Their prefix-based structure allows for very fast searching of a word's existence, typically faster than a hash table in many cases.",
-      "code": "class TrieNode {\n  constructor() {\n    this.children = {};\n    this.isEndOfWord = false;\n  }\n}\n\nclass Trie {\n  constructor() {\n    this.root = new TrieNode();\n  }\n\n  insert(word) {\n    let current = this.root;\n    for (let i = 0; i < word.length; i++) {\n      const char = word[i];\n      if (!current.children[char]) {\n        current.children[char] = new TrieNode();\n      }\n      current = current.children[char];\n    }\n    current.isEndOfWord = true;\n  }\n\n  search(word) {\n    let current = this.root;\n    for (let i = 0; i < word.length; i++) {\n      const char = word[i];\n      if (!current.children[char]) {\n        return false;\n      }\n      current = current.children[char];\n    }\n    return current.isEndOfWord;\n  }\n}\n\n// Usage\nconst trie = new Trie();\ntrie.insert(\"apple\");\ntrie.insert(\"app\");\nconsole.log(trie.search(\"apple\")); // true\nconsole.log(trie.search(\"app\"));   // true\nconsole.log(trie.search(\"banana\")); // false",
+      "code": "class TrieNode {\n  constructor() {\n    this.children = {};\n    this.isEndOfWord = false;\n  }\n}\n\nclass Trie {\n  constructor() {\n    this.root = new TrieNode();\n  }\n\n  insert(word) {\n    let current = this.root;\n    for (let i = 0; i < word.length; i++) {\n      const char = word[i];\n      if (!current.children[char]) {\n        current.children[char] = new TrieNode();\n      }\n      current = current.children[char];\n    }\n    current.isEndOfWord = true;\n  }\n\n  search(word) {\n    let current = this.root;\n    for (let i = 0; i < word.length; i++) {\n      const char = word[i];\n      if (!current.children[char]) {\n        return false;\n      }\n      current = current.children[char];\n    }\n    return current.isEndOfWord;\n  }\n}\n\n// Usage\nconst trie = new Trie();\ntrie.insert(\"apple\");\ntrie.insert(\"app\");\nconsole.log(trie.search(\"apple\")); // true\nconsole.log(trie.search(\"app\"));  // true\nconsole.log(trie.search(\"banana\")); // false",
       "questions": [
         {
           "question": "How does a Trie's space complexity compare to a Hash Table for storing a large list of words?",

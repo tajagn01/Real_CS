@@ -9,6 +9,7 @@ import HomePage from './pages/HomePage';
 import DomainPage from './pages/DomainPage';
 import InterviewPage from './pages/InterviewPage';
 import ConceptDetailPage from './pages/ConceptDetailPage';
+import LearningRoadmap from './pages/LearningRoadmap';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/:domain" element={<DomainPage />} />
               <Route path="/interview" element={<InterviewPage />} />
+              <Route path="/learning-roadmap" element={<LearningRoadmap />} />
               <Route path="/:domain/:conceptId" element={<ConceptDetailPage />} />
             </Routes>
           </main>
