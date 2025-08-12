@@ -2,3 +2,4 @@
   base = "frontend"
   command = "npm run build"
   publish = "dist"
+  NODE_VERSION = "20.17.0"
