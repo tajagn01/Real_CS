@@ -4,7 +4,8 @@ import { dsaData, aimlData, webdevData, cybersecurityData } from '../api/mockDat
 import WhatIsDSA from './WhatIsDSA';
 import UsesInIndustry from './usesInIndustry';
 import LearningRoadmap from './LearningRoadmap'; // <-- Import the component
-import ArrayPage from './Array'; // Make sure this import exists
+import ArrayPage from './Array';
+import Recursion from './Recursion'; // Make sure this import exists
 
 const dataMapping = {
   dsa: dsaData,
@@ -50,6 +51,11 @@ const ConceptDetailPage = () => {
     case 'array':
       if (domain === 'dsa') {
         return <ArrayPage />;
+      }
+      break;
+    case 'recursion':
+      if (domain === 'dsa') {
+        return <Recursion />;
       }
       break;
     // Add more cases for other custom pages
