@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Copy, Check, Play, Pause, ArrowRight, Code, Brain, Target, Rocket } from 'lucide-react';
 
 const Recursion = () => {
@@ -9,6 +9,135 @@ const Recursion = () => {
     navigator.clipboard.writeText(code);
     setCopiedCode(id);
     setTimeout(() => setCopiedCode(''), 2000);
+  };
+
+  // Simple syntax highlighter to make code not the same color while keeping the theme
+  const escapeHtml = (str) => str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  const getLanguageKeywords = (language) => {
+    switch (language) {
+      case 'JavaScript':
+        return ['function','return','if','else','for','while','const','let','var','class','new','switch','case','break','continue'];
+      case 'Python':
+        return ['def','return','if','else','elif','for','while','in','and','or','not','None','True','False','class','yield'];
+      case 'C':
+      case 'C++':
+      case 'C#':
+        return ['int','void','return','if','else','for','while','char','float','double','class','struct','public','private','protected','static','new','bool','using'];
+      default:
+        return ['return','if','else','for','while','class','function'];
+    }
+  };
+
+  const highlightCode = (code, language) => {
+    let html = escapeHtml(code);
+    // comments
+    if (language === 'Python') {
+      html = html.replace(/(^|\n)\s*#.*(?=$|\n)/g, (m) => `<span class="text-gray-400">${m}</span>`);
+    } else {
+      html = html
+        .replace(/\/\*[\s\S]*?\*\//g, (m) => `<span class="text-gray-400">${m}</span>`) // block comments
+        .replace(/(^|\n)\s*\/\/.*(?=$|\n)/g, (m) => `<span class="text-gray-400">${m}</span>`); // line comments
+    }
+    // strings
+    html = html
+      .replace(/`[\s\S]*?`/g, (m) => `<span class="text-green-300">${m}</span>`)
+      .replace(/"[^"\n]*"/g, (m) => `<span class="text-green-300">${m}</span>`)
+      .replace(/'[^'\n]*'/g, (m) => `<span class="text-green-300">${m}</span>`);
+    // numbers
+    html = html.replace(/\b\d+(?:\.\d+)?\b/g, (m) => `<span class="text-orange-300">${m}</span>`);
+    // keywords
+    const keywords = getLanguageKeywords(language).join('|');
+    const kwRegex = new RegExp(`\\b(${keywords})\\b`, 'g');
+    html = html.replace(kwRegex, (m) => `<span class="text-purple-300 font-semibold">${m}</span>`);
+    return html;
+  };
+
+  // Custom hook to trace recursion step-by-step (factorial example)
+  const useRecursionTracer = () => {
+    const [traceSteps, setTraceSteps] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const timerRef = useRef(null);
+
+    const buildTrace = (n) => {
+      const steps = [];
+      const factorialTrace = (k) => {
+        steps.push({ type: 'call', label: `factorial(${k})` });
+        if (k <= 1) {
+          steps.push({ type: 'return', label: `return 1` });
+          return 1;
+        }
+        const sub = factorialTrace(k - 1);
+        const res = k * sub;
+        steps.push({ type: 'return', label: `return ${res}` });
+        return res;
+      };
+      const value = factorialTrace(n);
+      return { steps, value };
+    };
+
+    const start = (n) => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      const { steps } = buildTrace(n);
+      setTraceSteps(steps);
+      setCurrentIndex(0);
+      setIsPlaying(false);
+    };
+
+    const next = () => setCurrentIndex((i) => Math.min(i + 1, traceSteps.length - 1));
+    const reset = () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      setCurrentIndex(0);
+      setIsPlaying(false);
+    };
+
+    useEffect(() => {
+      if (!isPlaying) return;
+      if (traceSteps.length === 0) return;
+      timerRef.current = setInterval(() => {
+        setCurrentIndex((i) => {
+          if (i >= traceSteps.length - 1) {
+            clearInterval(timerRef.current);
+            return i;
+          }
+          return i + 1;
+        });
+      }, 1000);
+      return () => timerRef.current && clearInterval(timerRef.current);
+    }, [isPlaying, traceSteps]);
+
+    const stackAt = (idx) => {
+      const stack = [];
+      for (let i = 0; i <= idx && i < traceSteps.length; i++) {
+        const step = traceSteps[i];
+        if (step.type === 'call') {
+          stack.push(step.label);
+        } else if (step.type === 'return') {
+          // Pop the latest call when we see a return
+          if (stack.length > 0) stack.pop();
+        }
+      }
+      return stack;
+    };
+
+    const isFinished = traceSteps.length > 0 && currentIndex >= traceSteps.length - 1;
+
+    return {
+      start,
+      next,
+      reset,
+      isPlaying,
+      setIsPlaying,
+      currentIndex,
+      traceSteps,
+      currentStep: traceSteps[currentIndex],
+      stack: stackAt(currentIndex),
+      isFinished
+    };
   };
 
   const FactorialAnimation = () => {
@@ -426,17 +555,19 @@ int solve(int row) {
         </button>
       </div>
       <pre className="p-4 overflow-auto text-sm bg-gray-900">
-        <code className="text-gray-300">{code}</code>
+        <code
+          className="text-gray-200"
+          dangerouslySetInnerHTML={{ __html: highlightCode(code, language) }}
+        />
       </pre>
     </div>
   );
 
   const LearningCard = ({ title, children, icon: Icon, color = "blue", borderColor }) => (
-    <div className={`bg-gray-800 rounded-xl p-6 border ${borderColor || 'border-gray-700'} mb-6 hover:border-gray-600 transition-colors`}>
+    <div className={`bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 ${borderColor || 'border-gray-300 dark:border-gray-700'}`}>
       {title && (
-        <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-3">
-          {Icon && <Icon className={`w-5 h-5 text-${color}-400`} />}
-          {title}
+        <h3 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200 flex items-center gap-3">
+          {Icon && <Icon className={`w-5 h-5 text-${color}-500`} />} {title}
         </h3>
       )}
       {children}
@@ -485,31 +616,133 @@ int solve(int row) {
     );
   };
 
-  return (
-    <div className="min-h-screen bg-gray-950 text-white font-sans">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-purple-900 via-blue-900 to-purple-800 py-16 px-6">
-        <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
-            Recursion Mastery
-          </h1>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-            Master the art of solving problems by breaking them down into smaller versions of themselves
-          </p>
+  const InteractiveTracer = () => {
+    const {
+      start,
+      next,
+      reset,
+      isPlaying,
+      setIsPlaying,
+      currentStep,
+      stack,
+      isFinished,
+      traceSteps,
+      currentIndex
+    } = useRecursionTracer();
+    const [n, setN] = useState(4);
+
+    useEffect(() => {
+      start(n);
+    }, [n]);
+
+    return (
+      <div className="bg-gray-900 rounded-xl p-6 border border-gray-700 mb-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <h4 className="text-xl font-semibold text-white flex items-center gap-2">
+            <Brain className="w-5 h-5 text-pink-400" />
+            Interactive Recursion Tracer
+          </h4>
+          <div className="flex flex-wrap items-center gap-3">
+            <label className="text-sm text-gray-300">n =</label>
+            <input
+              type="range"
+              min="0"
+              max="7"
+              value={n}
+              onChange={(e) => setN(Number(e.target.value))}
+              className="w-40"
+            />
+            <span className="text-sm text-blue-300 font-semibold w-6 text-center">{n}</span>
+            <button
+              onClick={() => setIsPlaying(!isPlaying)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium"
+            >
+              {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+              {isPlaying ? 'Pause' : 'Play'}
+            </button>
+            <button
+              onClick={next}
+              disabled={isFinished}
+              className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-sm font-medium border border-gray-600 disabled:opacity-50"
+            >
+              Step
+            </button>
+            <button
+              onClick={() => { reset(); start(n); }}
+              className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-sm font-medium border border-gray-600"
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h5 className="text-sm font-semibold text-gray-300 mb-2">Current step</h5>
+            <div className="bg-gray-800 rounded-lg p-4 min-h-[56px] flex items-center">
+              <span className="font-mono text-green-300">{currentStep ? currentStep.label : '—'}</span>
+            </div>
+            <div className="mt-4">
+              <h5 className="text-sm font-semibold text-gray-300 mb-2">Progress</h5>
+              <div className="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                <div
+                  className="bg-pink-500 h-2"
+                  style={{ width: traceSteps.length ? `${(currentIndex / (traceSteps.length - 1)) * 100}%` : '0%' }}
+                />
+              </div>
+            </div>
+          </div>
+          <div>
+            <h5 className="text-sm font-semibold text-gray-300 mb-2">Call stack</h5>
+            <div className="bg-gray-800 rounded-lg p-4 min-h-[140px]">
+              <div className="flex flex-col gap-2">
+                {stack.length === 0 && (
+                  <div className="text-gray-400 text-sm">Stack is empty</div>
+                )}
+                {stack.map((frame, idx) => (
+                  <div
+                    key={`${frame}-${idx}`}
+                    className={`px-3 py-2 rounded-md text-center text-white font-mono text-sm ${idx === stack.length - 1 ? 'bg-blue-600' : 'bg-gray-700'}`}
+                  >
+                    {frame}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+    );
+  };
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/20 text-gray-900 dark:text-white font-sans">
+      {/* Header */}
+      <header className="py-12 sm:py-16 text-center bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/10" />
+        <div className="relative z-10">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-3 sm:mb-4 animate-pulse break-words">Recursion</h1>
+          <p className="text-base sm:text-xl">Problem Solving with Self-Reference</p>
+          <div className="mt-6">
+            <div className="flex justify-center flex-wrap gap-2 sm:gap-3 text-xs sm:text-sm px-4">
+              <span className="px-3 py-1 bg-white/20 rounded-full">🧠 Concepts</span>
+              <span className="px-3 py-1 bg-white/20 rounded-full">🎬 Visualize</span>
+              <span className="px-3 py-1 bg-white/20 rounded-full">🏭 Industry</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12 space-y-12 sm:space-y-16">
         
         {/* Student Hook Section */}
-        <section className="mb-16">
-          <h2 className="text-4xl font-bold mb-8 text-white flex items-center gap-3">
-            <Target className="w-8 h-8 text-purple-400" />
-            Why Recursion Matters
+        <section className="transform hover:scale-105 transition-transform duration-300">
+          <h2 className="text-4xl font-bold mb-6 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            🎯 Why Recursion Matters
           </h2>
           
           <LearningCard title="The Russian Doll Mystery" icon={Brain} color="purple" borderColor="border-purple-500">
-            <p className="text-lg text-gray-300 mb-4">
+            <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 mb-4">
               Imagine you have a Russian doll (Matryoshka) and you want to find the smallest doll inside. 
               How would you do it? You'd open the current doll, and if there's another doll inside, 
               you'd repeat the same process until you find the smallest one!
@@ -523,7 +756,7 @@ int solve(int row) {
           </LearningCard>
           
           <LearningCard title="Real-World Impact" icon={Rocket} color="blue" borderColor="border-blue-500">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="flex items-center gap-3 text-gray-300">
                 <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
                 <span>Google's search algorithms use recursion to crawl web pages</span>
@@ -545,23 +778,22 @@ int solve(int row) {
         </section>
 
         {/* Concept Understanding Section */}
-        <section className="mb-16">
-          <h2 className="text-4xl font-bold mb-8 text-white flex items-center gap-3">
-            <Code className="w-8 h-8 text-blue-400" />
-            Core Concepts
+        <section>
+           <h2 className="text-4xl md:text-5xl font-bold mb-6 md:mb-8 text-center bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            💡 Core Concepts
           </h2>
 
           <LearningCard title="Essential Components">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-r from-green-900/30 to-green-800/30 p-6 rounded-lg border border-green-500">
-                <h4 className="text-lg font-semibold text-green-400 mb-3">1. Base Case</h4>
-                <p className="text-gray-300">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <div className="bg-gradient-to-r from-green-900/30 to-green-800/30 p-4 sm:p-6 rounded-lg border border-green-500">
+                <h4 className="text-base sm:text-lg font-semibold text-green-400 mb-2 sm:mb-3">1. Base Case</h4>
+                <p className="text-gray-300 text-sm sm:text-base">
                   The condition that stops the recursion. Without this, you get infinite recursion!
                 </p>
               </div>
-              <div className="bg-gradient-to-r from-blue-900/30 to-blue-800/30 p-6 rounded-lg border border-blue-500">
-                <h4 className="text-lg font-semibold text-blue-400 mb-3">2. Recursive Case</h4>
-                <p className="text-gray-300">
+              <div className="bg-gradient-to-r from-blue-900/30 to-blue-800/30 p-4 sm:p-6 rounded-lg border border-blue-500">
+                <h4 className="text-base sm:text-lg font-semibold text-blue-400 mb-2 sm:mb-3">2. Recursive Case</h4>
+                <p className="text-gray-300 text-sm sm:text-base">
                   The function calls itself with a modified parameter, moving closer to the base case.
                 </p>
               </div>
@@ -577,27 +809,27 @@ int solve(int row) {
         </section>
 
         {/* Visual Learning Section */}
-        <section className="mb-16">
-          <h2 className="text-4xl font-bold mb-8 text-white flex items-center gap-3">
-            <Brain className="w-8 h-8 text-purple-400" />
-            Visual Learning
+        <section>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 md:mb-8 text-center bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">
+            🎬 Visual Learning
           </h2>
           
           <FactorialAnimation />
+          <InteractiveTracer />
           
           <LearningCard title="Call Stack Visualization">
-            <div className="bg-gray-900 p-6 rounded-lg">
-              <div className="font-mono text-sm flex flex-col gap-3">
-                <div className="bg-red-600 text-white p-3 rounded-lg text-center">
+            <div className="bg-gray-900 p-4 sm:p-6 rounded-lg">
+              <div className="font-mono text-xs sm:text-sm flex flex-col gap-3">
+                <div className="bg-red-600 text-white p-2 sm:p-3 rounded-lg text-center">
                   factorial(4)
                 </div>
-                <div className="bg-yellow-600 text-white p-3 rounded-lg text-center ml-4">
+                <div className="bg-yellow-600 text-white p-2 sm:p-3 rounded-lg text-center ml-2 sm:ml-4">
                   factorial(3)
                 </div>
-                <div className="bg-purple-600 text-white p-3 rounded-lg text-center ml-8">
+                <div className="bg-purple-600 text-white p-2 sm:p-3 rounded-lg text-center ml-4 sm:ml-8">
                   factorial(2)
                 </div>
-                <div className="bg-blue-600 text-white p-3 rounded-lg text-center ml-12">
+                <div className="bg-blue-600 text-white p-2 sm:p-3 rounded-lg text-center ml-6 sm:ml-12">
                   factorial(1) → returns 1
                 </div>
               </div>
@@ -611,10 +843,9 @@ int solve(int row) {
         </section>
 
         {/* Industry Applications */}
-        <section className="mb-16">
-          <h2 className="text-4xl font-bold mb-8 text-white flex items-center gap-3">
-            <Rocket className="w-8 h-8 text-orange-400" />
-            Industry Applications
+        <section>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 md:mb-8 text-center bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+            🏭 Industry Applications
           </h2>
 
           <LearningCard title="How Tech Giants Use Recursion">
@@ -695,14 +926,13 @@ int solve(int row) {
         </section>
 
         {/* Interview Questions */}
-        <section className="mb-16">
-          <h2 className="text-4xl font-bold mb-8 text-white flex items-center gap-3">
-            <Target className="w-8 h-8 text-yellow-400" />
-            Interview Questions
+        <section>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 md:mb-8 text-center bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent">
+            🎤 Interview Questions & Answers
           </h2>
 
           <LearningCard title="Ace Your Technical Interviews">
-            <p className="text-lg text-gray-300 mb-8">
+            <p className="text-base sm:text-lg text-gray-300 mb-6 sm:mb-8">
               These are real questions asked at top tech companies!
             </p>
 
@@ -744,17 +974,16 @@ int solve(int row) {
         </section>
 
         {/* Next Steps */}
-        <section className="mb-16">
-          <h2 className="text-4xl font-bold mb-8 text-white flex items-center gap-3">
-            <ArrowRight className="w-8 h-8 text-green-400" />
-            Continue Your Journey
+        <section>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 md:mb-8 text-center bg-gradient-to-r from-violet-600 to-pink-600 bg-clip-text text-transparent">
+            🚀 Hands-on Next Steps
           </h2>
 
           <LearningCard title="What's Next?">
             <p className="text-gray-300 mb-6">
               Ready to tackle more advanced topics? Here's your roadmap:
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
               <div className="bg-gradient-to-r from-green-900/30 to-green-800/30 p-6 rounded-lg border border-green-500 text-center hover:border-green-400 transition-colors cursor-pointer">
                 <div className="text-3xl mb-3">🌳</div>
                 <h4 className="text-lg font-semibold text-green-400 mb-2">Trees & BST</h4>
@@ -775,16 +1004,30 @@ int solve(int row) {
         </section>
 
         {/* Call to Action */}
-        <div className="bg-gradient-to-r from-purple-900 to-blue-900 rounded-2xl p-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Ready to Master Recursion?</h2>
-          <p className="text-blue-100 mb-6 text-lg">
+        <div className="bg-gradient-to-r from-purple-900 to-blue-900 rounded-2xl p-6 sm:p-8 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Ready to Master Recursion?</h2>
+          <p className="text-blue-100 mb-4 sm:mb-6 text-base sm:text-lg">
             Join thousands of developers who have mastered recursive problem-solving
           </p>
-          <button className="bg-white text-purple-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+          <button className="bg-white text-purple-900 px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
             Start Practicing Now
           </button>
         </div>
-      </div>
+      </main>
+
+      <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-12 mt-16">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h3 className="text-2xl font-bold mb-4">Master Recursion Today! 🚀</h3>
+          <p className="text-lg text-gray-300 mb-6">
+            Learn, visualize, and practice recursive thinking with real interview problems.
+          </p>
+          <div className="flex justify-center space-x-4 text-sm">
+            <span className="px-4 py-2 bg-white/10 rounded-full">📚 Learn</span>
+            <span className="px-4 py-2 bg-white/10 rounded-full">💻 Practice</span>
+            <span className="px-4 py-2 bg-white/10 rounded-full">🎯 Master</span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

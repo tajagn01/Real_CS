@@ -6,157 +6,321 @@ const arrayData = {
   sections: {
     student_hook:
       "Imagine you're organizing a massive library with millions of books, and you need to find any book instantly by its catalog number. Arrays work exactly like this - they're like numbered shelves that store data in perfect order, making retrieval lightning-fast! Just like how you can grab book #247 directly without searching through hundreds of others, arrays let you access any element instantly using its index position.",
-    concept_understanding:
-      "An array is a fundamental data structure that stores multiple elements of the same type in contiguous memory locations. Think of it as a row of lockers in a school hallway - each locker has a unique number (index) and can store one item (element). The beauty of arrays lies in their simplicity and efficiency: since elements are stored sequentially in memory, the computer can calculate the exact location of any element using simple arithmetic. This makes arrays perfect for scenarios where you need fast, random access to data and know the approximate size of your dataset beforehand.",
-    visual_learning: {
-      description:
-        "Visual representation showing array elements stored in consecutive memory locations with index positions starting from 0",
+
+    // 1D Array Content
+    oneDimensional: {
+      concept:
+        "A 1D array is like a row of lockers in a school hallway - each locker has a unique number (index) and can store one item (element). Elements are stored sequentially in memory, making access incredibly fast through simple arithmetic calculations.",
+      realWorldExample:
+        "Think of a playlist on your phone - song 1, song 2, song 3... You can jump to any song instantly by its position number!",
+      industry_applications: [
+        "🎵 Spotify - Song playlists and queue management",
+        "📊 Excel - Row and column data storage",
+        "🎮 Gaming - Player score arrays and leaderboards",
+        "📱 Mobile Apps - Contact lists and message threads",
+        "💰 Banking - Transaction history arrays",
+        "🛒 E-commerce - Shopping cart item lists",
+      ],
+      advantages: [
+        "⚡ O(1) instant access by index",
+        "💾 Memory efficient storage",
+        "🔄 Cache-friendly sequential access",
+        "🎯 Simple and intuitive structure",
+      ],
+      disadvantages: [
+        "📏 Fixed size in most languages",
+        "➕ Expensive insertion in middle",
+        "➖ Expensive deletion in middle",
+        "🔍 Linear search for unknown indices",
+      ],
     },
+
+    // 2D Array Content
+    twoDimensional: {
+      concept:
+        "A 2D array is like a spreadsheet or chess board - it has rows and columns forming a grid. Each cell can be accessed using two indices: [row][column]. Perfect for representing matrices, game boards, and image data.",
+      realWorldExample:
+        "Think of a chess board - each square has a row (A-H) and column (1-8) position. Or a movie theater with rows and seat numbers!",
+      industry_applications: [
+        "🎬 Netflix - Movie recommendation matrices",
+        "🏥 Healthcare - Medical imaging (X-rays, MRIs)",
+        "🎮 Gaming - Game boards, maps, and terrain data",
+        "📈 Finance - Risk assessment matrices",
+        "🎨 Graphics - Image pixel data and filters",
+        "🧬 Science - DNA sequence alignment matrices",
+      ],
+      advantages: [
+        "🎯 Perfect for grid-based data",
+        "⚡ Fast row/column access",
+        "💡 Intuitive for mathematical operations",
+        "🔄 Excellent for matrix algorithms",
+      ],
+      disadvantages: [
+        "💾 More memory usage than 1D",
+        "🔧 More complex index management",
+        "📏 Fixed dimensions in static arrays",
+        "🎯 Requires two indices for access",
+      ],
+    },
+
+    // 3D Array Content
+    threeDimensional: {
+      concept:
+        "A 3D array adds depth to the grid concept - imagine a cube made of smaller cubes. Each element needs three coordinates: [depth][row][column]. Essential for 3D graphics, video processing, and scientific simulations.",
+      realWorldExample:
+        "Think of a building with floors, rows of rooms, and room numbers. Or a Rubik's cube where each small cube has a 3D position!",
+      industry_applications: [
+        "🎬 Pixar - 3D animation and rendering",
+        "🏥 Medical - CT scans and 3D body imaging",
+        "🌡️ Weather - Climate simulation models",
+        "🎮 Gaming - 3D world coordinates and voxel data",
+        "🧪 Science - Molecular modeling and simulations",
+        "🚗 Automotive - 3D crash test simulations",
+      ],
+      advantages: [
+        "🎯 Perfect for 3D data representation",
+        "🌍 Natural for spatial algorithms",
+        "💡 Ideal for scientific modeling",
+        "🎨 Essential for 3D graphics",
+      ],
+      disadvantages: [
+        "💾 High memory consumption",
+        "🧮 Complex index calculations",
+        "🔧 Difficult to visualize and debug",
+        "⚡ Cache performance challenges",
+      ],
+    },
+
     code_examples: {
-      c: `// C Array Example
+      c: `// C Array Example - Student Grades System
 #include <stdio.h>
-int main() {
-    int numbers[5] = {10, 20, 30, 40, 50};
-    
-    // Accessing elements
-    printf("First element: %d\\n", numbers[0]);  // Output: 10
-    printf("Third element: %d\\n", numbers[2]);  // Output: 30
-    
-    // Modifying elements
-    numbers[1] = 25;
-    printf("Modified second element: %d\\n", numbers[1]); // Output: 25
-    
-    return 0;
-}`,
-      cpp: `// C++ Array Example
-#include <iostream>
-using namespace std;
 
 int main() {
-    int marks[5] = {85, 90, 78, 92, 88};
+    // 1D Array - Store grades for 5 subjects
+    int grades[5] = {85, 92, 78, 95, 88};
     
-    // Display all elements
+    printf("=== Student Grade Report ===\\n");
+    
+    // Display all grades
     for(int i = 0; i < 5; i++) {
-        cout << "Student " << i+1 << " marks: " << marks[i] << endl;
+        printf("Subject %d: %d%%\\n", i+1, grades[i]);
     }
     
     // Calculate average
     int sum = 0;
     for(int i = 0; i < 5; i++) {
-        sum += marks[i];
+        sum += grades[i];
     }
-    cout << "Average marks: " << sum/5 << endl;
+    printf("\\nAverage Grade: %.1f%%\\n", sum/5.0);
+    
+    // Find highest grade
+    int highest = grades[0];
+    for(int i = 1; i < 5; i++) {
+        if(grades[i] > highest) {
+            highest = grades[i];
+        }
+    }
+    printf("Highest Grade: %d%%\\n", highest);
     
     return 0;
 }`,
-      java: `// Java Array Example
-public class ArrayExample {
+      cpp: `// C++ Array Example - Temperature Monitoring
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    // 1D Array - Daily temperatures for a week
+    double temperatures[7] = {23.5, 25.2, 22.8, 26.1, 24.3, 21.9, 23.7};
+    string days[7] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+    
+    cout << "=== Weekly Temperature Report ===\\n";
+    
+    // Display daily temperatures
+    for(int i = 0; i < 7; i++) {
+        cout << days[i] << ": " << temperatures[i] << "°C\\n";
+    }
+    
+    // Find min and max temperatures
+    double minTemp = *min_element(temperatures, temperatures + 7);
+    double maxTemp = *max_element(temperatures, temperatures + 7);
+    
+    cout << "\\nColdest Day: " << minTemp << "°C\\n";
+    cout << "Hottest Day: " << maxTemp << "°C\\n";
+    
+    // Calculate average temperature
+    double sum = 0;
+    for(int i = 0; i < 7; i++) {
+        sum += temperatures[i];
+    }
+    cout << "Average Temperature: " << sum/7.0 << "°C\\n";
+    
+    return 0;
+}`,
+      java: `// Java Array Example - Inventory Management
+public class InventorySystem {
     public static void main(String[] args) {
-        String[] fruits = {"Apple", "Banana", "Orange", "Mango", "Grapes"};
+        // 1D Arrays - Product inventory system
+        String[] products = {"Laptop", "Mouse", "Keyboard", "Monitor", "Headphones"};
+        int[] quantities = {15, 50, 30, 8, 25};
+        double[] prices = {999.99, 29.99, 79.99, 299.99, 149.99};
         
-        // Enhanced for loop
-        System.out.println("All fruits:");
-        for(String fruit : fruits) {
-            System.out.println(fruit);
+        System.out.println("=== Inventory Report ===");
+        
+        // Display inventory
+        for(int i = 0; i < products.length; i++) {
+            System.out.printf("%-12s | Qty: %2d | Price: $%.2f | Value: $%.2f%n", 
+                products[i], quantities[i], prices[i], 
+                quantities[i] * prices[i]);
         }
         
-        // Array length
-        System.out.println("Total fruits: " + fruits.length);
+        // Calculate total inventory value
+        double totalValue = 0;
+        for(int i = 0; i < products.length; i++) {
+            totalValue += quantities[i] * prices[i];
+        }
         
-        // Search for a fruit
-        String searchFruit = "Orange";
-        for(int i = 0; i < fruits.length; i++) {
-            if(fruits[i].equals(searchFruit)) {
-                System.out.println(searchFruit + " found at index " + i);
-                break;
+        System.out.printf("%nTotal Inventory Value: $%.2f%n", totalValue);
+        
+        // Find low stock items (less than 20 units)
+        System.out.println("\\n=== Low Stock Alert ===");
+        for(int i = 0; i < products.length; i++) {
+            if(quantities[i] < 20) {
+                System.out.println("⚠️  " + products[i] + " (Only " + quantities[i] + " left)");
             }
         }
     }
 }`,
-      python: `# Python Array (List) Example
-# Creating and manipulating arrays
-temperatures = [23.5, 25.0, 22.8, 26.2, 24.1]
+      python: `# Python Array Example - Sales Analytics
+import statistics
 
-# Accessing elements
-print(f"Today's temperature: {temperatures[0]}°C")
-print(f"Tomorrow's temperature: {temperatures[1]}°C")
+def analyze_sales():
+    # 1D Array - Monthly sales data
+    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+              "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    sales = [45000, 52000, 48000, 61000, 55000, 67000,
+             71000, 69000, 58000, 62000, 75000, 82000]
+    
+    print("=== Annual Sales Report ===")
+    
+    # Display monthly sales
+    for i in range(len(months)):
+        print("{0}: ${1}".format(months[i], format(sales[i], ",")))
+    
+    # Statistical analysis
+    total_sales = sum(sales)
+    average_sales = statistics.mean(sales)
+    best_month_idx = sales.index(max(sales))
+    worst_month_idx = sales.index(min(sales))
+    
+    print("\\n=== Performance Summary ===")
+    print("Total Annual Sales: ${0}".format(format(total_sales, ",")))
+    print("Average Monthly Sales: ${0}".format(format(int(average_sales), ",")))
+    print("Best Month: {0} (${1})".format(months[best_month_idx], format(max(sales), ",")))
+    print("Worst Month: {0} (${1})".format(months[worst_month_idx], format(min(sales), ",")))
+    
+    # Growth trend analysis
+    print("\\n=== Growth Analysis ===")
+    q1_sales = sum(sales[0:3])
+    q4_sales = sum(sales[9:12])
+    growth = ((q4_sales - q1_sales) / q1_sales) * 100
+    print("Q1 Sales: ${0}".format(format(q1_sales, ",")))
+    print("Q4 Sales: ${0}".format(format(q4_sales, ",")))
+    print("Year-over-Year Growth: {0:.1f}%".format(growth))
 
-# Adding new temperature
-temperatures.append(27.3)
-print(f"Updated temperatures: {temperatures}")
+# Run the analysis
+analyze_sales()`,
+      javascript: `// JavaScript Array Example - Social Media Analytics
+class SocialMediaAnalytics {
+    constructor() {
+        // 1D Arrays - Social media engagement data
+        this.platforms = ['Instagram', 'Twitter', 'Facebook', 'TikTok', 'YouTube'];
+        this.followers = [125000, 89000, 156000, 78000, 234000];
+        this.engagement = [8.5, 6.2, 4.8, 12.1, 7.3]; // percentage
+        this.dailyPosts = [2, 5, 1, 3, 1];
+    }
+    
+    generateReport() {
+        console.log('=== Social Media Performance Report ===');
+        
+        // Display platform metrics
+        this.platforms.forEach((platform, index) => {
+            const followers = this.followers[index].toLocaleString();
+            const engagementRate = this.engagement[index];
+            const posts = this.dailyPosts[index];
+            
+            console.log(\`\${platform}:\`);
+            console.log(\`  📊 Followers: \${followers}\`);
+            console.log(\`  💖 Engagement: \${engagementRate}%\`);
+            console.log(\`  📝 Daily Posts: \${posts}\`);
+            console.log('');
+        });
+        
+        // Calculate totals and averages
+        const totalFollowers = this.followers.reduce((sum, count) => sum + count, 0);
+        const avgEngagement = this.engagement.reduce((sum, rate) => sum + rate, 0) / this.platforms.length;
+        
+        // Find best performing platform
+        const bestEngagementIndex = this.engagement.indexOf(Math.max(...this.engagement));
+        const mostFollowersIndex = this.followers.indexOf(Math.max(...this.followers));
+        
+        console.log('=== Summary Statistics ===');
+        console.log(\`Total Followers: \${totalFollowers.toLocaleString()}\`);
+        console.log(\`Average Engagement: \${avgEngagement.toFixed(1)}%\`);
+        console.log(\`Best Engagement: \${this.platforms[bestEngagementIndex]} (\${this.engagement[bestEngagementIndex]}%)\`);
+        console.log(\`Most Followers: \${this.platforms[mostFollowersIndex]} (\${this.followers[mostFollowersIndex].toLocaleString()})\`);
+        
+        // Growth recommendations
+        this.generateRecommendations();
+    }
+    
+    generateRecommendations() {
+        console.log('\\n=== Growth Recommendations ===');
+        
+        this.platforms.forEach((platform, index) => {
+            if (this.engagement[index] < 5) {
+                console.log(\`🔴 \${platform}: Low engagement - consider more interactive content\`);
+            } else if (this.engagement[index] > 10) {
+                console.log(\`🟢 \${platform}: Excellent engagement - scale up posting\`);
+            }
+        });
+    }
+}
 
-# Finding maximum and minimum
-print(f"Highest temperature: {max(temperatures)}°C")
-print(f"Lowest temperature: {min(temperatures)}°C")
-
-# Sorting temperatures
-temperatures.sort()
-print(f"Sorted temperatures: {temperatures}")`,
-      javascript: `// JavaScript Array Example
-let shoppingCart = ['Laptop', 'Mouse', 'Keyboard', 'Monitor'];
-
-// Adding items
-shoppingCart.push('Speakers');
-console.log('Cart after adding speakers:', shoppingCart);
-
-// Removing items
-let removedItem = shoppingCart.pop();
-console.log('Removed item:', removedItem);
-console.log('Updated cart:', shoppingCart);
-
-// Finding items
-let itemIndex = shoppingCart.indexOf('Mouse');
-console.log('Mouse is at index:', itemIndex);
-
-// Iterating through cart
-shoppingCart.forEach((item, index) => {
-    console.log(\`Item \${index + 1}: \${item}\`);
-});
-
-// Filter expensive items (example)
-let expensiveItems = shoppingCart.filter(item => 
-    ['Laptop', 'Monitor'].includes(item)
-);
-console.log('Expensive items:', expensiveItems);`,
+// Run the analytics
+const analytics = new SocialMediaAnalytics();
+analytics.generateReport();`,
     },
-
-    industry_applications: [
-      "Database Indexing - PostgreSQL and MySQL use arrays for B-tree indexes to enable fast data retrieval",
-      "Image Processing - Adobe Photoshop represents images as 2D arrays of pixel values for filters and transformations",
-      "Game Development - Unity and Unreal Engine store game world coordinates and sprite animations in arrays",
-      "Financial Trading - Bloomberg terminals use arrays to store real-time stock price data for analysis",
-      "Machine Learning - TensorFlow and PyTorch represent neural network weights and data as multi-dimensional arrays",
-      "Video Streaming - Netflix uses arrays to buffer video chunks and manage quality adaptation algorithms",
-      "Search Engines - Google's PageRank algorithm processes web page relationships stored in massive arrays",
-      "Operating Systems - Linux kernel uses arrays for process scheduling and memory management tables",
-      "E-commerce - Amazon's recommendation engine processes user behavior data stored in arrays",
-      "Social Media - Instagram stores and processes millions of image thumbnails using array-based data structures",
-    ],
 
     interview_questions: [
       {
         question: "What is the time complexity of accessing an element in an array by index?",
-        answer: "O(1) - Constant time, because arrays provide direct access using memory address calculation.",
+        answer:
+          "O(1) - Constant time, because arrays provide direct access using memory address calculation: base_address + (index * element_size).",
         difficulty: "Easy",
       },
       {
         question: "How do you find the second largest element in an array in one pass?",
-        answer: "Keep track of largest and second largest while iterating. Update both when you find a larger element.",
+        answer:
+          "Keep track of largest and second largest while iterating. When you find a larger element, update second largest to previous largest, then update largest.",
         difficulty: "Medium",
       },
       {
         question: "Explain the difference between static and dynamic arrays.",
-        answer: "Static arrays have fixed size determined at compile time, dynamic arrays can resize during runtime but may require memory reallocation.",
+        answer:
+          "Static arrays have fixed size determined at compile time (like C arrays). Dynamic arrays can resize during runtime but may require memory reallocation (like Python lists, JavaScript arrays).",
         difficulty: "Medium",
       },
       {
         question: "How would you rotate an array to the right by k positions?",
-        answer: "Reverse entire array, then reverse first k elements, then reverse remaining elements. Time: O(n), Space: O(1).",
+        answer:
+          "Reverse entire array, then reverse first k elements, then reverse remaining elements. Time: O(n), Space: O(1). Example: [1,2,3,4,5] rotated by 2 becomes [4,5,1,2,3].",
         difficulty: "Hard",
       },
       {
         question: "What are the advantages and disadvantages of arrays?",
-        answer: "Advantages: O(1) access, memory efficient, cache friendly. Disadvantages: Fixed size, expensive insertion/deletion in middle.",
+        answer:
+          "Advantages: O(1) random access, memory efficient, cache friendly, simple indexing. Disadvantages: Fixed size (static), expensive insertion/deletion in middle O(n), no built-in bounds checking in some languages.",
         difficulty: "Easy",
       },
     ],
@@ -165,33 +329,70 @@ console.log('Expensive items:', expensiveItems);`,
       {
         title: "Student Grade Management System",
         description:
-          "Create a system that stores student grades in arrays, calculates averages, finds top performers, and generates reports.",
+          "Create a system that stores student grades in arrays, calculates averages, finds top performers, and generates reports with data visualization.",
         difficulty: "Beginner",
-        technologies: ["Python", "CSV handling", "Data analysis"],
+        technologies: ["Python", "CSV handling", "Data analysis", "Matplotlib"],
       },
       {
         title: "Image Pixel Manipulator",
         description:
-          "Build an application that loads images into 2D arrays and applies filters like blur, sharpen, and color adjustments.",
+          "Build an application that loads images into 2D arrays and applies filters like blur, sharpen, edge detection, and color adjustments.",
         difficulty: "Intermediate",
-        technologies: ["Python/OpenCV", "NumPy", "Image processing"],
+        technologies: ["Python/OpenCV", "NumPy", "Image processing", "GUI"],
       },
       {
         title: "Stock Market Data Analyzer",
         description:
-          "Develop a tool that stores historical stock prices in arrays and implements technical indicators like moving averages.",
+          "Develop a tool that stores historical stock prices in arrays and implements technical indicators like moving averages, RSI, and trend analysis.",
         difficulty: "Advanced",
-        technologies: ["JavaScript/Python", "APIs", "Data visualization"],
+        technologies: ["JavaScript/Python", "APIs", "Data visualization", "Real-time data"],
       },
       {
-        title: "Game Leaderboard System",
+        title: "3D Game World Generator",
         description:
-          "Create a leaderboard that maintains player scores in sorted arrays with efficient insertion and ranking algorithms.",
-        difficulty: "Intermediate",
-        technologies: ["Java/C++", "Sorting algorithms", "File I/O"],
+          "Create a procedural world generator using 3D arrays to represent terrain, biomes, and structures in a voxel-based game world.",
+        difficulty: "Advanced",
+        technologies: ["C++/Unity", "3D graphics", "Procedural generation", "Game engines"],
       },
     ],
   },
+};
+
+// Syntax highlighting function
+const highlightSyntax = (code, language) => {
+  const keywords = {
+    c: ['int', 'float', 'double', 'char', 'void', 'return', 'if', 'else', 'for', 'while', 'printf', 'include', 'main'],
+    cpp: ['int', 'float', 'double', 'char', 'void', 'return', 'if', 'else', 'for', 'while', 'cout', 'cin', 'using', 'namespace', 'std', 'include', 'main', 'string'],
+    java: ['public', 'private', 'static', 'void', 'int', 'double', 'String', 'class', 'return', 'if', 'else', 'for', 'while', 'System', 'main', 'println', 'printf'],
+    python: ['def', 'return', 'if', 'else', 'elif', 'for', 'while', 'import', 'from', 'class', 'print', 'len', 'range', 'True', 'False', 'None'],
+    javascript: ['function', 'const', 'let', 'var', 'return', 'if', 'else', 'for', 'while', 'class', 'this', 'console', 'log', 'true', 'false', 'null', 'undefined']
+  };
+
+  const strings = /"[^"]*"|'[^']*'|`[^`]*`/g;
+  // Fix: Prevent replacing inside HTML tags by using a function for .replace
+  const comments = language === 'python' ? /#.*$/gm : /\/\/.*$|\/\*[\s\S]*?\*\//gm;
+  const numbers = /\b\d+\.?\d*\b/g;
+
+  let highlightedCode = code;
+
+  // Highlight strings (green)
+  highlightedCode = highlightedCode.replace(strings, match => `<span style="color: #22c55e;">${match}</span>`);
+  
+  // Highlight comments (gray)
+  highlightedCode = highlightedCode.replace(comments, match => `<span style="color: #6b7280;">${match}</span>`);
+  
+  // Highlight numbers (orange)
+  highlightedCode = highlightedCode.replace(numbers, match => `<span style="color: #f97316;">${match}</span>`);
+  
+  // Highlight keywords (blue)
+  if (keywords[language]) {
+    keywords[language].forEach(keyword => {
+      const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+      highlightedCode = highlightedCode.replace(regex, match => `<span style="color: #3b82f6;">${match}</span>`);
+    });
+  }
+
+  return highlightedCode;
 };
 
 export default function EnhancedArrayPage() {
@@ -199,7 +400,6 @@ export default function EnhancedArrayPage() {
   const [selectedArrayIndex, setSelectedArrayIndex] = useState(0);
   const [arrayValues, setArrayValues] = useState([10, 20, 30, 40, 50]);
   const [inputValue, setInputValue] = useState("");
-  const [arrayDimension, setArrayDimension] = useState("1d");
   const [animatingIndex, setAnimatingIndex] = useState(-1);
   const [selectedQuestionIndex, setSelectedQuestionIndex] = useState(-1);
   
@@ -211,7 +411,7 @@ export default function EnhancedArrayPage() {
   ]);
   const [selected2DIndex, setSelected2DIndex] = useState({ row: 0, col: 0 });
   
-  // 3D Array state - simplified visualization
+  // 3D Array state
   const [array3D, setArray3D] = useState([
     [[1, 2], [3, 4]],
     [[5, 6], [7, 8]]
@@ -256,26 +456,10 @@ export default function EnhancedArrayPage() {
     }
   };
 
-  const update2DArray = (row, col, value) => {
-    const newArray = array2D.map((r, i) => 
-      r.map((c, j) => (i === row && j === col) ? value : c)
-    );
-    setArray2D(newArray);
-  };
-
-  const update3DArray = (depth, row, col, value) => {
-    const newArray = array3D.map((d, i) =>
-      d.map((r, j) =>
-        r.map((c, k) => (i === depth && j === row && k === col) ? value : c)
-      )
-    );
-    setArray3D(newArray);
-  };
-
   const ArrayVisualization1D = () => (
     <div className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-blue-200 dark:border-blue-800">
       <h3 className="text-2xl font-bold mb-6 text-center text-blue-800 dark:text-blue-200">
-        1D Array - Linear Structure
+        📊 1D Array Interactive Demo
       </h3>
       
       <div className="flex flex-wrap justify-center gap-3 mb-6">
@@ -291,7 +475,7 @@ export default function EnhancedArrayPage() {
             } ${animatingIndex === index ? "animate-bounce" : ""}`}
           >
             <div
-              className={`w-20 h-20 rounded-lg shadow-lg border-3 flex items-center justify-center transition-all duration-300 ${
+              className={`w-20 h-20 rounded-lg shadow-lg border-2 flex items-center justify-center transition-all duration-300 ${
                 selectedArrayIndex === index
                   ? "bg-blue-500 border-blue-600 text-white shadow-xl"
                   : "bg-white dark:bg-gray-800 border-blue-300 dark:border-blue-600 text-blue-800 dark:text-blue-200"
@@ -309,7 +493,7 @@ export default function EnhancedArrayPage() {
         ))}
       </div>
 
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow mb-4">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
           <div>
             <span className="text-sm text-gray-500">Array Length</span>
@@ -325,13 +509,46 @@ export default function EnhancedArrayPage() {
           </div>
         </div>
       </div>
+
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+        <h4 className="text-lg font-bold mb-3 text-center">Array Operations</h4>
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+          <input
+            type="number"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Enter value"
+            className="px-4 py-2 border-2 border-blue-300 dark:border-blue-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-blue-500 transition-colors duration-200"
+          />
+          <div className="flex gap-2">
+            <button
+              onClick={handleArrayUpdate}
+              className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+            >
+              Update [{selectedArrayIndex}]
+            </button>
+            <button
+              onClick={addElement}
+              className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+            >
+              Add
+            </button>
+            <button
+              onClick={removeElement}
+              className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 
   const ArrayVisualization2D = () => (
     <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border-2 border-green-200 dark:border-green-800">
       <h3 className="text-2xl font-bold mb-6 text-center text-green-800 dark:text-green-200">
-        2D Array - Matrix Structure (3×3)
+        🎯 2D Array Interactive Demo
       </h3>
       
       <div className="flex justify-center mb-6">
@@ -378,19 +595,13 @@ export default function EnhancedArrayPage() {
           </div>
         </div>
       </div>
-
-      <div className="mt-4 p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
-        <p className="text-sm text-green-800 dark:text-green-200">
-          <strong>Memory Layout:</strong> Elements stored row by row: arr[0][0], arr[0][1], arr[0][2], arr[1][0]...
-        </p>
-      </div>
     </div>
   );
 
   const ArrayVisualization3D = () => (
     <div className="p-6 bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 rounded-xl border-2 border-purple-200 dark:border-purple-800">
       <h3 className="text-2xl font-bold mb-6 text-center text-purple-800 dark:text-purple-200">
-        3D Array - Cube Structure (2×2×2)
+        🧊 3D Array Interactive Demo
       </h3>
       
       <div className="flex justify-center gap-8 mb-6">
@@ -446,12 +657,6 @@ export default function EnhancedArrayPage() {
           </div>
         </div>
       </div>
-
-      <div className="mt-4 p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-        <p className="text-sm text-purple-800 dark:text-purple-200">
-          <strong>Memory Layout:</strong> Elements stored layer by layer, then row by row within each layer
-        </p>
-      </div>
     </div>
   );
 
@@ -486,203 +691,197 @@ export default function EnhancedArrayPage() {
           </div>
         </section>
 
-        {/* Array Dimensions Selector */}
+        {/* 1D Arrays Section */}
         <section>
-          <h2 className="text-4xl font-bold mb-6 text-center bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-            🎮 Interactive Array Explorer
+          <h2 className="text-5xl font-bold mb-8 text-center bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            📊 1D Arrays - Linear Data Structure
           </h2>
           
-          <div className="flex justify-center mb-8">
-            <div className="bg-white dark:bg-gray-800 p-2 rounded-xl shadow-lg flex space-x-2">
-              {[
-                { id: "1d", label: "1D Array", icon: "📊" },
-                { id: "2d", label: "2D Array", icon: "🎯" },
-                { id: "3d", label: "3D Array", icon: "🧊" }
-              ].map((dim) => (
-                <button
-                  key={dim.id}
-                  onClick={() => setArrayDimension(dim.id)}
-                  className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 ${
-                    arrayDimension === dim.id
-                      ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg"
-                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                  }`}
+          {/* 1D Concept */}
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 border-blue-500">
+            <h3 className="text-2xl font-bold mb-4 text-blue-700 dark:text-blue-300">💡 Understanding 1D Arrays</h3>
+            <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200 mb-4">
+              {sections.oneDimensional.concept}
+            </p>
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border-l-4 border-blue-400">
+              <p className="text-blue-800 dark:text-blue-200 font-medium">
+                <span className="font-bold">Real-world example:</span> {sections.oneDimensional.realWorldExample}
+              </p>
+            </div>
+          </div>
+
+          {/* 1D Interactive Demo */}
+          <ArrayVisualization1D />
+
+          {/* 1D Advantages & Disadvantages */}
+          <div className="grid md:grid-cols-2 gap-8 mt-8">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-green-500">
+              <h3 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-300">✅ Advantages</h3>
+              <ul className="space-y-3">
+                {sections.oneDimensional.advantages.map((advantage, index) => (
+                  <li key={index} className="flex items-start space-x-3">
+                    <span className="text-green-500 text-lg">{advantage.split(' ')[0]}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{advantage.substring(2)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-red-500">
+              <h3 className="text-2xl font-bold mb-4 text-red-700 dark:text-red-300">❌ Disadvantages</h3>
+              <ul className="space-y-3">
+                {sections.oneDimensional.disadvantages.map((disadvantage, index) => (
+                  <li key={index} className="flex items-start space-x-3">
+                    <span className="text-red-500 text-lg">{disadvantage.split(' ')[0]}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{disadvantage.substring(2)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* 1D Industry Applications */}
+          <div className="mt-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
+            <h3 className="text-2xl font-bold mb-6 text-center text-blue-700 dark:text-blue-300">🏢 1D Arrays in Industry</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {sections.oneDimensional.industry_applications.map((application, index) => (
+                <div
+                  key={index}
+                  className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border-l-4 border-blue-400 hover:shadow-lg transition-shadow duration-300"
                 >
-                  {dim.icon} {dim.label}
-                </button>
+                  <p className="text-gray-700 dark:text-gray-300">{application}</p>
+                </div>
               ))}
             </div>
           </div>
-
-          {/* Dynamic Array Visualization */}
-          {arrayDimension === "1d" && <ArrayVisualization1D />}
-          {arrayDimension === "2d" && <ArrayVisualization2D />}
-          {arrayDimension === "3d" && <ArrayVisualization3D />}
-
-          {/* 1D Array Controls */}
-          {arrayDimension === "1d" && (
-            <div className="mt-8 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-              <h4 className="text-xl font-bold mb-4 text-center">Array Operations</h4>
-              <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                <input
-                  type="number"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="Enter value"
-                  className="px-4 py-3 border-2 border-blue-300 dark:border-blue-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-blue-500 transition-colors duration-200"
-                />
-                <div className="flex gap-2">
-                  <button
-                    onClick={handleArrayUpdate}
-                    className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
-                  >
-                    Update [{selectedArrayIndex}]
-                  </button>
-                  <button
-                    onClick={addElement}
-                    className="px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
-                  >
-                    Add Element
-                  </button>
-                  <button
-                    onClick={removeElement}
-                    className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
-                  >
-                    Remove Last
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </section>
 
-        {/* Array Types Comparison */}
+        {/* 2D Arrays Section */}
         <section>
-          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            📐 Array Types Comparison
+          <h2 className="text-5xl font-bold mb-8 text-center bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+            🎯 2D Arrays - Matrix Data Structure
           </h2>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* 1D Arrays */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-blue-500 transform hover:scale-105 transition-all duration-300">
-              <div className="text-center mb-4">
-                <div className="text-4xl mb-2">📊</div>
-                <h3 className="text-2xl font-bold text-blue-600">1D Arrays</h3>
-              </div>
-              <div className="space-y-4">
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Use Cases:</h4>
-                  <ul className="text-sm space-y-1 text-gray-700 dark:text-gray-300">
-                    <li>• List of numbers, names, or items</li>
-                    <li>• Simple data collections</li>
-                    <li>• Linear algorithms</li>
-                  </ul>
-                </div>
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Declaration:</h4>
-                  <code className="text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded block">
-                    int arr[5] = {"{1,2,3,4,5}"};
-                  </code>
-                </div>
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Access:</h4>
-                  <code className="text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded block">
-                    arr[index]
-                  </code>
-                </div>
-              </div>
+          {/* 2D Concept */}
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 border-green-500">
+            <h3 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-300">💡 Understanding 2D Arrays</h3>
+            <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200 mb-4">
+              {sections.twoDimensional.concept}
+            </p>
+            <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border-l-4 border-green-400">
+              <p className="text-green-800 dark:text-green-200 font-medium">
+                <span className="font-bold">Real-world example:</span> {sections.twoDimensional.realWorldExample}
+              </p>
             </div>
+          </div>
 
-            {/* 2D Arrays */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-green-500 transform hover:scale-105 transition-all duration-300">
-              <div className="text-center mb-4">
-                <div className="text-4xl mb-2">🎯</div>
-                <h3 className="text-2xl font-bold text-green-600">2D Arrays</h3>
-              </div>
-              <div className="space-y-4">
-                <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Use Cases:</h4>
-                  <ul className="text-sm space-y-1 text-gray-700 dark:text-gray-300">
-                    <li>• Matrices and grids</li>
-                    <li>• Game boards and maps</li>
-                    <li>• Image processing</li>
-                  </ul>
-                </div>
-                <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Declaration:</h4>
-                  <code className="text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded block">
-                    int arr[3][3];
-                  </code>
-                </div>
-                <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Access:</h4>
-                  <code className="text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded block">
-                    arr[row][col]
-                  </code>
-                </div>
-              </div>
+          {/* 2D Interactive Demo */}
+          <ArrayVisualization2D />
+
+          {/* 2D Advantages & Disadvantages */}
+          <div className="grid md:grid-cols-2 gap-8 mt-8">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-green-500">
+              <h3 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-300">✅ Advantages</h3>
+              <ul className="space-y-3">
+                {sections.twoDimensional.advantages.map((advantage, index) => (
+                  <li key={index} className="flex items-start space-x-3">
+                    <span className="text-green-500 text-lg">{advantage.split(' ')[0]}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{advantage.substring(2)}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
+            
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-red-500">
+              <h3 className="text-2xl font-bold mb-4 text-red-700 dark:text-red-300">❌ Disadvantages</h3>
+              <ul className="space-y-3">
+                {sections.twoDimensional.disadvantages.map((disadvantage, index) => (
+                  <li key={index} className="flex items-start space-x-3">
+                    <span className="text-red-500 text-lg">{disadvantage.split(' ')[0]}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{disadvantage.substring(2)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
 
-            {/* 3D Arrays */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-purple-500 transform hover:scale-105 transition-all duration-300">
-              <div className="text-center mb-4">
-                <div className="text-4xl mb-2">🧊</div>
-                <h3 className="text-2xl font-bold text-purple-600">3D Arrays</h3>
-              </div>
-              <div className="space-y-4">
-                <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Use Cases:</h4>
-                  <ul className="text-sm space-y-1 text-gray-700 dark:text-gray-300">
-                    <li>• 3D graphics and modeling</li>
-                    <li>• Video processing</li>
-                    <li>• Scientific simulations</li>
-                  </ul>
+          {/* 2D Industry Applications */}
+          <div className="mt-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
+            <h3 className="text-2xl font-bold mb-6 text-center text-green-700 dark:text-green-300">🏢 2D Arrays in Industry</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {sections.twoDimensional.industry_applications.map((application, index) => (
+                <div
+                  key={index}
+                  className="bg-green-50 dark:bg-green-900/20 p-4 rounded-xl border-l-4 border-green-400 hover:shadow-lg transition-shadow duration-300"
+                >
+                  <p className="text-gray-700 dark:text-gray-300">{application}</p>
                 </div>
-                <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Declaration:</h4>
-                  <code className="text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded block">
-                    int arr[2][2][2];
-                  </code>
-                </div>
-                <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Access:</h4>
-                  <code className="text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded block">
-                    arr[depth][row][col]
-                  </code>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Concept Understanding */}
+        {/* 3D Arrays Section */}
         <section>
-          <h2 className="text-4xl font-bold mb-6 text-center bg-gradient-to-r from-indigo-600 to-cyan-600 bg-clip-text text-transparent">
-            💡 Understanding Arrays
+          <h2 className="text-5xl font-bold mb-8 text-center bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">
+            🧊 3D Arrays - Cube Data Structure
           </h2>
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl">
-            <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200 mb-6">
-              {sections.concept_understanding}
+          
+          {/* 3D Concept */}
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 border-purple-500">
+            <h3 className="text-2xl font-bold mb-4 text-purple-700 dark:text-purple-300">💡 Understanding 3D Arrays</h3>
+            <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200 mb-4">
+              {sections.threeDimensional.concept}
             </p>
-            
-            {/* Memory Layout Visualization */}
-            <div className="bg-gradient-to-r from-indigo-50 to-cyan-50 dark:from-indigo-900/20 dark:to-cyan-900/20 p-6 rounded-xl border-l-4 border-indigo-500">
-              <h3 className="text-xl font-bold mb-4 text-indigo-800 dark:text-indigo-200">Memory Layout Example</h3>
-              <div className="grid grid-cols-5 gap-2 mb-4">
-                {arrayValues.slice(0, 5).map((value, index) => (
-                  <div key={index} className="text-center">
-                    <div className="bg-indigo-200 dark:bg-indigo-700 p-2 rounded text-sm font-mono">
-                      {value}
-                    </div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                      0x{(1000 + index * 4).toString(16)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <p className="text-sm text-indigo-700 dark:text-indigo-300">
-                Each element occupies 4 bytes (for int), stored consecutively in memory
+            <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border-l-4 border-purple-400">
+              <p className="text-purple-800 dark:text-purple-200 font-medium">
+                <span className="font-bold">Real-world example:</span> {sections.threeDimensional.realWorldExample}
               </p>
+            </div>
+          </div>
+
+          {/* 3D Interactive Demo */}
+          <ArrayVisualization3D />
+
+          {/* 3D Advantages & Disadvantages */}
+          <div className="grid md:grid-cols-2 gap-8 mt-8">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-green-500">
+              <h3 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-300">✅ Advantages</h3>
+              <ul className="space-y-3">
+                {sections.threeDimensional.advantages.map((advantage, index) => (
+                  <li key={index} className="flex items-start space-x-3">
+                    <span className="text-green-500 text-lg">{advantage.split(' ')[0]}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{advantage.substring(2)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-red-500">
+              <h3 className="text-2xl font-bold mb-4 text-red-700 dark:text-red-300">❌ Disadvantages</h3>
+              <ul className="space-y-3">
+                {sections.threeDimensional.disadvantages.map((disadvantage, index) => (
+                  <li key={index} className="flex items-start space-x-3">
+                    <span className="text-red-500 text-lg">{disadvantage.split(' ')[0]}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{disadvantage.substring(2)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* 3D Industry Applications */}
+          <div className="mt-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
+            <h3 className="text-2xl font-bold mb-6 text-center text-purple-700 dark:text-purple-300">🏢 3D Arrays in Industry</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {sections.threeDimensional.industry_applications.map((application, index) => (
+                <div
+                  key={index}
+                  className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-xl border-l-4 border-purple-400 hover:shadow-lg transition-shadow duration-300"
+                >
+                  <p className="text-gray-700 dark:text-gray-300">{application}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -690,7 +889,7 @@ export default function EnhancedArrayPage() {
         {/* Code Examples */}
         <section>
           <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-rose-600 to-orange-600 bg-clip-text text-transparent">
-            💻 Code Examples
+            💻 Real-World Code Examples
           </h2>
           
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
@@ -713,44 +912,73 @@ export default function EnhancedArrayPage() {
               </div>
             </div>
             
-            {/* Code Display */}
+            {/* Code Display with Syntax Highlighting */}
             <div className="p-6">
-              <pre className="bg-gray-900 text-green-400 p-6 rounded-xl overflow-x-auto text-sm">
-                <code>{sections.code_examples[selectedLanguage]}</code>
+              <pre className="bg-gray-900 text-white p-6 rounded-xl overflow-x-auto text-sm leading-relaxed">
+                <code 
+                  dangerouslySetInnerHTML={{ 
+                    __html: highlightSyntax(sections.code_examples[selectedLanguage], selectedLanguage) 
+                  }}
+                />
               </pre>
             </div>
           </div>
         </section>
 
-        {/* Industry Applications */}
+        {/* Time & Space Complexity Analysis */}
         <section>
-          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-            🏢 Industry Applications
+          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent">
+            ⚡ Performance Analysis
           </h2>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sections.industry_applications.map((application, index) => (
-              <div
-                key={index}
-                className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-l-4 border-emerald-500"
-              >
-                <div className="flex items-start space-x-3">
-                  <div className="bg-emerald-100 dark:bg-emerald-900/30 p-2 rounded-full">
-                    <div className="w-4 h-4 bg-emerald-500 rounded-full"></div>
-                  </div>
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                    {application}
-                  </p>
-                </div>
-              </div>
-            ))}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-100 dark:bg-gray-700">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-lg font-semibold text-gray-800 dark:text-gray-200">Operation</th>
+                    <th className="px-6 py-4 text-center text-lg font-semibold text-gray-800 dark:text-gray-200">Time Complexity</th>
+                    <th className="px-6 py-4 text-center text-lg font-semibold text-gray-800 dark:text-gray-200">Space Complexity</th>
+                    <th className="px-6 py-4 text-left text-lg font-semibold text-gray-800 dark:text-gray-200">Notes</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
+                  {[
+                    { operation: "Access by Index", time: "O(1)", space: "O(1)", notes: "Direct memory address calculation" },
+                    { operation: "Search (Linear)", time: "O(n)", space: "O(1)", notes: "Must check each element sequentially" },
+                    { operation: "Insertion at End", time: "O(1)", space: "O(1)", notes: "For dynamic arrays with available space" },
+                    { operation: "Insertion at Middle", time: "O(n)", space: "O(1)", notes: "Requires shifting elements" },
+                    { operation: "Deletion at End", time: "O(1)", space: "O(1)", notes: "Simply remove last element" },
+                    { operation: "Deletion at Middle", time: "O(n)", space: "O(1)", notes: "Requires shifting elements left" }
+                  ].map((row, index) => (
+                    <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150">
+                      <td className="px-6 py-4 font-medium text-gray-800 dark:text-gray-200">{row.operation}</td>
+                      <td className="px-6 py-4 text-center">
+                        <span className={`px-3 py-1 rounded-full text-sm font-mono ${
+                          row.time === "O(1)" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300" :
+                          "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300"
+                        }`}>
+                          {row.time}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <span className="px-3 py-1 rounded-full text-sm font-mono bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                          {row.space}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-gray-700 dark:text-gray-300 text-sm">{row.notes}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 
         {/* Interview Questions */}
         <section>
           <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent">
-            🎤 Interview Questions
+            🎤 Interview Questions & Answers
           </h2>
           
           <div className="space-y-4">
@@ -808,7 +1036,7 @@ export default function EnhancedArrayPage() {
         {/* Project Ideas */}
         <section>
           <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-violet-600 to-pink-600 bg-clip-text text-transparent">
-            🚀 Project Ideas
+            🚀 Hands-on Project Ideas
           </h2>
           
           <div className="grid md:grid-cols-2 gap-8">
@@ -851,56 +1079,6 @@ export default function EnhancedArrayPage() {
             ))}
           </div>
         </section>
-
-        {/* Array Complexity Analysis */}
-        <section>
-          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent">
-            ⚡ Time & Space Complexity
-          </h2>
-          
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-100 dark:bg-gray-700">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-lg font-semibold text-gray-800 dark:text-gray-200">Operation</th>
-                    <th className="px-6 py-4 text-center text-lg font-semibold text-gray-800 dark:text-gray-200">Time Complexity</th>
-                    <th className="px-6 py-4 text-center text-lg font-semibold text-gray-800 dark:text-gray-200">Space Complexity</th>
-                    <th className="px-6 py-4 text-left text-lg font-semibold text-gray-800 dark:text-gray-200">Notes</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
-                  {[
-                    { operation: "Access by Index", time: "O(1)", space: "O(1)", notes: "Direct memory address calculation" },
-                    { operation: "Search (Linear)", time: "O(n)", space: "O(1)", notes: "Must check each element sequentially" },
-                    { operation: "Insertion at End", time: "O(1)", space: "O(1)", notes: "For dynamic arrays with available space" },
-                    { operation: "Insertion at Middle", time: "O(n)", space: "O(1)", notes: "Requires shifting elements" },
-                    { operation: "Deletion at End", time: "O(1)", space: "O(1)", notes: "Simply remove last element" },
-                    { operation: "Deletion at Middle", time: "O(n)", space: "O(1)", notes: "Requires shifting elements left" }
-                  ].map((row, index) => (
-                    <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150">
-                      <td className="px-6 py-4 font-medium text-gray-800 dark:text-gray-200">{row.operation}</td>
-                      <td className="px-6 py-4 text-center">
-                        <span className={`px-3 py-1 rounded-full text-sm font-mono ${
-                          row.time === "O(1)" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300" :
-                          "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300"
-                        }`}>
-                          {row.time}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <span className="px-3 py-1 rounded-full text-sm font-mono bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
-                          {row.space}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-gray-700 dark:text-gray-300 text-sm">{row.notes}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
       </main>
 
       {/* Footer */}
@@ -908,7 +1086,7 @@ export default function EnhancedArrayPage() {
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h3 className="text-2xl font-bold mb-4">Master Arrays Today! 🚀</h3>
           <p className="text-lg text-gray-300 mb-6">
-            Arrays are the foundation of efficient programming. Practice with the interactive examples above!
+            From simple 1D lists to complex 3D structures - arrays are your foundation for efficient programming!
           </p>
           <div className="flex justify-center space-x-4 text-sm">
             <span className="px-4 py-2 bg-white/10 rounded-full">📚 Learn</span>
