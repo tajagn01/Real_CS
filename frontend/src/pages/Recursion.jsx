@@ -800,11 +800,14 @@ int solve(int row) {
             </div>
           </LearningCard>
 
-          <LearningCard title="Simple Example: Factorial">
+          <LearningCard  title="Simple Example: Factorial ">
             <p className="text-gray-300 mb-4">
               Factorial of n (n!) = n × (n-1) × (n-2) × ... × 1
             </p>
-            <CodeTabs snippets={codeSnippets} />
+          <div className="w-full overflow-x-auto">
+  <CodeTabs className="flex flex-col gap-4 max-w-full" snippets={codeSnippets} />
+</div>
+
           </LearningCard>
         </section>
 
@@ -926,52 +929,67 @@ int solve(int row) {
         </section>
 
         {/* Interview Questions */}
-        <section>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 md:mb-8 text-center bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent">
-            🎤 Interview Questions & Answers
-          </h2>
+     <section className="px-4 sm:px-6 md:px-8 py-8 md:py-12">
+  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 md:mb-10 text-center bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent">
+    🎤 Interview Questions & Answers
+  </h2>
 
-          <LearningCard title="Ace Your Technical Interviews">
-            <p className="text-base sm:text-lg text-gray-300 mb-6 sm:mb-8">
-              These are real questions asked at top tech companies!
-            </p>
+  <LearningCard title="Ace Your Technical Interviews">
+    <p className="text-sm sm:text-base md:text-lg text-gray-300 mb-6 sm:mb-8 md:mb-10 text-center">
+      These are real questions asked at top tech companies!
+    </p>
 
-            <div className="space-y-8">
-              <div className="bg-gradient-to-r from-green-900/20 to-green-800/20 p-6 rounded-lg border border-green-500">
-                <div className="flex items-center mb-4">
-                  <DifficultyBadge level="EASY" color="bg-green-600 text-white" />
-                  <h4 className="text-lg font-semibold text-green-400">Google, Amazon</h4>
-                </div>
-                <p className="text-gray-300 mb-4">
-                  Write a recursive function to calculate the power of a number.
-                </p>
-                <CodeTabs snippets={powerSnippets} />
-              </div>
+    {/* Cards Grid */}
+    <div className="flex flex-col gap-6 sm:gap-8 lg:grid lg:grid-cols-2 xl:grid-cols-3">
+      
+      {/* EASY */}
+      <div className="bg-gradient-to-r from-green-900/20 to-green-800/20 p-4 sm:p-6 rounded-lg sm:rounded-xl border border-green-500 flex flex-col h-full">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+          <DifficultyBadge level="EASY" color="bg-green-600 text-white" />
+          <h4 className="text-base sm:text-lg font-semibold text-green-400">Google, Amazon</h4>
+        </div>
+        <p className="text-gray-300 mb-4 flex-1 text-sm sm:text-base">
+          Write a recursive function to calculate the power of a number.
+        </p>
+        <div className="w-full overflow-x-auto px-1 sm:px-2">
+          <CodeTabs
+            className="flex flex-col gap-4 w-full [&_pre]:w-full [&_pre]:whitespace-pre-wrap [&_pre]:break-words"
+            snippets={codeSnippets}
+          />
+        </div>
+      </div>
 
-              <div className="bg-gradient-to-r from-yellow-900/20 to-yellow-800/20 p-6 rounded-lg border border-yellow-500">
-                <div className="flex items-center mb-4">
-                  <DifficultyBadge level="MEDIUM" color="bg-yellow-600 text-black" />
-                  <h4 className="text-lg font-semibold text-yellow-400">Facebook, Microsoft</h4>
-                </div>
-                <p className="text-gray-300 mb-4">
-                  Generate all possible combinations of n pairs of balanced parentheses.
-                </p>
-                <CodeTabs snippets={parenthesesSnippets} />
-              </div>
+      {/* MEDIUM */}
+      <div className="bg-gradient-to-r from-yellow-900/20 to-yellow-800/20 p-4 sm:p-6 rounded-lg sm:rounded-xl border border-yellow-500 flex flex-col h-full">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+          <DifficultyBadge level="MEDIUM" color="bg-yellow-600 text-black" />
+          <h4 className="text-base sm:text-lg font-semibold text-yellow-400">Facebook, Microsoft</h4>
+        </div>
+        <p className="text-gray-300 mb-4 flex-1 text-sm sm:text-base">
+          Generate all possible combinations of n pairs of balanced parentheses.
+        </p>
+        <div className="w-full overflow-x-auto px-1 sm:px-2">
+          <CodeTabs snippets={powerSnippets} className="max-w-full" />
+        </div>
+      </div>
 
-              <div className="bg-gradient-to-r from-red-900/20 to-red-800/20 p-6 rounded-lg border border-red-500">
-                <div className="flex items-center mb-4">
-                  <DifficultyBadge level="HARD" color="bg-red-600 text-white" />
-                  <h4 className="text-lg font-semibold text-red-400">Google, Netflix</h4>
-                </div>
-                <p className="text-gray-300 mb-4">
-                  Solve the N-Queens problem: place N queens on N×N chessboard.
-                </p>
-                <CodeTabs snippets={nQueensSnippets} />
-              </div>
-            </div>
-          </LearningCard>
-        </section>
+      {/* HARD */}
+      <div className="bg-gradient-to-r from-red-900/20 to-red-800/20 p-4 sm:p-6 rounded-lg sm:rounded-xl border border-red-500 flex flex-col h-full">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+          <DifficultyBadge level="HARD" color="bg-red-600 text-white" />
+          <h4 className="text-base sm:text-lg font-semibold text-red-400">Google, Netflix</h4>
+        </div>
+        <p className="text-gray-300 mb-4 flex-1 text-sm sm:text-base">
+          Solve the N-Queens problem: place N queens on N×N chessboard.
+        </p>
+        <div className="w-full overflow-x-auto px-1 sm:px-2">
+          <CodeTabs snippets={powerSnippets} className="max-w-full" />
+        </div>
+      </div>
+    </div>
+  </LearningCard>
+</section>
+
 
         {/* Next Steps */}
         <section>
