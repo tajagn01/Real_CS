@@ -1,47 +1,45 @@
 import React, { useState } from 'react';
 import { Code, Lightbulb, Building2, HelpCircle, Rocket } from 'lucide-react';
 
-const StackVisualization = () => {
-    const [stack, setStack] = useState([10, 20, 30, 40]);
-    const [inputValue, setInputValue] = useState('');
-    const [selectedIndex, setSelectedIndex] = useState(stack.length - 1);
-    const [animation, setAnimation] = useState('');
+const Stack = () => {
+  
+  const [stack, setStack] = useState([10, 20, 30, 40]);
+  const [inputValue, setInputValue] = useState('');
+  const [selectedIndex, setSelectedIndex] = useState(stack.length - 1);
+  const [animation, setAnimation] = useState('');
 
-    const push = () => {
-      if (inputValue.trim() !== '') {
-        const newValue = parseInt(inputValue) || inputValue;
-        setAnimation('push');
-        setTimeout(() => {
-          setStack(prev => [...prev, newValue]);
-          setSelectedIndex(stack.length);
-          setInputValue('');
-          setAnimation('');
-        }, 300);
-      }
-    };
-
-    const pop = () => {
-      if (stack.length > 0) {
-        setAnimation('pop');
-        setTimeout(() => {
-          setStack(prev => prev.slice(0, -1));
-          setSelectedIndex(Math.max(0, stack.length - 2));
-          setAnimation('');
-        }, 300);
-      }
-    };
-
-    const peek = () => {
-      if (stack.length > 0) {
-        setSelectedIndex(stack.length - 1);
-        setAnimation('peek');
-        setTimeout(() => setAnimation(''), 600);
-      }
-    };
+  const push = () => {
+    if (inputValue.trim() !== '') {
+      const newValue = parseInt(inputValue) || inputValue;
+      setAnimation('push');
+      setTimeout(() => {
+        setStack(prev => [...prev, newValue]);
+        setSelectedIndex(stack.length);
+        setInputValue('');
+        setAnimation('');
+      }, 300);
+    }
   };
 
-const Stack = () => {
-  const [activeLanguage, setActiveLanguage] = useState('javascript');
+  const pop = () => {
+    if (stack.length > 0) {
+      setAnimation('pop');
+      setTimeout(() => {
+        setStack(prev => prev.slice(0, -1));
+        setSelectedIndex(Math.max(0, stack.length - 2));
+        setAnimation('');
+      }, 300);
+    }
+  };
+
+  const peek = () => {
+    if (stack.length > 0) {
+      setSelectedIndex(stack.length - 1);
+      setAnimation('peek');
+      setTimeout(() => setAnimation(''), 600);
+    }
+  };
+
 
   const stackData = {
     concept: {
@@ -486,374 +484,380 @@ public:
 
   
 
-    return (
+  return (
 
+    
+    <div className="min-h-screen bg-gray-900 text-white">
+   
 
-      <div className="min-h-screen bg-gray-900 text-white">
-
-
-        <header className="py-16 text-center bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-black/10"></div>
-          <div className="relative z-10">
-            <h1 className="text-6xl font-extrabold mb-4 animate-pulse">Stack</h1>
-            <p className="text-xl">Organizing Data with Last-In, First-Out</p>
-            <div className="mt-6">
-              <div className="flex justify-center space-x-4 text-sm">
-                <span className="px-3 py-1 bg-white/20 rounded-full">🧠 Concepts</span>
-                <span className="px-3 py-1 bg-white/20 rounded-full">🎬 Visualize</span>
-                <span className="px-3 py-1 bg-white/20 rounded-full">🏭 Industry</span>
-              </div>
+     <header className="py-16 text-center bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="relative z-10">
+          <h1 className="text-6xl font-extrabold mb-4 animate-pulse">Stack</h1>
+          <p className="text-xl">Organizing Data with Last-In, First-Out</p>
+          <div className="mt-6">
+            <div className="flex justify-center space-x-4 text-sm">
+              <span className="px-3 py-1 bg-white/20 rounded-full">🧠 Concepts</span>
+              <span className="px-3 py-1 bg-white/20 rounded-full">🎬 Visualize</span>
+              <span className="px-3 py-1 bg-white/20 rounded-full">🏭 Industry</span>
             </div>
           </div>
-        </header>
+        </div>
+      </header>
+      
+ <main className="max-w-7xl mx-auto px-6 py-12 space-y-16">
+      {/* Definition Section */}
+     
 
-        <main className="max-w-7xl mx-auto px-6 py-12 space-y-16">
-          {/* Definition Section */}
-
-
-          <section className="transform hover:scale-105 transition-transform duration-300">
-            <h2 className="text-4xl font-bold mb-6 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              🎯     What Does Stack Enable in Industry?
-            </h2>
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border-l-8 border-blue-500">
-              <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-200 italic">
+      <section className="transform hover:scale-105 transition-transform duration-300">
+          <h2 className="text-4xl font-bold mb-6 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            🎯     What Does Stack Enable in Industry?
+          </h2>
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border-l-8 border-blue-500">
+            <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-200 italic">
                 {stackData.concept.definition}
-              </p>
-            </div>
-          </section>
-
-          {/* Code Understanding Section */}
-          <div className="max-w-6xl mx-auto px-4 pb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">
-              Stack - Linear Data Structure
-            </h2>
-            <p className="text-gray-400 mb-8 text-center text-lg max-w-4xl mx-auto">
-              Understand Stack implementation with comprehensive examples across multiple programming languages
             </p>
-
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold text-white mb-4 text-center">Choose Programming Language:</h3>
-              <div className="flex justify-center flex-wrap gap-3">
-                {Object.keys(codeExamples).map((lang) => (
-                  <button
-                    key={lang}
-                    onClick={() => setActiveLanguage(lang)}
-                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${activeLanguage === lang
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                      }`}
-                  >
-                    {lang.charAt(0).toUpperCase() + lang.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-gray-800 rounded-lg p-6 overflow-x-auto mb-8">
-              <pre className="text-sm">
-                <code className="text-gray-300">
-                  {codeExamples[activeLanguage]}
-                </code>
-              </pre>
-            </div>
-
-            {/* Interactive Visualization */}
-            <div className="bg-gray-800 rounded-lg p-6 mb-12">
-              <h4 className="text-lg font-semibold text-white mb-4 text-center">Stack Interactive Demo</h4>
-              <div className="flex items-center justify-center space-x-8">
-                <div className="flex flex-col items-center">
-                  <div className="text-orange-400 text-lg font-bold mb-2">Stack Operations</div>
-                  <div className="space-y-2">
-                    <div className="bg-red-600 text-white px-4 py-2 rounded text-center min-w-16">30</div>
-                    <div className="bg-blue-600 text-white px-4 py-2 rounded text-center min-w-16">20</div>
-                    <div className="bg-green-600 text-white px-4 py-2 rounded text-center min-w-16">10</div>
-                  </div>
-                  <div className="text-gray-400 text-sm mt-2">↑ Top of Stack</div>
-                </div>
-                <div className="text-gray-400">
-                  <div className="space-y-2">
-                    <div>• <span className="text-green-400">Push(30)</span> - Add to top</div>
-                    <div>• <span className="text-blue-400">Push(20)</span> - Add to top</div>
-                    <div>• <span className="text-purple-400">Push(10)</span> - Add to top</div>
-                    <div>• <span className="text-red-400">Pop()</span> - Remove from top</div>
-                    <div>• <span className="text-yellow-400">Peek()</span> - View top element</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* //part22 */}
-            <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border-2 border-green-200 dark:border-green-800">
-              <h3 className="text-2xl font-bold mb-6 text-center text-green-800 dark:text-green-200">
-                📚 Stack Interactive Demo
-              </h3>
-
-              {/* Stack Visualization */}
-              <div className="flex justify-center mb-6">
-                <div className="flex flex-col-reverse gap-2">
-                  {stack.map((value, index) => (
-                    <div
-                      key={index}
-                      onClick={() => setSelectedIndex(index)}
-                      className={`w-20 h-16 rounded-lg border-2 flex items-center justify-center cursor-pointer transition-all duration-300 relative ${selectedIndex === index
-                          ? "bg-green-500 border-green-600 text-white scale-110 shadow-lg"
-                          : "bg-white dark:bg-gray-800 border-green-300 dark:border-green-600 text-green-800 dark:text-green-200 hover:scale-105"
-                        } ${animation === 'push' && index === stack.length - 1 ? 'animate-bounce' : ''
-                        } ${animation === 'pop' && index === stack.length - 1 ? 'animate-pulse opacity-50' : ''
-                        } ${animation === 'peek' && index === stack.length - 1 ? 'animate-pulse bg-yellow-400' : ''
-                        }`}
-                    >
-                      <span className="font-bold">{value}</span>
-                      {index === stack.length - 1 && (
-                        <div className="absolute -right-8 top-1/2 transform -translate-y-1/2 text-green-600 font-bold text-sm">
-                          TOP
-                        </div>
-                      )}
-                    </div>
-                  ))}
-
-                  {/* Stack Base */}
-                  <div className="w-24 h-2 bg-green-600 dark:bg-green-400 rounded-full"></div>
-                  <div className="text-center text-green-600 dark:text-green-400 font-bold text-sm mt-1">
-                    STACK
-                  </div>
-                </div>
-              </div>
-
-              {/* Controls */}
-              <div className="flex flex-wrap justify-center gap-3 mb-6">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Enter value"
-                    className="px-3 py-2 border-2 border-green-300 dark:border-green-600 rounded-lg focus:border-green-500 focus:outline-none bg-white dark:bg-gray-800 text-green-800 dark:text-green-200"
-                    onKeyPress={(e) => e.key === 'Enter' && push()}
-                  />
-                  <button
-                    onClick={push}
-                    disabled={!inputValue.trim()}
-                    className="px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white rounded-lg font-bold transition-colors duration-200"
-                  >
-                    Push
-                  </button>
-                </div>
-
-                <button
-                  onClick={pop}
-                  disabled={stack.length === 0}
-                  className="px-4 py-2 bg-red-500 hover:bg-red-600 disabled:bg-gray-400 text-white rounded-lg font-bold transition-colors duration-200"
-                >
-                  Pop
-                </button>
-
-                <button
-                  onClick={peek}
-                  disabled={stack.length === 0}
-                  className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white rounded-lg font-bold transition-colors duration-200"
-                >
-                  Peek
-                </button>
-              </div>
-
-              {/* Stack Information */}
-              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-center text-sm">
-                  <div>
-                    <span className="text-gray-500">Size</span>
-                    <div className="font-bold text-green-600">{stack.length}</div>
-                  </div>
-                  <div>
-                    <span className="text-gray-500">Selected Index</span>
-                    <div className="font-bold text-green-600">
-                      {stack.length > 0 ? selectedIndex : 'N/A'}
-                    </div>
-                  </div>
-                  <div>
-                    <span className="text-gray-500">Top Value</span>
-                    <div className="font-bold text-green-600">
-                      {stack.length > 0 ? stack[stack.length - 1] : 'Empty'}
-                    </div>
-                  </div>
-                  <div>
-                    <span className="text-gray-500">Status</span>
-                    <div className="font-bold text-green-600">
-                      {stack.length === 0 ? 'Empty' : 'Active'}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Stack Operations Info */}
-              <div className="mt-4 p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
-                <div className="text-sm text-green-700 dark:text-green-300">
-                  <strong>Stack Operations:</strong>
-                  <div className="mt-1">
-                    • <strong>Push:</strong> Add element to top • <strong>Pop:</strong> Remove top element • <strong>Peek:</strong> View top element
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
+        </section>
 
-          {/* Industry Use Cases */}
-          <div className="max-w-6xl mx-auto px-4 pb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center">
-              Industry Applications & Company Examples
-            </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {industryExamples.map((example, idx) => {
-                const gradients = [
-                  "from-green-600 to-blue-500",
-                  "from-blue-600 to-cyan-500",
-                  "from-purple-600 to-pink-500",
-                  "from-orange-600 to-red-500",
-                  "from-teal-600 to-green-500",
-                  "from-yellow-500 to-orange-500",
-                  "from-red-500 to-pink-500",
-                  "from-indigo-600 to-purple-500",
-                  "from-cyan-600 to-blue-500",
-                  "from-pink-600 to-red-500",
-                  "from-emerald-600 to-teal-500",
-                  "from-violet-600 to-purple-500",
-                  "from-amber-600 to-orange-500",
-                  "from-rose-600 to-pink-500",
-                  "from-sky-600 to-blue-500",
-                  "from-lime-600 to-green-500",
-                  "from-fuchsia-600 to-purple-500",
-                  "from-orange-500 to-red-500",
-                  "from-teal-500 to-cyan-500"
-                ];
-                const [company, description] = example
-                  .replace(/^- /, "")
-                  .split(":");
-                return (
-                  <div
-                    key={idx}
-                    className={`bg-gradient-to-r ${gradients[idx % gradients.length]} rounded-xl p-6 md:p-8 shadow-xl hover:shadow-2xl transition-all duration-300`}
-                  >
-                    <span className="block font-bold text-white text-xl mb-2">
-                      {company.trim()}
-                    </span>
-                    <p className="text-white text-md">{description.trim()}</p>
-                  </div>
-                );
-              })}
-            </div>
+      {/* Code Understanding Section */}
+      <div className="max-w-6xl mx-auto px-4 pb-16">
+        <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">
+          Stack - Linear Data Structure
+        </h2>
+        <p className="text-gray-400 mb-8 text-center text-lg max-w-4xl mx-auto">
+          Understand Stack implementation with comprehensive examples across multiple programming languages
+        </p>
+
+        <div className="mb-6">
+          <h3 className="text-xl font-semibold text-white mb-4 text-center">Choose Programming Language:</h3>
+          <div className="flex justify-center flex-wrap gap-3">
+            {Object.keys(codeExamples).map((lang) => (
+              <button
+                key={lang}
+                onClick={() => setActiveLanguage(lang)}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  activeLanguage === lang
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                }`}
+              >
+                {lang.charAt(0).toUpperCase() + lang.slice(1)}
+              </button>
+            ))}
           </div>
+        </div>
+        
+        <div className="bg-gray-800 rounded-lg p-6 overflow-x-auto mb-8">
+          <pre className="text-sm">
+            <code className="text-gray-300">
+              {codeExamples[activeLanguage]}
+            </code>
+          </pre>
+        </div>
 
-          {/* Domain Importance & Related Tech */}
-          <div className="max-w-5xl mx-auto px-4 pb-16">
-            <div className="bg-gray-800 rounded-2xl p-8 md:p-10 shadow-lg border border-gray-700">
-              <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
-                Why Stack Matters for Modern Tech
-              </h2>
-              <p className="text-gray-300 mb-6 text-center text-lg">
-                {stackData.domainData.importance}
-              </p>
-              <div className="flex flex-col md:flex-row md:justify-center md:space-x-12">
-                <div className="mb-6 md:mb-0">
-                  <h3 className="font-semibold text-blue-400 mb-3 text-center text-xl">
-                    Related Technologies
-                  </h3>
-                  <ul className="list-disc list-inside text-gray-300 space-y-1">
-                    {stackData.domainData.relatedTechnologies.map((tech, idx) => (
-                      <li key={idx}>{tech}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-green-400 mb-3 text-center text-xl">
-                    Growth Trend
-                  </h3>
-                  <p className="text-gray-300 max-w-xs">
-                    {stackData.domainData.growthTrend}
-                  </p>
-                </div>
+        {/* Interactive Visualization */}
+        <div className="bg-gray-800 rounded-lg p-6 mb-12">
+          <h4 className="text-lg font-semibold text-white mb-4 text-center">Stack Interactive Demo</h4>
+          <div className="flex items-center justify-center space-x-8">
+            <div className="flex flex-col items-center">
+              <div className="text-orange-400 text-lg font-bold mb-2">Stack Operations</div>
+              <div className="space-y-2">
+                <div className="bg-red-600 text-white px-4 py-2 rounded text-center min-w-16">30</div>
+                <div className="bg-blue-600 text-white px-4 py-2 rounded text-center min-w-16">20</div>
+                <div className="bg-green-600 text-white px-4 py-2 rounded text-center min-w-16">10</div>
+              </div>
+              <div className="text-gray-400 text-sm mt-2">↑ Top of Stack</div>
+            </div>
+            <div className="text-gray-400">
+              <div className="space-y-2">
+                <div>• <span className="text-green-400">Push(30)</span> - Add to top</div>
+                <div>• <span className="text-blue-400">Push(20)</span> - Add to top</div>
+                <div>• <span className="text-purple-400">Push(10)</span> - Add to top</div>
+                <div>• <span className="text-red-400">Pop()</span> - Remove from top</div>
+                <div>• <span className="text-yellow-400">Peek()</span> - View top element</div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Interview Questions */}
-          <div className="max-w-6xl mx-auto px-4 pb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">
-              <HelpCircle className="inline-block mr-3 text-orange-400" size={32} />
-              Interview Questions & Answers
-            </h2>
-            <p className="text-gray-400 mb-12 text-center text-lg">
-              Master these essential Stack interview questions to crack your next coding interview
-            </p>
+         <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border-2 border-green-200 dark:border-green-800">
+      <h3 className="text-2xl font-bold mb-6 text-center text-green-800 dark:text-green-200">
+        📚 Stack Interactive Demo
+      </h3>
 
-            <div className="space-y-6">
-              {interviewQuestions.map((item, index) => (
-                <div key={index} className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                  <h3 className="text-lg font-semibold text-orange-400 mb-3">
-                    Q{index + 1}: {item.question}
-                  </h3>
-                  <p className="text-gray-300 leading-relaxed">
-                    <strong className="text-green-400">Answer:</strong> {item.answer}
-                  </p>
+      {/* Stack Visualization */}
+      <div className="flex justify-center mb-6">
+        <div className="flex flex-col-reverse gap-2">
+          {stack.map((value, index) => (
+            <div
+              key={index}
+              onClick={() => setSelectedIndex(index)}
+              className={`w-20 h-16 rounded-lg border-2 flex items-center justify-center cursor-pointer transition-all duration-300 relative ${
+                selectedIndex === index
+                  ? "bg-green-500 border-green-600 text-white scale-110 shadow-lg"
+                  : "bg-white dark:bg-gray-800 border-green-300 dark:border-green-600 text-green-800 dark:text-green-200 hover:scale-105"
+              } ${
+                animation === 'push' && index === stack.length - 1 ? 'animate-bounce' : ''
+              } ${
+                animation === 'pop' && index === stack.length - 1 ? 'animate-pulse opacity-50' : ''
+              } ${
+                animation === 'peek' && index === stack.length - 1 ? 'animate-pulse bg-yellow-400' : ''
+              }`}
+            >
+              <span className="font-bold">{value}</span>
+              {index === stack.length - 1 && (
+                <div className="absolute -right-8 top-1/2 transform -translate-y-1/2 text-green-600 font-bold text-sm">
+                  TOP
                 </div>
-              ))}
+              )}
             </div>
+          ))}
+          
+          {/* Stack Base */}
+          <div className="w-24 h-2 bg-green-600 dark:bg-green-400 rounded-full"></div>
+          <div className="text-center text-green-600 dark:text-green-400 font-bold text-sm mt-1">
+            STACK
           </div>
-
-          {/* Projects Section */}
-          <div className="max-w-6xl mx-auto px-4 pb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">
-              <Rocket className="inline-block mr-3 text-pink-400" size={32} />
-              Hands-on Project Ideas
-            </h2>
-            <p className="text-gray-400 mb-12 text-center text-lg">
-              Build these projects to master Stack concepts and showcase your skills to potential employers
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {projects.map((project, index) => (
-                <div key={index} className="bg-gray-800 rounded-lg p-6 border-l-4 border-l-purple-500 hover:shadow-xl transition-shadow">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-bold text-white">{project.title}</h3>
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${project.difficulty === 'Beginner' ? 'bg-green-600 text-white' :
-                        project.difficulty === 'Intermediate' ? 'bg-yellow-600 text-white' :
-                          'bg-red-600 text-white'
-                      }`}>
-                      {project.difficulty}
-                    </span>
-                  </div>
-                  <p className="text-gray-300 mb-4">{project.description}</p>
-                  <div className="space-y-2">
-                    <h4 className="font-semibold text-blue-400">Key Features:</h4>
-                    <ul className="text-gray-300 text-sm space-y-1">
-                      {project.features.map((feature, idx) => (
-                        <li key={idx}>• {feature}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Footer */}
-          <footer className="bg-black py-8">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">CS</span>
-                </div>
-                <span className="text-white font-semibold">The Real CS</span>
-              </div>
-              <p className="text-gray-400 text-center text-sm">
-                © 2025 The Real CS. Master every corner of computer science.
-              </p>
-            </div>
-          </footer>
-        </main>
+        </div>
       </div>
 
-    );
-  };
+      {/* Controls */}
+      <div className="flex flex-wrap justify-center gap-3 mb-6">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Enter value"
+            className="px-3 py-2 border-2 border-green-300 dark:border-green-600 rounded-lg focus:border-green-500 focus:outline-none bg-white dark:bg-gray-800 text-green-800 dark:text-green-200"
+            onKeyPress={(e) => e.key === 'Enter' && push()}
+          />
+          <button
+            onClick={push}
+            disabled={!inputValue.trim()}
+            className="px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white rounded-lg font-bold transition-colors duration-200"
+          >
+            Push
+          </button>
+        </div>
+        
+        <button
+          onClick={pop}
+          disabled={stack.length === 0}
+          className="px-4 py-2 bg-red-500 hover:bg-red-600 disabled:bg-gray-400 text-white rounded-lg font-bold transition-colors duration-200"
+        >
+          Pop
+        </button>
+        
+        <button
+          onClick={peek}
+          disabled={stack.length === 0}
+          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white rounded-lg font-bold transition-colors duration-200"
+        >
+          Peek
+        </button>
+      </div>
+
+      {/* Stack Information */}
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-center text-sm">
+          <div>
+            <span className="text-gray-500">Size</span>
+            <div className="font-bold text-green-600">{stack.length}</div>
+          </div>
+          <div>
+            <span className="text-gray-500">Selected Index</span>
+            <div className="font-bold text-green-600">
+              {stack.length > 0 ? selectedIndex : 'N/A'}
+            </div>
+          </div>
+          <div>
+            <span className="text-gray-500">Top Value</span>
+            <div className="font-bold text-green-600">
+              {stack.length > 0 ? stack[stack.length - 1] : 'Empty'}
+            </div>
+          </div>
+          <div>
+            <span className="text-gray-500">Status</span>
+            <div className="font-bold text-green-600">
+              {stack.length === 0 ? 'Empty' : 'Active'}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Stack Operations Info */}
+      <div className="mt-4 p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
+        <div className="text-sm text-green-700 dark:text-green-300">
+          <strong>Stack Operations:</strong>
+          <div className="mt-1">
+            • <strong>Push:</strong> Add element to top • <strong>Pop:</strong> Remove top element • <strong>Peek:</strong> View top element
+          </div>
+        </div>
+      </div>
+    </div>
+
+      </div>
+
+      {/* Industry Use Cases */}
+      <div className="max-w-6xl mx-auto px-4 pb-16">
+        <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center">
+          Industry Applications & Company Examples
+        </h2>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {industryExamples.map((example, idx) => {
+            const gradients = [
+              "from-green-600 to-blue-500",
+              "from-blue-600 to-cyan-500", 
+              "from-purple-600 to-pink-500",
+              "from-orange-600 to-red-500",
+              "from-teal-600 to-green-500",
+              "from-yellow-500 to-orange-500",
+              "from-red-500 to-pink-500",
+              "from-indigo-600 to-purple-500",
+              "from-cyan-600 to-blue-500",
+              "from-pink-600 to-red-500",
+              "from-emerald-600 to-teal-500",
+              "from-violet-600 to-purple-500",
+              "from-amber-600 to-orange-500",
+              "from-rose-600 to-pink-500",
+              "from-sky-600 to-blue-500",
+              "from-lime-600 to-green-500",
+              "from-fuchsia-600 to-purple-500",
+              "from-orange-500 to-red-500",
+              "from-teal-500 to-cyan-500"
+            ];
+            const [company, description] = example
+              .replace(/^- /, "")
+              .split(":");
+            return (
+              <div
+                key={idx}
+                className={`bg-gradient-to-r ${gradients[idx % gradients.length]} rounded-xl p-6 md:p-8 shadow-xl hover:shadow-2xl transition-all duration-300`}
+              >
+                <span className="block font-bold text-white text-xl mb-2">
+                  {company.trim()}
+                </span>
+                <p className="text-white text-md">{description.trim()}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Domain Importance & Related Tech */}
+      <div className="max-w-5xl mx-auto px-4 pb-16">
+        <div className="bg-gray-800 rounded-2xl p-8 md:p-10 shadow-lg border border-gray-700">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
+            Why Stack Matters for Modern Tech
+          </h2>
+          <p className="text-gray-300 mb-6 text-center text-lg">
+            {stackData.domainData.importance}
+          </p>
+          <div className="flex flex-col md:flex-row md:justify-center md:space-x-12">
+            <div className="mb-6 md:mb-0">
+              <h3 className="font-semibold text-blue-400 mb-3 text-center text-xl">
+                Related Technologies
+              </h3>
+              <ul className="list-disc list-inside text-gray-300 space-y-1">
+                {stackData.domainData.relatedTechnologies.map((tech, idx) => (
+                  <li key={idx}>{tech}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-green-400 mb-3 text-center text-xl">
+                Growth Trend
+              </h3>
+              <p className="text-gray-300 max-w-xs">
+                {stackData.domainData.growthTrend}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Interview Questions */}
+      <div className="max-w-6xl mx-auto px-4 pb-16">
+        <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">
+          <HelpCircle className="inline-block mr-3 text-orange-400" size={32} />
+          Interview Questions & Answers
+        </h2>
+        <p className="text-gray-400 mb-12 text-center text-lg">
+          Master these essential Stack interview questions to crack your next coding interview
+        </p>
+        
+        <div className="space-y-6">
+          {interviewQuestions.map((item, index) => (
+            <div key={index} className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+              <h3 className="text-lg font-semibold text-orange-400 mb-3">
+                Q{index + 1}: {item.question}
+              </h3>
+              <p className="text-gray-300 leading-relaxed">
+                <strong className="text-green-400">Answer:</strong> {item.answer}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Projects Section */}
+      <div className="max-w-6xl mx-auto px-4 pb-16">
+        <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">
+          <Rocket className="inline-block mr-3 text-pink-400" size={32} />
+          Hands-on Project Ideas
+        </h2>
+        <p className="text-gray-400 mb-12 text-center text-lg">
+          Build these projects to master Stack concepts and showcase your skills to potential employers
+        </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {projects.map((project, index) => (
+            <div key={index} className="bg-gray-800 rounded-lg p-6 border-l-4 border-l-purple-500 hover:shadow-xl transition-shadow">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-white">{project.title}</h3>
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  project.difficulty === 'Beginner' ? 'bg-green-600 text-white' :
+                  project.difficulty === 'Intermediate' ? 'bg-yellow-600 text-white' :
+                  'bg-red-600 text-white'
+                }`}>
+                  {project.difficulty}
+                </span>
+              </div>
+              <p className="text-gray-300 mb-4">{project.description}</p>
+              <div className="space-y-2">
+                <h4 className="font-semibold text-blue-400">Key Features:</h4>
+                <ul className="text-gray-300 text-sm space-y-1">
+                  {project.features.map((feature, idx) => (
+                    <li key={idx}>• {feature}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-black py-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+              <span className="text-white font-bold text-sm">CS</span>
+            </div>
+            <span className="text-white font-semibold">The Real CS</span>
+          </div>
+          <p className="text-gray-400 text-center text-sm">
+            © 2025 The Real CS. Master every corner of computer science.
+          </p>
+        </div>
+      </footer>
+      </main>
+    </div>
+    
+  );
+};
 
 
-  export default Stack;
+export default Stack;
