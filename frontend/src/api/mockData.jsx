@@ -96,7 +96,7 @@ export const dsaData = {
       ]
     },
     {
-      "id": "linked-list",
+      "id": "linkedList",
       "name": "Linked List",
       "description": "A linear data structure where elements are not stored in contiguous memory locations",
       "definition": "A linked list is a linear data structure where each element is a separate object called a node. Each node contains a data field and a 'next' reference or link to the next node in the sequence. It's a dynamic structure, unlike arrays.",
@@ -116,7 +116,7 @@ export const dsaData = {
       ]
     },
     {
-      "id": "binary-tree",
+      "id": "binaryTree",
       "name": "Binary Tree",
       "description": "A hierarchical data structure with nodes having at most two children",
       "definition": "A binary tree is a hierarchical data structure where each node has at most two children, referred to as left and right child. It's a fundamental structure that forms the basis for many advanced data structures like binary search trees, heaps, and expression trees.",
@@ -131,7 +131,7 @@ export const dsaData = {
       ]
     },
     {
-      "id": "hash-table",
+      "id": "hashTable",
       "name": "Hash Table / Hash Map",
       "description": "A data structure that stores key-value pairs for efficient lookup",
       "definition": "A hash table is a data structure that uses a hash function to map keys to a specific index in an array. This allows for very fast, average case O(1), insertion, deletion, and lookup operations.",

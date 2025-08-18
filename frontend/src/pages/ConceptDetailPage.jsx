@@ -3,9 +3,14 @@ import { useParams, Link } from 'react-router-dom';
 import { dsaData, aimlData, webdevData, cybersecurityData } from '../api/mockData';
 import WhatIsDSA from './WhatIsDSA';
 import UsesInIndustry from './usesInIndustry';
-import LearningRoadmap from './LearningRoadmap'; // <-- Import the component
+import LearningRoadmap from './LearningRoadmap';
 import ArrayPage from './Array';
-import Recursion from './Recursion'; // Make sure this import exists
+import Recursion from './Recursion';
+import Stack from './Stack';
+import Queue from './Queue';
+import LinkedList from './LinkedList';
+import BinaryTree from './BinaryTree';
+import HashTable from './HashTable';
 
 const dataMapping = {
   dsa: dsaData,
@@ -40,27 +45,38 @@ const ConceptDetailPage = () => {
   // Render a different component for each concept
   switch (conceptId) {
     case 'learningRoadmap':
-      if (domain === 'dsa') {
-        return <LearningRoadmap />;
-      }
+      if (domain === 'dsa') return <LearningRoadmap />;
       break;
     case 'what-is-dsa':
       return <WhatIsDSA concept={concept} domain={domain} domainData={domainData} />;
     case 'usesInIndustry':
       return <UsesInIndustry concept={concept} domain={domain} domainData={domainData} />;
     case 'array':
-      if (domain === 'dsa') {
-        return <ArrayPage />;
-      }
+      if (domain === 'dsa') return <ArrayPage />;
       break;
     case 'recursion':
-      if (domain === 'dsa') {
-        return <Recursion />;
-      }
+      if (domain === 'dsa') return <Recursion />;
       break;
+    case 'stack':
+      if (domain === 'dsa') return <Stack />;
+      break;
+    case 'queue':
+      if (domain === 'dsa') return <Queue />;
+      break;
+case 'linkedList':
+  if (domain === 'dsa') return <LinkedList />;
+  break;
+case 'binaryTree':
+  if (domain === 'dsa') return <BinaryTree />;
+  break;
+case 'hashTable':
+  if (domain === 'dsa') return <HashTable />;
+  break;
+
+
     // Add more cases for other custom pages
     default:
-      // fallback: use your existing generic layout for other concepts
+      // fallback: generic layout
       return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
           <header className="py-12 text-center">
