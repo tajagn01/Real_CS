@@ -41,7 +41,7 @@ const StackVisualization = () => {
   };
 
 const Stack = () => {
-  const [activeLanguage, setActiveLanguage] = useState('javascript');
+  const [language, setLanguage] = useState('javascript');
 
   // Interactive demo state (migrated from unused StackVisualization)
   const [stack, setStack] = useState([10, 20, 30, 40]);
@@ -575,8 +575,8 @@ public:
                 {Object.keys(codeExamples).map((lang) => (
                   <button
                     key={lang}
-                    onClick={() => setActiveLanguage(lang)}
-                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${activeLanguage === lang
+                    onClick={() => setLanguage(lang)}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${language === lang
                         ? 'bg-blue-600 text-white'
                         : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                       }`}
@@ -590,7 +590,7 @@ public:
             <div className="bg-gray-800 rounded-lg p-6 overflow-x-auto mb-8">
               <pre className="text-sm">
                 <code className="text-gray-300">
-                  {codeExamples[activeLanguage]}
+                  {codeExamples[language]}
                 </code>
               </pre>
             </div>
