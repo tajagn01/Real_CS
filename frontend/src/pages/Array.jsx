@@ -926,54 +926,54 @@ export default function EnhancedArrayPage() {
         </section>
 
         {/* Time & Space Complexity Analysis */}
-        <section>
-          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent">
-            ⚡ Performance Analysis
-          </h2>
-          
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-100 dark:bg-gray-700">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-lg font-semibold text-gray-800 dark:text-gray-200">Operation</th>
-                    <th className="px-6 py-4 text-center text-lg font-semibold text-gray-800 dark:text-gray-200">Time Complexity</th>
-                    <th className="px-6 py-4 text-center text-lg font-semibold text-gray-800 dark:text-gray-200">Space Complexity</th>
-                    <th className="px-6 py-4 text-left text-lg font-semibold text-gray-800 dark:text-gray-200">Notes</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
-                  {[
-                    { operation: "Access by Index", time: "O(1)", space: "O(1)", notes: "Direct memory address calculation" },
-                    { operation: "Search (Linear)", time: "O(n)", space: "O(1)", notes: "Must check each element sequentially" },
-                    { operation: "Insertion at End", time: "O(1)", space: "O(1)", notes: "For dynamic arrays with available space" },
-                    { operation: "Insertion at Middle", time: "O(n)", space: "O(1)", notes: "Requires shifting elements" },
-                    { operation: "Deletion at End", time: "O(1)", space: "O(1)", notes: "Simply remove last element" },
-                    { operation: "Deletion at Middle", time: "O(n)", space: "O(1)", notes: "Requires shifting elements left" }
-                  ].map((row, index) => (
-                    <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150">
-                      <td className="px-6 py-4 font-medium text-gray-800 dark:text-gray-200">{row.operation}</td>
-                      <td className="px-6 py-4 text-center">
-                        <span className={`px-3 py-1 rounded-full text-sm font-mono ${
-                          row.time === "O(1)" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300" :
-                          "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300"
-                        }`}>
-                          {row.time}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <span className="px-3 py-1 rounded-full text-sm font-mono bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
-                          {row.space}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-gray-700 dark:text-gray-300 text-sm">{row.notes}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+   <section>
+  <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent">
+    ⚡ Performance Analysis
+  </h2>
+
+  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+    <table className="w-full text-xs sm:text-sm md:text-base">
+      <thead className="bg-gray-100 dark:bg-gray-700">
+        <tr>
+          <th className="px-2 py-2 sm:px-4 sm:py-3 text-left font-semibold text-gray-800 dark:text-gray-200">Operation</th>
+          <th className="px-2 py-2 sm:px-4 sm:py-3 text-center font-semibold text-gray-800 dark:text-gray-200">Time</th>
+          <th className="px-2 py-2 sm:px-4 sm:py-3 text-center font-semibold text-gray-800 dark:text-gray-200">Space</th>
+          <th className="px-2 py-2 sm:px-4 sm:py-3 text-left font-semibold text-gray-800 dark:text-gray-200">Notes</th>
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
+        {[
+          { operation: "Access by Index", time: "O(1)", space: "O(1)", notes: "Direct memory address calculation" },
+          { operation: "Search (Linear)", time: "O(n)", space: "O(1)", notes: "Must check each element sequentially" },
+          { operation: "Insertion at End", time: "O(1)", space: "O(1)", notes: "For dynamic arrays with available space" },
+          { operation: "Insertion at Middle", time: "O(n)", space: "O(1)", notes: "Requires shifting elements" },
+          { operation: "Deletion at End", time: "O(1)", space: "O(1)", notes: "Simply remove last element" },
+          { operation: "Deletion at Middle", time: "O(n)", space: "O(1)", notes: "Requires shifting elements left" }
+        ].map((row, index) => (
+          <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150">
+            <td className="px-2 py-2 sm:px-4 sm:py-3 font-medium text-gray-800 dark:text-gray-200">{row.operation}</td>
+            <td className="px-2 py-2 sm:px-4 sm:py-3 text-center">
+              <span className={`px-2 py-1 rounded text-[10px] sm:text-xs font-mono ${
+                row.time === "O(1)" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300" :
+                "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300"
+              }`}>
+                {row.time}
+              </span>
+            </td>
+            <td className="px-2 py-2 sm:px-4 sm:py-3 text-center">
+              <span className="px-2 py-1 rounded text-[10px] sm:text-xs font-mono bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                {row.space}
+              </span>
+            </td>
+            <td className="px-2 py-2 sm:px-4 sm:py-3 text-gray-700 dark:text-gray-300 text-[11px] sm:text-sm">{row.notes}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
 
         {/* Interview Questions */}
         <section>

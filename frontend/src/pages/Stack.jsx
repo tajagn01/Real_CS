@@ -3,44 +3,7 @@ import { Code, Lightbulb, Building2, HelpCircle, Rocket } from 'lucide-react';
 
 const Stack = () => {
   
-  const [stack, setStack] = useState([10, 20, 30, 40]);
-  const [inputValue, setInputValue] = useState('');
-  const [selectedIndex, setSelectedIndex] = useState(stack.length - 1);
-  const [animation, setAnimation] = useState('');
-
-  const push = () => {
-    if (inputValue.trim() !== '') {
-      const newValue = parseInt(inputValue) || inputValue;
-      setAnimation('push');
-      setTimeout(() => {
-        setStack(prev => [...prev, newValue]);
-        setSelectedIndex(stack.length);
-        setInputValue('');
-        setAnimation('');
-      }, 300);
-    }
-  };
-
-  const pop = () => {
-    if (stack.length > 0) {
-      setAnimation('pop');
-      setTimeout(() => {
-        setStack(prev => prev.slice(0, -1));
-        setSelectedIndex(Math.max(0, stack.length - 2));
-        setAnimation('');
-      }, 300);
-    }
-  };
-
-  const peek = () => {
-    if (stack.length > 0) {
-      setSelectedIndex(stack.length - 1);
-      setAnimation('peek');
-      setTimeout(() => setAnimation(''), 600);
-    }
-  };
-
-
+ const [activeLanguage, setActiveLanguage] = useState('javascript');
   // Interactive demo state (migrated from unused StackVisualization)
   const [stack, setStack] = useState([10, 20, 30, 40]);
   const [inputValue, setInputValue] = useState('');
@@ -78,6 +41,7 @@ const Stack = () => {
       setTimeout(() => setAnimation(''), 600);
     }
   };
+
 
   const stackData = {
     concept: {

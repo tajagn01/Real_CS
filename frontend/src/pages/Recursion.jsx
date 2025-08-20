@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Copy, Check, Play, Pause, ArrowRight, Code, Brain, Target, Rocket } from 'lucide-react';
+import { Copy, Check, Play, Pause, ArrowRight, Code, Brain, Target, Rocket, Folder, BookOpen, RotateCcw, StepForward, Eye, EyeOff } from 'lucide-react';
 
 const Recursion = () => {
+  const [selectedQuestionIndex, setSelectedQuestionIndex] = useState(-1);
+
   const [copiedCode, setCopiedCode] = useState('');
   const [isAnimationPlaying, setIsAnimationPlaying] = useState(true);
 
@@ -11,71 +13,207 @@ const Recursion = () => {
     setTimeout(() => setCopiedCode(''), 2000);
   };
 
-  // Simple syntax highlighter to make code not the same color while keeping the theme
-  const escapeHtml = (str) => str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
 
-  const getLanguageKeywords = (language) => {
-    switch (language) {
-      case 'JavaScript':
-        return ['function','return','if','else','for','while','const','let','var','class','new','switch','case','break','continue'];
-      case 'Python':
-        return ['def','return','if','else','elif','for','while','in','and','or','not','None','True','False','class','yield'];
-      case 'C':
-      case 'C++':
-      case 'C#':
-        return ['int','void','return','if','else','for','while','char','float','double','class','struct','public','private','protected','static','new','bool','using'];
-      default:
-        return ['return','if','else','for','while','class','function'];
-    }
+  //ind. application 
+  const sections1 = {
+    recursion: {
+      industry_applications: [
+        {
+          title: "Google Search",
+          color: "#ef4444", // red
+          points: [
+            "Web crawling algorithms recursively follow links",
+            "PageRank algorithm uses recursive calculations",
+            "Search tree traversal for query optimization",
+          ],
+        },
+        {
+          title: "Facebook / Meta",
+          color: "#3b82f6", // blue
+          points: [
+            "Social graph traversal (friends of friends)",
+            "News feed algorithm uses recursive sorting",
+            "Comment thread nesting and replies",
+          ],
+        },
+        {
+          title: "File Systems",
+          color: "#22c55e", // green
+          points: [
+            "Directory traversal (Windows, macOS, Linux)",
+            "File search operations",
+            "Backup and synchronization tools",
+          ],
+        },
+        {
+          title: "Gaming Industry",
+          color: "#a855f7", // purple
+          points: [
+            "AI decision trees (Chess, Go)",
+            "Pathfinding algorithms",
+            "Procedural content generation",
+          ],
+        },
+        {
+          title: "Data Compression",
+          color: "#f97316", // orange
+          points: [
+            "Recursive Huffman coding",
+            "Image compression (quadtree decomposition)",
+            "Recursive run-length encoding",
+          ],
+        },
+        {
+          title: "Networking",
+          color: "#06b6d4", // cyan
+          points: [
+            "Recursive DNS lookups",
+            "Packet routing through recursive algorithms",
+            "Recursive parsing of network protocols",
+          ],
+        },
+        {
+          title: "Compiler Design",
+          color: "#eab308", // yellow
+          points: [
+            "Recursive descent parsing",
+            "Expression tree generation",
+            "Syntax checking via recursion",
+          ],
+        },
+        {
+          title: "Artificial Intelligence",
+          color: "#9333ea", // violet
+          points: [
+            "Recursive search in decision trees",
+            "Minimax algorithm in game AI",
+            "Recursive neural network architectures",
+          ],
+        },
+        {
+          title: "Cybersecurity",
+          color: "#0ea5e9", // sky blue
+          points: [
+            "Recursive scanning for malware patterns",
+            "Recursive log analysis for threat detection",
+            "Recursive traversal in penetration testing",
+          ],
+        },
+      ],
+    },
   };
 
-  const highlightCode = (code, language) => {
-    let html = escapeHtml(code);
-    // comments
-    if (language === 'Python') {
-      html = html.replace(/(^|\n)\s*#.*(?=$|\n)/g, (m) => `<span class="text-gray-400">${m}</span>`);
-    } else {
-      html = html
-        .replace(/\/\*[\s\S]*?\*\//g, (m) => `<span class="text-gray-400">${m}</span>`) // block comments
-        .replace(/(^|\n)\s*\/\/.*(?=$|\n)/g, (m) => `<span class="text-gray-400">${m}</span>`); // line comments
+
+
+  const highlightSyntax = (code, language) => {
+    const keywords = {
+      c: ['int', 'float', 'double', 'char', 'void', 'return', 'if', 'else', 'for', 'while', 'printf', 'include', 'main'],
+      cpp: ['int', 'float', 'double', 'char', 'void', 'return', 'if', 'else', 'for', 'while', 'cout', 'cin', 'using', 'namespace', 'std', 'include', 'main', 'string'],
+      java: ['public', 'private', 'static', 'void', 'int', 'double', 'String', 'class', 'return', 'if', 'else', 'for', 'while', 'System', 'main', 'println', 'printf'],
+      python: ['def', 'return', 'if', 'else', 'elif', 'for', 'while', 'import', 'from', 'class', 'print', 'len', 'range', 'True', 'False', 'None'],
+      javascript: ['function', 'const', 'let', 'var', 'return', 'if', 'else', 'for', 'while', 'class', 'this', 'console', 'log', 'true', 'false', 'null', 'undefined']
+    };
+
+    const strings = /"[^"]*"|'[^']*'|`[^`]*`/g;
+    const comments = language.toLowerCase() === 'python' ? /#.*$/gm : /\/\/.*$|\/\*[\s\S]*?\*\//gm;
+    const numbers = /\b\d+\.?\d*\b/g;
+
+    let highlightedCode = code;
+
+    // Strings → green
+    highlightedCode = highlightedCode.replace(strings, m => `<span style="color: #22c55e;">${m}</span>`);
+    // Comments → gray
+    highlightedCode = highlightedCode.replace(comments, m => `<span style="color: #6b7280;">${m}</span>`);
+    // Numbers → orange
+    highlightedCode = highlightedCode.replace(numbers, m => `<span style="color: #f97316;">${m}</span>`);
+
+    // Keywords → blue
+    const lang = language.toLowerCase();
+    if (keywords[lang]) {
+      keywords[lang].forEach(keyword => {
+        const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+        highlightedCode = highlightedCode.replace(regex, `<span style="color: #3b82f6;">${keyword}</span>`);
+      });
     }
-    // strings
-    html = html
-      .replace(/`[\s\S]*?`/g, (m) => `<span class="text-green-300">${m}</span>`)
-      .replace(/"[^"\n]*"/g, (m) => `<span class="text-green-300">${m}</span>`)
-      .replace(/'[^'\n]*'/g, (m) => `<span class="text-green-300">${m}</span>`);
-    // numbers
-    html = html.replace(/\b\d+(?:\.\d+)?\b/g, (m) => `<span class="text-orange-300">${m}</span>`);
-    // keywords
-    const keywords = getLanguageKeywords(language).join('|');
-    const kwRegex = new RegExp(`\\b(${keywords})\\b`, 'g');
-    html = html.replace(kwRegex, (m) => `<span class="text-purple-300 font-semibold">${m}</span>`);
-    return html;
+
+    return highlightedCode;
   };
 
-  // Custom hook to trace recursion step-by-step (factorial example)
+  //questions
+  const sections = {
+    interview_questions: [
+      {
+        question: "What is recursion?",
+        answer: "A function calling itself to solve smaller subproblems.",
+        difficulty: "Easy",
+      },
+      {
+        question: "How do you optimize a recursive function?",
+        answer: "Use memoization or convert it to dynamic programming.",
+        difficulty: "Medium",
+      },
+      {
+        question: "Explain the N-Queens problem.",
+        answer: "Place N queens on an N×N board so none attack each other.",
+        difficulty: "Hard",
+      },
+      {
+        question: "What are base and recursive cases?",
+        answer: "Base case stops recursion; recursive case breaks problem down.",
+        difficulty: "Easy",
+      },
+      {
+        question: "How does recursion differ from iteration?",
+        answer: "Recursion uses the call stack; iteration uses loops.",
+        difficulty: "Medium",
+      },
+    ],
+  };
+
+
+  // Enhanced recursion tracer with more features
   const useRecursionTracer = () => {
     const [traceSteps, setTraceSteps] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [speed, setSpeed] = useState(1000);
     const timerRef = useRef(null);
 
     const buildTrace = (n) => {
       const steps = [];
+      let depth = 0;
       const factorialTrace = (k) => {
-        steps.push({ type: 'call', label: `factorial(${k})` });
+        depth++;
+        steps.push({
+          type: 'call',
+          label: `factorial(${k})`,
+          depth: depth - 1,
+          value: k
+        });
+
         if (k <= 1) {
-          steps.push({ type: 'return', label: `return 1` });
+          steps.push({
+            type: 'return',
+            label: `return 1`,
+            depth: depth - 1,
+            value: 1
+          });
+          depth--;
           return 1;
         }
+
         const sub = factorialTrace(k - 1);
         const res = k * sub;
-        steps.push({ type: 'return', label: `return ${res}` });
+        steps.push({
+          type: 'return',
+          label: `return ${res}`,
+          depth: depth - 1,
+          value: res
+        });
+        depth--;
         return res;
       };
+
       const value = factorialTrace(n);
       return { steps, value };
     };
@@ -89,6 +227,7 @@ const Recursion = () => {
     };
 
     const next = () => setCurrentIndex((i) => Math.min(i + 1, traceSteps.length - 1));
+    const prev = () => setCurrentIndex((i) => Math.max(i - 1, 0));
     const reset = () => {
       if (timerRef.current) clearInterval(timerRef.current);
       setCurrentIndex(0);
@@ -98,26 +237,27 @@ const Recursion = () => {
     useEffect(() => {
       if (!isPlaying) return;
       if (traceSteps.length === 0) return;
+
       timerRef.current = setInterval(() => {
         setCurrentIndex((i) => {
           if (i >= traceSteps.length - 1) {
-            clearInterval(timerRef.current);
+            setIsPlaying(false);
             return i;
           }
           return i + 1;
         });
-      }, 1000);
+      }, speed);
+
       return () => timerRef.current && clearInterval(timerRef.current);
-    }, [isPlaying, traceSteps]);
+    }, [isPlaying, traceSteps, speed]);
 
     const stackAt = (idx) => {
       const stack = [];
       for (let i = 0; i <= idx && i < traceSteps.length; i++) {
         const step = traceSteps[i];
         if (step.type === 'call') {
-          stack.push(step.label);
+          stack.push(step);
         } else if (step.type === 'return') {
-          // Pop the latest call when we see a return
           if (stack.length > 0) stack.pop();
         }
       }
@@ -127,81 +267,169 @@ const Recursion = () => {
     const isFinished = traceSteps.length > 0 && currentIndex >= traceSteps.length - 1;
 
     return {
-      start,
-      next,
-      reset,
-      isPlaying,
-      setIsPlaying,
-      currentIndex,
-      traceSteps,
+      start, next, prev, reset, isPlaying, setIsPlaying,
+      currentIndex, traceSteps, speed, setSpeed,
       currentStep: traceSteps[currentIndex],
       stack: stackAt(currentIndex),
       isFinished
     };
   };
 
+  // Enhanced Factorial Animation with more visual elements
   const FactorialAnimation = () => {
     const [step, setStep] = useState(0);
+    const [showExplanation, setShowExplanation] = useState(true);
+
     const steps = [
-      'factorial(4)',
-      'factorial(4) = 4 × factorial(3)',
-      'factorial(4) = 4 × 3 × factorial(2)',
-      'factorial(4) = 4 × 3 × 2 × factorial(1)',
-      'factorial(4) = 4 × 3 × 2 × 1',
-      'factorial(4) = 24'
+      {
+        equation: 'factorial(4)',
+        explanation: 'Start with factorial(4) - we need to find 4!',
+        color: 'text-blue-400'
+      },
+      {
+        equation: 'factorial(4) = 4 × factorial(3)',
+        explanation: 'Break down: 4! = 4 × 3!',
+        color: 'text-purple-400'
+      },
+      {
+        equation: 'factorial(4) = 4 × 3 × factorial(2)',
+        explanation: 'Continue breaking down: 3! = 3 × 2!',
+        color: 'text-pink-400'
+      },
+      {
+        equation: 'factorial(4) = 4 × 3 × 2 × factorial(1)',
+        explanation: 'Keep going: 2! = 2 × 1!',
+        color: 'text-orange-400'
+      },
+      {
+        equation: 'factorial(4) = 4 × 3 × 2 × 1',
+        explanation: 'Base case reached: 1! = 1',
+        color: 'text-green-400'
+      },
+      {
+        equation: 'factorial(4) = 24',
+        explanation: 'Calculate final result: 4 × 3 × 2 × 1 = 24',
+        color: 'text-cyan-400'
+      }
     ];
 
     useEffect(() => {
       if (!isAnimationPlaying) return;
-      
+
       const interval = setInterval(() => {
         setStep((prev) => (prev + 1) % steps.length);
-      }, 2000);
+      }, 2500);
       return () => clearInterval(interval);
     }, [isAnimationPlaying]);
 
     return (
-      <div className="bg-gray-900 rounded-xl p-8 border border-gray-700 mb-8">
+      <div className="bg-gradient-to-br from-gray-900 via-blue-900/20 to-purple-900/20 rounded-xl p-8 border border-gray-700 mb-8 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-6">
           <h4 className="text-xl font-semibold text-white flex items-center gap-2">
-            <Brain className="w-5 h-5 text-blue-400" />
-            Factorial Animation
+            <Brain className="w-6 h-6 text-blue-400" />
+            Interactive Factorial Animation
           </h4>
-          <button
-            onClick={() => setIsAnimationPlaying(!isAnimationPlaying)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium"
-          >
-            {isAnimationPlaying ? <Pause size={16} /> : <Play size={16} />}
-            {isAnimationPlaying ? 'Pause' : 'Play'}
-          </button>
-        </div>
-        <div className="text-center">
-          <div className="text-2xl font-mono text-green-400 mb-6 min-h-8">
-            {steps[step]}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setShowExplanation(!showExplanation)}
+              className="flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors text-sm border border-gray-600"
+            >
+              {showExplanation ? <EyeOff size={16} /> : <Eye size={16} />}
+              {showExplanation ? 'Hide' : 'Show'} Details
+            </button>
+            <button
+              onClick={() => setIsAnimationPlaying(!isAnimationPlaying)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium"
+            >
+              {isAnimationPlaying ? <Pause size={16} /> : <Play size={16} />}
+              {isAnimationPlaying ? 'Pause' : 'Play'}
+            </button>
           </div>
-          <div className="flex justify-center gap-2">
+        </div>
+
+        <div className="text-center mb-6">
+          <div className={`text-3xl font-mono font-bold mb-4 transition-all duration-500 ${steps[step]?.color || 'text-green-400'}`}>
+            {steps[step]?.equation}
+          </div>
+
+          {showExplanation && (
+            <div className="text-gray-300 text-lg mb-6 min-h-[3rem] flex items-center justify-center">
+              {steps[step]?.explanation}
+            </div>
+          )}
+
+          <div className="flex justify-center gap-2 mb-4">
             {steps.map((_, index) => (
-              <div
+              <button
                 key={index}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  index === step ? 'bg-blue-500' : 'bg-gray-600'
-                }`}
+                onClick={() => setStep(index)}
+                className={`w-4 h-4 rounded-full transition-all duration-300 ${index === step
+                  ? 'bg-blue-500 scale-125'
+                  : index < step
+                    ? 'bg-blue-400 opacity-60'
+                    : 'bg-gray-600'
+                  }`}
               />
             ))}
+          </div>
+
+          <div className="text-sm text-gray-400">
+            Step {step + 1} of {steps.length}
           </div>
         </div>
       </div>
     );
   };
 
+  // Enhanced code snippets
   const codeSnippets = {
-    javascript: {
-      label: "JavaScript",
-      code: `function factorial(n) {
-  if (n <= 1) return 1;
-  return n * factorial(n - 1);
+    java: {
+      label: "Java",
+      code: `public class FactorialExample {
+    public static int factorial(int n) {
+        if (n <= 1)
+            return 1;
+        else
+            return n * factorial(n - 1);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(factorial(5)); // Output: 120
+    }
+}`
+    },
+    cpp: {
+      label: "C++",
+      code: `#include <iostream>
+using namespace std;
+
+int factorial(int n) {
+    if (n <= 1)
+        return 1;
+    else
+        return n * factorial(n - 1);
 }
-console.log(factorial(5)); // Output: 120`
+
+int main() {
+    cout << factorial(5); // Output: 120
+    return 0;
+}`
+    },
+    c: {
+      label: "C",
+      code: `#include <stdio.h>
+
+int factorial(int n) {
+    if (n <= 1)
+        return 1;
+    else
+        return n * factorial(n - 1);
+}
+
+int main() {
+    printf("%d", factorial(5)); // Output: 120
+    return 0;
+}`
     },
     python: {
       label: "Python",
@@ -210,37 +438,21 @@ console.log(factorial(5)); // Output: 120`
         return 1
     return n * factorial(n - 1)
 
-print(factorial(5))  # Output: 120`
+if __name__ == "__main__":
+    print(factorial(5))  # Output: 120`
     },
-    c: {
-      label: "C",
-      code: `int factorial(int n) {
-  if (n <= 1)
-    return 1;
-  else
-    return n * factorial(n - 1);
+    javascript: {
+      label: "JavaScript",
+      code: `function factorial(n) {
+  if (n <= 1) return 1;
+  return n * factorial(n - 1);
 }
-// printf("%d", factorial(5)); // Output: 120`
-    },
-    cpp: {
-      label: "C++",
-      code: `int factorial(int n) {
-  if (n <= 1)
-    return 1;
-  else
-    return n * factorial(n - 1);
+
+function main() {
+  console.log(factorial(5)); // Output: 120
 }
-// std::cout << factorial(5); // Output: 120`
-    },
-    csharp: {
-      label: "C#",
-      code: `int Factorial(int n) {
-  if (n <= 1)
-    return 1;
-  else
-    return n * Factorial(n - 1);
-}
-// Console.WriteLine(Factorial(5)); // Output: 120`
+
+main();`
     }
   };
 
@@ -257,7 +469,7 @@ print(factorial(5))  # Output: 120`
     return base * power(base, exponent - 1);
   }
 }
-// O(log n)`
+// Time Complexity: O(log n)`
     },
     python: {
       label: "Python",
@@ -271,7 +483,7 @@ print(factorial(5))  # Output: 120`
         return half * half
     else:
         return base * power(base, exponent - 1)
-# O(log n)`
+# Time Complexity: O(log n)`
     },
     c: {
       label: "C",
@@ -285,7 +497,7 @@ print(factorial(5))  # Output: 120`
     return base * power(base, exponent - 1);
   }
 }
-// O(log n)`
+// Time Complexity: O(log n)`
     },
     cpp: {
       label: "C++",
@@ -299,21 +511,21 @@ print(factorial(5))  # Output: 120`
     return base * power(base, exponent - 1);
   }
 }
-// O(log n)`
+// Time Complexity: O(log n)`
     },
-    csharp: {
-      label: "C#",
-      code: `int Power(int baseNum, int exponent) {
+    java: {
+      label: "Java",
+      code: `public static int power(int base, int exponent) {
   if (exponent == 0) return 1;
-  if (exponent == 1) return baseNum;
+  if (exponent == 1) return base;
   if (exponent % 2 == 0) {
-    int half = Power(baseNum, exponent / 2);
+    int half = power(base, exponent / 2);
     return half * half;
   } else {
-    return baseNum * Power(baseNum, exponent - 1);
+    return base * power(base, exponent - 1);
   }
 }
-// O(log n)`
+// Time Complexity: O(log n)`
     }
   };
 
@@ -365,8 +577,7 @@ print(factorial(5))  # Output: 120`
     str[pos] = ')';
     generateParentheses(n, str, open, close + 1, pos + 1);
   }
-}
-// Usage: char str[2*n+1]; generateParentheses(n, str, 0, 0, 0);`
+}`
     },
     cpp: {
       label: "C++",
@@ -379,22 +590,20 @@ print(factorial(5))  # Output: 120`
     generateParentheses(n, str + "(", open + 1, close);
   if (close < open)
     generateParentheses(n, str + ")", open, close + 1);
-}
-// Usage: generateParentheses(n, "", 0, 0);`
+}`
     },
-    csharp: {
-      label: "C#",
-      code: `void GenerateParentheses(int n, string current, int open, int close) {
-  if (current.Length == 2 * n) {
-    Console.WriteLine(current);
+    java: {
+      label: "Java",
+      code: `public void generateParentheses(int n, String current, int open, int close) {
+  if (current.length() == 2 * n) {
+    System.out.println(current);
     return;
   }
   if (open < n)
-    GenerateParentheses(n, current + "(", open + 1, close);
+    generateParentheses(n, current + "(", open + 1, close);
   if (close < open)
-    GenerateParentheses(n, current + ")", open, close + 1);
-}
-// Usage: GenerateParentheses(n, "", 0, 0);`
+    generateParentheses(n, current + ")", open, close + 1);
+}`
     }
   };
 
@@ -404,6 +613,7 @@ print(factorial(5))  # Output: 120`
       code: `function solveNQueens(n) {
   const result = [];
   const board = Array(n).fill().map(() => Array(n).fill('.'));
+  
   function isValid(row, col) {
     for (let i = 0; i < row; i++)
       if (board[i][col] === 'Q') return false;
@@ -413,6 +623,7 @@ print(factorial(5))  # Output: 120`
       if (board[i][j] === 'Q') return false;
     return true;
   }
+  
   function backtrack(row) {
     if (row === n) {
       result.push(board.map(row => row.join('')));
@@ -426,6 +637,7 @@ print(factorial(5))  # Output: 120`
       }
     }
   }
+  
   backtrack(0);
   return result;
 }`
@@ -434,7 +646,8 @@ print(factorial(5))  # Output: 120`
       label: "Python",
       code: `def solve_n_queens(n):
     result = []
-    board = [["."] * n for _ in range(n)]
+    board = [["." for _ in range(n)] for _ in range(n)]
+    
     def is_valid(row, col):
         for i in range(row):
             if board[i][col] == "Q":
@@ -446,6 +659,7 @@ print(factorial(5))  # Output: 120`
             if board[i][j] == "Q":
                 return False
         return True
+    
     def backtrack(row):
         if row == n:
             result.append(["".join(r) for r in board])
@@ -455,100 +669,110 @@ print(factorial(5))  # Output: 120`
                 board[row][col] = "Q"
                 backtrack(row + 1)
                 board[row][col] = "."
+    
     backtrack(0)
     return result`
     },
-    c: {
-      label: "C",
-      code: `// N-Queens in C (prints one solution)
-#define N 8
-int board[N][N];
-int isSafe(int row, int col) {
-  for (int i = 0; i < row; i++)
-    if (board[i][col]) return 0;
-  for (int i = row-1, j = col-1; i>=0 && j>=0; i--, j--)
-    if (board[i][j]) return 0;
-  for (int i = row-1, j = col+1; i>=0 && j<N; i--, j++)
-    if (board[i][j]) return 0;
-  return 1;
-}
-int solve(int row) {
-  if (row == N) return 1;
-  for (int col = 0; col < N; col++) {
-    if (isSafe(row, col)) {
-      board[row][col] = 1;
-      if (solve(row+1)) return 1;
-      board[row][col] = 0;
+    java: {
+      label: "Java",
+      code: `public List<List<String>> solveNQueens(int n) {
+    List<List<String>> result = new ArrayList<>();
+    char[][] board = new char[n][n];
+    
+    for (int i = 0; i < n; i++) {
+        Arrays.fill(board[i], '.');
     }
-  }
-  return 0;
+    
+    backtrack(result, board, 0, n);
+    return result;
 }
-// Usage: solve(0);`
+
+private void backtrack(List<List<String>> result, char[][] board, int row, int n) {
+    if (row == n) {
+        List<String> solution = new ArrayList<>();
+        for (char[] r : board) {
+            solution.add(String.valueOf(r));
+        }
+        result.add(solution);
+        return;
+    }
+    
+    for (int col = 0; col < n; col++) {
+        if (isValid(board, row, col, n)) {
+            board[row][col] = 'Q';
+            backtrack(result, board, row + 1, n);
+            board[row][col] = '.';
+        }
+    }
+}`
     },
     cpp: {
       label: "C++",
-      code: `void solveNQueens(int n, int row, vector<string>& board, vector<vector<string>>& res) {
-  if (row == n) {
-    res.push_back(board);
-    return;
-  }
-  for (int col = 0; col < n; col++) {
-    bool safe = true;
-    for (int i = 0; i < row; i++)
-      if (board[i][col] == 'Q') safe = false;
-    for (int i = row-1, j = col-1; i>=0 && j>=0; i--, j--)
-      if (board[i][j] == 'Q') safe = false;
-    for (int i = row-1, j = col+1; i>=0 && j<n; i--, j++)
-      if (board[i][j] == 'Q') safe = false;
-    if (safe) {
-      board[row][col] = 'Q';
-      solveNQueens(n, row+1, board, res);
-      board[row][col] = '.';
-    }
-  }
+      code: `vector<vector<string>> solveNQueens(int n) {
+    vector<vector<string>> result;
+    vector<string> board(n, string(n, '.'));
+    backtrack(result, board, 0, n);
+    return result;
 }
-// Usage: vector<vector<string>> res; vector<string> board(n, string(n, '.')); solveNQueens(n, 0, board, res);`
+
+void backtrack(vector<vector<string>>& result, vector<string>& board, int row, int n) {
+    if (row == n) {
+        result.push_back(board);
+        return;
+    }
+    
+    for (int col = 0; col < n; col++) {
+        if (isValid(board, row, col, n)) {
+            board[row][col] = 'Q';
+            backtrack(result, board, row + 1, n);
+            board[row][col] = '.';
+        }
+    }
+}`
     },
-    csharp: {
-      label: "C#",
-      code: `void SolveNQueens(int n, int row, char[,] board, List<List<string>> res) {
-  if (row == n) {
-    var solution = new List<string>();
-    for (int i = 0; i < n; i++) {
-      var rowStr = "";
-      for (int j = 0; j < n; j++)
-        rowStr += board[i, j];
-      solution.Add(rowStr);
-    }
-    res.Add(solution);
-    return;
-  }
-  for (int col = 0; col < n; col++) {
-    bool safe = true;
+    c: {
+      label: "C",
+      code: `#define N 8
+int board[N][N];
+
+int isSafe(int row, int col) {
     for (int i = 0; i < row; i++)
-      if (board[i, col] == 'Q') safe = false;
-    for (int i = row-1, j = col-1; i>=0 && j>=0; i--, j--)
-      if (board[i, j] == 'Q') safe = false;
-    for (int i = row-1, j = col+1; i>=0 && j<n; i--, j++)
-      if (board[i, j] == 'Q') safe = false;
-    if (safe) {
-      board[row, col] = 'Q';
-      SolveNQueens(n, row+1, board, res);
-      board[row, col] = '.';
-    }
-  }
+        if (board[i][col]) return 0;
+    
+    for (int i = row-1, j = col-1; i >= 0 && j >= 0; i--, j--)
+        if (board[i][j]) return 0;
+    
+    for (int i = row-1, j = col+1; i >= 0 && j < N; i--, j++)
+        if (board[i][j]) return 0;
+    
+    return 1;
 }
-// Usage: var res = new List<List<string>>(); var board = new char[n, n]; for (int i=0;i<n;i++) for (int j=0;j<n;j++) board[i,j]='.'; SolveNQueens(n, 0, board, res);`
+
+int solve(int row) {
+    if (row == N) return 1;
+    
+    for (int col = 0; col < N; col++) {
+        if (isSafe(row, col)) {
+            board[row][col] = 1;
+            if (solve(row + 1)) return 1;
+            board[row][col] = 0;
+        }
+    }
+    return 0;
+}`
     }
   };
 
   const CodeBlock = ({ code, language, id }) => (
-    <div className="bg-gray-900 rounded-xl overflow-hidden border border-gray-700 mb-6">
-      <div className="flex items-center justify-between bg-gray-800 px-4 py-3 border-b border-gray-700">
-        <span className="text-sm text-gray-400 font-medium">{language}</span>
+    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl overflow-hidden border border-gray-700 mb-6 shadow-xl">
+      <div className="flex items-center justify-between bg-gradient-to-r from-gray-800 to-gray-700 px-4 py-3 border-b border-gray-600">
+        <div className="flex items-center gap-2">
+          <Code className="w-4 h-4 text-blue-400" />
+          <span className="text-sm text-gray-300 font-medium">{language}</span>
+        </div>
         <button
           onClick={() => copyToClipboard(code, id)}
-          className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm px-3 py-1 rounded-lg hover:bg-gray-700"
+          className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm px-3 py-1 rounded-lg hover:bg-gray-600"
         >
           {copiedCode === id ? <Check size={14} /> : <Copy size={14} />}
           <span>{copiedCode === id ? 'Copied!' : 'Copy'}</span>
@@ -557,19 +781,17 @@ int solve(int row) {
       <pre className="p-4 overflow-auto text-sm bg-gray-900">
         <code
           className="text-gray-200"
-          dangerouslySetInnerHTML={{ __html: highlightCode(code, language) }}
+          dangerouslySetInnerHTML={{ __html: highlightSyntax(code, language) }}
         />
       </pre>
     </div>
   );
 
   const LearningCard = ({ title, children, icon: Icon, color = "blue", borderColor }) => (
-    <div className={`bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 ${borderColor || 'border-gray-300 dark:border-gray-700'}`}>
-      {title && (
-        <h3 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200 flex items-center gap-3">
-          {Icon && <Icon className={`w-5 h-5 text-${color}-500`} />} {title}
-        </h3>
-      )}
+    <div className="bg-gray-800/60 backdrop-blur-lg rounded-2xl shadow-lg border border-gray-700 p-6 sm:p-8 w-full max-w-4xl mx-auto mb-10">
+      <h3 className="text-xl sm:text-2xl font-semibold mb-4 text-white text-center">
+        {title}
+      </h3>
       {children}
     </div>
   );
@@ -590,25 +812,25 @@ int solve(int row) {
   const CodeTabs = ({ snippets }) => {
     const defaultTab = snippets.python ? 'python' : Object.keys(snippets)[0];
     const [active, setActive] = useState(defaultTab);
+
     return (
       <div>
-        <div className="flex gap-2 mb-2">
+        <div className="flex gap-1 mb-4 overflow-x-auto">
           {Object.entries(snippets).map(([key, { label }]) => (
             <button
               key={key}
               onClick={() => setActive(key)}
-              className={`px-4 py-1 rounded-t-lg font-semibold ${
-                active === key
-                  ? 'bg-pink-600 text-white'
-                  : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
-              }`}
+              className={`px-4 py-2 rounded-t-lg font-semibold text-sm whitespace-nowrap transition-all ${active === key
+                ? 'bg-blue-600 text-white border-b-2 border-blue-400'
+                : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+                }`}
             >
               {label}
             </button>
           ))}
         </div>
         <CodeBlock
-          id={`factorial-${active}`}
+          id={`code-${active}-${Math.random()}`}
           language={snippets[active].label}
           code={snippets[active].code}
         />
@@ -618,16 +840,9 @@ int solve(int row) {
 
   const InteractiveTracer = () => {
     const {
-      start,
-      next,
-      reset,
-      isPlaying,
-      setIsPlaying,
-      currentStep,
-      stack,
-      isFinished,
-      traceSteps,
-      currentIndex
+      start, next, prev, reset, isPlaying, setIsPlaying,
+      currentStep, stack, isFinished, traceSteps,
+      currentIndex, speed, setSpeed
     } = useRecursionTracer();
     const [n, setN] = useState(4);
 
@@ -636,23 +851,37 @@ int solve(int row) {
     }, [n]);
 
     return (
-      <div className="bg-gray-900 rounded-xl p-6 border border-gray-700 mb-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+      <div className="bg-gradient-to-br from-gray-900 via-purple-900/20 to-pink-900/20 rounded-xl p-6 border border-gray-700 mb-8 backdrop-blur-sm">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
           <h4 className="text-xl font-semibold text-white flex items-center gap-2">
-            <Brain className="w-5 h-5 text-pink-400" />
-            Interactive Recursion Tracer
+            <Brain className="w-6 h-6 text-pink-400" />
+            Advanced Recursion Tracer
           </h4>
           <div className="flex flex-wrap items-center gap-3">
-            <label className="text-sm text-gray-300">n =</label>
-            <input
-              type="range"
-              min="0"
-              max="7"
-              value={n}
-              onChange={(e) => setN(Number(e.target.value))}
-              className="w-40"
-            />
-            <span className="text-sm text-blue-300 font-semibold w-6 text-center">{n}</span>
+            <div className="flex items-center gap-2">
+              <label className="text-sm text-gray-300">Input:</label>
+              <input
+                type="range"
+                min="0"
+                max="7"
+                value={n}
+                onChange={(e) => setN(Number(e.target.value))}
+                className="w-20"
+              />
+              <span className="text-sm text-blue-300 font-semibold w-6 text-center">{n}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <label className="text-sm text-gray-300">Speed:</label>
+              <select
+                value={speed}
+                onChange={(e) => setSpeed(Number(e.target.value))}
+                className="bg-gray-800 text-white px-2 py-1 rounded text-sm border border-gray-600"
+              >
+                <option value={2000}>Slow</option>
+                <option value={1000}>Normal</option>
+                <option value={500}>Fast</option>
+              </select>
+            </div>
             <button
               onClick={() => setIsPlaying(!isPlaying)}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium"
@@ -661,55 +890,255 @@ int solve(int row) {
               {isPlaying ? 'Pause' : 'Play'}
             </button>
             <button
+              onClick={prev}
+              disabled={currentIndex === 0}
+              className="px-3 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-sm font-medium border border-gray-600 disabled:opacity-50"
+            >
+              ←
+            </button>
+            <button
               onClick={next}
               disabled={isFinished}
               className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-sm font-medium border border-gray-600 disabled:opacity-50"
             >
-              Step
+              <StepForward size={16} />
             </button>
             <button
               onClick={() => { reset(); start(n); }}
               className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-sm font-medium border border-gray-600"
             >
-              Reset
+              <RotateCcw size={16} />
             </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Current Step */}
           <div>
-            <h5 className="text-sm font-semibold text-gray-300 mb-2">Current step</h5>
-            <div className="bg-gray-800 rounded-lg p-4 min-h-[56px] flex items-center">
-              <span className="font-mono text-green-300">{currentStep ? currentStep.label : '—'}</span>
+            <h5 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+              <Target className="w-4 h-4" />
+              Current Step
+            </h5>
+            <div className="bg-gradient-to-r from-gray-800 to-gray-700 rounded-lg p-4 min-h-[80px] flex items-center justify-center border border-gray-600">
+              <div className="text-center">
+                <div className="font-mono text-lg text-green-300 mb-2">
+                  {currentStep ? currentStep.label : '—'}
+                </div>
+                <div className="text-xs text-gray-400">
+                  {currentStep ? `Depth: ${currentStep.depth}` : 'Ready to start'}
+                </div>
+              </div>
             </div>
+
+            {/* Progress Bar */}
             <div className="mt-4">
-              <h5 className="text-sm font-semibold text-gray-300 mb-2">Progress</h5>
-              <div className="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+              <div className="flex justify-between text-xs text-gray-400 mb-2">
+                <span>Progress</span>
+                <span>{currentIndex + 1} / {traceSteps.length || 1}</span>
+              </div>
+              <div className="w-full bg-gray-800 rounded-full h-2 overflow-hidden border border-gray-600">
                 <div
-                  className="bg-pink-500 h-2"
-                  style={{ width: traceSteps.length ? `${(currentIndex / (traceSteps.length - 1)) * 100}%` : '0%' }}
+                  className="bg-gradient-to-r from-pink-500 to-purple-500 h-2 transition-all duration-300"
+                  style={{ width: traceSteps.length ? `${((currentIndex + 1) / traceSteps.length) * 100}%` : '0%' }}
                 />
               </div>
             </div>
           </div>
+
+          {/* Call Stack */}
           <div>
-            <h5 className="text-sm font-semibold text-gray-300 mb-2">Call stack</h5>
-            <div className="bg-gray-800 rounded-lg p-4 min-h-[140px]">
-              <div className="flex flex-col gap-2">
+            <h5 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+              <Folder className="w-4 h-4" />
+              Call Stack
+            </h5>
+            <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg p-4 min-h-[200px] border border-gray-600">
+              <div className="flex flex-col-reverse gap-2 max-h-[180px] overflow-y-auto">
                 {stack.length === 0 && (
-                  <div className="text-gray-400 text-sm">Stack is empty</div>
+                  <div className="text-gray-400 text-sm text-center py-4">
+                    Stack is empty
+                  </div>
                 )}
                 {stack.map((frame, idx) => (
                   <div
-                    key={`${frame}-${idx}`}
-                    className={`px-3 py-2 rounded-md text-center text-white font-mono text-sm ${idx === stack.length - 1 ? 'bg-blue-600' : 'bg-gray-700'}`}
+                    key={`${frame.label}-${idx}`}
+                    className={`px-4 py-3 rounded-md text-center text-white font-mono text-sm transition-all ${idx === stack.length - 1
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 scale-105 shadow-lg'
+                      : 'bg-gray-700 opacity-80'
+                      }`}
+                    style={{
+                      marginLeft: `${idx * 8}px`
+                    }}
                   >
-                    {frame}
+                    <div>{frame.label}</div>
+                    <div className="text-xs opacity-75">depth: {frame.depth}</div>
                   </div>
                 ))}
               </div>
             </div>
           </div>
+
+          {/* Execution Flow */}
+          <div>
+            <h5 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+              <ArrowRight className="w-4 h-4" />
+              Execution Flow
+            </h5>
+            <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg p-4 min-h-[200px] border border-gray-600">
+              <div className="space-y-1 max-h-[180px] overflow-y-auto text-sm">
+                {traceSteps.slice(Math.max(0, currentIndex - 5), currentIndex + 1).map((step, idx, arr) => (
+                  <div
+                    key={idx}
+                    className={`p-2 rounded font-mono transition-all ${idx === arr.length - 1
+                      ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white'
+                      : step.type === 'call'
+                        ? 'bg-blue-900/50 text-blue-200'
+                        : 'bg-orange-900/50 text-orange-200'
+                      }`}
+                    style={{ marginLeft: `${step.depth * 12}px` }}
+                  >
+                    <div className="flex items-center gap-2">
+                      {step.type === 'call' ? '→' : '←'}
+                      <span>{step.label}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+sections.recursion_projects = [
+  {
+    title: "Factorial Finder",
+    description: "Write a function that calculates the factorial of a number recursively.",
+    technologies: ["Recursion Basics", "Mathematical Thinking"],
+    difficulty: "Beginner",
+  },
+  {
+    title: "Fibonacci Sequence",
+    description: "Generate the Fibonacci sequence using a recursive function.",
+    technologies: ["Recursion Basics", "Sequence Generation"],
+    difficulty: "Beginner",
+  },
+  {
+    title: "Sum of Digits",
+    description: "Create a recursive function that finds the sum of all digits of a number.",
+    technologies: ["Recursion", "Problem Decomposition"],
+    difficulty: "Beginner",
+  },
+  {
+    title: "Countdown Timer",
+    description: "Use recursion to print numbers from N down to 1 in order.",
+    technologies: ["Recursion", "Base Case & Step"],
+    difficulty: "Beginner",
+  },
+  {
+    title: "String Reversal",
+    description: "Build a recursive function that reverses a string without loops.",
+    technologies: ["Recursion", "String Manipulation"],
+    difficulty: "Beginner",
+  },
+  {
+    title: "Palindrome Checker",
+    description: "Check if a word is a palindrome using recursion instead of loops.",
+    technologies: ["Recursion", "Conditional Logic"],
+    difficulty: "Intermediate",
+  },
+  {
+    title: "Nested List Sum",
+    description: "Recursively calculate the sum of numbers inside nested lists.",
+    technologies: ["Recursion", "List Traversal"],
+    difficulty: "Intermediate",
+  },
+  {
+    title: "Tower of Hanoi (Visual Steps)",
+    description: "Implement the Tower of Hanoi problem and print each move step by step.",
+    technologies: ["Recursion", "Problem Solving"],
+    difficulty: "Intermediate",
+  },
+];
+
+
+
+
+  // New Visual Tree Component
+  const RecursionTree = () => {
+    const [selectedN, setSelectedN] = useState(3);
+
+    const generateTree = (n, depth = 0) => {
+      if (n <= 1) return { value: n, result: 1, children: [], depth };
+
+      return {
+        value: n,
+        result: n * factorial(n - 1),
+        children: [generateTree(n - 1, depth + 1)],
+        depth
+      };
+    };
+
+    const factorial = (n) => n <= 1 ? 1 : n * factorial(n - 1);
+
+    const tree = generateTree(selectedN);
+
+    const TreeNode = ({ node }) => (
+      <div className="flex flex-col items-center">
+        <div className={`
+          px-4 py-3 rounded-lg border-2 text-center font-mono transition-all duration-300 hover:scale-105
+          ${node.value <= 1
+            ? 'bg-green-600 border-green-400 text-white'
+            : 'bg-blue-600 border-blue-400 text-white'
+          }
+        `}>
+          <div className="text-sm">factorial({node.value})</div>
+          <div className="text-xs opacity-80">= {node.result}</div>
+        </div>
+        {node.children.length > 0 && (
+          <div className="mt-4">
+            <div className="w-px h-8 bg-gray-400 mx-auto"></div>
+            <div className="flex gap-8">
+              {node.children.map((child, idx) => (
+                <div key={idx} className="relative">
+                  <TreeNode node={child} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+
+    return (
+      <div className="bg-gradient-to-br from-gray-900 via-indigo-900/20 to-blue-900/20 rounded-xl p-8 border border-gray-700 mb-8 backdrop-blur-sm">
+        <div className="flex items-center justify-between mb-6">
+          <h4 className="text-xl font-semibold text-white flex items-center gap-2">
+            <BookOpen className="w-6 h-6 text-indigo-400" />
+            Recursion Tree Visualization
+          </h4>
+          <div className="flex items-center gap-3">
+            <label className="text-sm text-gray-300">Value:</label>
+            <select
+              value={selectedN}
+              onChange={(e) => setSelectedN(Number(e.target.value))}
+              className="bg-gray-800 text-white px-3 py-2 rounded border border-gray-600"
+            >
+              {[1, 2, 3, 4, 5].map(n => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <div className="min-w-max py-8 flex justify-center">
+            <TreeNode node={tree} />
+          </div>
+        </div>
+
+        <div className="mt-6 text-center text-gray-400 text-sm">
+          Green nodes represent base cases, blue nodes represent recursive calls
         </div>
       </div>
     );
@@ -734,92 +1163,101 @@ int solve(int row) {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12 space-y-12 sm:space-y-16">
-        
+
         {/* Student Hook Section */}
         <section className="transform hover:scale-105 transition-transform duration-300">
           <h2 className="text-4xl font-bold mb-6 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             🎯 Why Recursion Matters
           </h2>
-          
-          <LearningCard title="The Russian Doll Mystery" icon={Brain} color="purple" borderColor="border-purple-500">
-            <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 mb-4">
-              Imagine you have a Russian doll (Matryoshka) and you want to find the smallest doll inside. 
-              How would you do it? You'd open the current doll, and if there's another doll inside, 
-              you'd repeat the same process until you find the smallest one!
+        </section>
+
+        <section className="transform hover:scale-105 transition-transform duration-300">
+          {/* Concept */}
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 border-purple-500">
+            <h3 className="text-2xl font-bold mb-4 text-purple-700 dark:text-purple-300">💡Real life scenario</h3>
+            <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200 mb-4">
+              Just like in your computer, a folder can hold files and even other folders. Those folders can again contain files and subfolders. This nesting keeps repeating — a natural example of recursion!
             </p>
-            <div className="bg-gray-900 p-4 rounded-lg border-l-4 border-green-500">
-              <p className="text-green-400 font-semibold">
-                This is exactly how recursion works in programming - a function calling itself 
-                with a smaller version of the same problem until it reaches the simplest case!
+            <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border-l-4 border-purple-400">
+              <p className="text-purple-800 dark:text-purple-200 font-medium">
+                <span className="font-bold">Real-world example:</span> Opening folders one inside another until you reach the final file.
               </p>
             </div>
-          </LearningCard>
-          
-          <LearningCard title="Real-World Impact" icon={Rocket} color="blue" borderColor="border-blue-500">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              <div className="flex items-center gap-3 text-gray-300">
-                <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                <span>Google's search algorithms use recursion to crawl web pages</span>
-              </div>
-              <div className="flex items-center gap-3 text-gray-300">
-                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                <span>File systems use recursion to navigate directories</span>
-              </div>
-              <div className="flex items-center gap-3 text-gray-300">
-                <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                <span>Game AI uses recursion for decision trees</span>
-              </div>
-              <div className="flex items-center gap-3 text-gray-300">
-                <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                <span>Data compression algorithms rely on recursive techniques</span>
-              </div>
-            </div>
-          </LearningCard>
+          </div>
         </section>
 
         {/* Concept Understanding Section */}
         <section>
-           <h2 className="text-4xl md:text-5xl font-bold mb-6 md:mb-8 text-center bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            💡 Core Concepts
+          <h2 className="text-5xl font-bold mb-8 text-center bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            🔹 What is Recursion?
           </h2>
 
-          <LearningCard title="Essential Components">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              <div className="bg-gradient-to-r from-green-900/30 to-green-800/30 p-4 sm:p-6 rounded-lg border border-green-500">
-                <h4 className="text-base sm:text-lg font-semibold text-green-400 mb-2 sm:mb-3">1. Base Case</h4>
-                <p className="text-gray-300 text-sm sm:text-base">
-                  The condition that stops the recursion. Without this, you get infinite recursion!
-                </p>
-              </div>
-              <div className="bg-gradient-to-r from-blue-900/30 to-blue-800/30 p-4 sm:p-6 rounded-lg border border-blue-500">
-                <h4 className="text-base sm:text-lg font-semibold text-blue-400 mb-2 sm:mb-3">2. Recursive Case</h4>
-                <p className="text-gray-300 text-sm sm:text-base">
-                  The function calls itself with a modified parameter, moving closer to the base case.
-                </p>
-              </div>
-            </div>
-          </LearningCard>
-
-          <LearningCard  title="Simple Example: Factorial ">
-            <p className="text-gray-300 mb-4">
-              Factorial of n (n!) = n × (n-1) × (n-2) × ... × 1
+          {/* Concept */}
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 border-blue-500">
+            <h3 className="text-2xl font-bold mb-4 text-blue-700 dark:text-blue-300">💡 Understanding Recursion</h3>
+            <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200 mb-4">
+              Recursion is when a function calls itself to solve a problem by breaking it
+              into smaller sub-problems.
             </p>
-          <div className="w-full overflow-x-auto">
-  <CodeTabs className="flex flex-col gap-4 max-w-full" snippets={codeSnippets} />
-</div>
-
-          </LearningCard>
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border-l-4 border-blue-400">
+              <p className="text-blue-800 dark:text-blue-200 font-medium">
+                👉 Think of it like: Solving a big problem by solving smaller versions
+                of the same problem until you reach the simplest case
+                (called the <span className="font-bold">base case</span>).
+              </p>
+            </div>
+          </div>
         </section>
 
-        {/* Visual Learning Section */}
+        {/* Enhanced Visual Learning Section */}
         <section>
+
+          {/* Code Examples - Show on mobile but simplified */}
+          <div className="w-screen relative left-1/2 -translate-x-1/2">
+            <LearningCard title="Factorial Implementation - Multiple Languages">
+              <p className="text-gray-300 mb-6 text-center text-sm">
+                See how recursion looks in different programming languages:
+              </p>
+              <CodeTabs snippets={codeSnippets} />
+            </LearningCard>
+          </div>
+
+
+
           <h2 className="text-4xl md:text-5xl font-bold mb-6 md:mb-8 text-center bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">
-            🎬 Visual Learning
+            🎬 Enhanced Visual Learning
           </h2>
-          
-          <FactorialAnimation />
-          <InteractiveTracer />
-          
+
+
+
+          {/* Mobile Message - Only show on mobile */}
+          <div className="block md:hidden mb-6">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-4 text-center text-white">
+              <p className="text-sm">
+                💻 <strong>Use laptop/tablet for interactive visualizations</strong>
+              </p>
+            </div>
+          </div>
+
+          {/* Interactive Components - Hide on mobile */}
+          <div className="hidden md:block">
+
+
+            {/* Code Examples with Multiple Languages
+            <LearningCard title="Factorial Implementation - Multiple Languages">
+              <p className="text-gray-300 mb-6 text-center">
+                See how recursion looks in different programming languages:
+              </p>
+              <CodeTabs snippets={codeSnippets} />
+            </LearningCard> */}
+
+            <FactorialAnimation />
+            <InteractiveTracer />
+            <RecursionTree />
+
+          </div>
+
+          {/* Call Stack Visualization - Show on all devices */}
           <LearningCard title="Call Stack Visualization">
             <div className="bg-gray-900 p-4 sm:p-6 rounded-lg">
               <div className="font-mono text-xs sm:text-sm flex flex-col gap-3">
@@ -836,190 +1274,174 @@ int solve(int row) {
                   factorial(1) → returns 1
                 </div>
               </div>
-              <div className="mt-6 text-center text-gray-400 flex items-center justify-center gap-2">
+              <div className="mt-6 text-center text-gray-400 flex items-center justify-center gap-2 text-sm sm:text-base">
                 <span>Building up the stack</span>
                 <ArrowRight className="w-4 h-4" />
                 <span>Unwinding and calculating</span>
               </div>
             </div>
           </LearningCard>
+
+
         </section>
 
         {/* Industry Applications */}
-        <section>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 md:mb-8 text-center bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
-            🏭 Industry Applications
-          </h2>
+        <div className="mt-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
+          <h3 className="text-2xl font-bold mb-6 text-center text-green-700 dark:text-green-300">
+            🏭 Industry Applications of Recursion
+          </h3>
 
-          <LearningCard title="How Tech Giants Use Recursion">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-r from-red-900/30 to-red-800/30 p-6 rounded-lg border border-red-500">
-                <CompanyLogo name="Google Search" color="bg-red-500" />
-                <ul className="space-y-2 text-gray-300">
-                  <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-red-400 rounded-full"></div>
-                    Web crawling algorithms recursively follow links
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-red-400 rounded-full"></div>
-                    PageRank algorithm uses recursive calculations
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-red-400 rounded-full"></div>
-                    Search tree traversal for query optimization
-                  </li>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {sections1.recursion.industry_applications.map((app, index) => (
+              <div
+                key={index}
+                className="bg-gray-50 dark:bg-gray-900/30 p-4 rounded-xl border-l-4 hover:shadow-lg transition-shadow duration-300"
+                style={{ borderColor: app.color }}
+              >
+                <h4 className="text-lg font-semibold mb-3" style={{ color: app.color }}>
+                  {app.title}
+                </h4>
+                <ul className="space-y-2 text-gray-700 dark:text-gray-300">
+                  {app.points.map((point, i) => (
+                    <li key={i} className="flex items-center gap-2">
+                      <div
+                        className="w-1.5 h-1.5 rounded-full"
+                        style={{ backgroundColor: app.color }}
+                      ></div>
+                      {point}
+                    </li>
+                  ))}
                 </ul>
               </div>
+            ))}
+          </div>
+        </div>
 
-              <div className="bg-gradient-to-r from-blue-900/30 to-blue-800/30 p-6 rounded-lg border border-blue-500">
-                <CompanyLogo name="Facebook/Meta" color="bg-blue-500" />
-                <ul className="space-y-2 text-gray-300">
-                  <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-blue-400 rounded-full"></div>
-                    Social graph traversal (friends of friends)
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-blue-400 rounded-full"></div>
-                    News feed algorithm uses recursive sorting
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-blue-400 rounded-full"></div>
-                    Comment thread nesting and replies
-                  </li>
-                </ul>
-              </div>
-
-              <div className="bg-gradient-to-r from-green-900/30 to-green-800/30 p-6 rounded-lg border border-green-500">
-                <CompanyLogo name="File Systems" color="bg-green-500" />
-                <ul className="space-y-2 text-gray-300">
-                  <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-green-400 rounded-full"></div>
-                    Directory traversal (Windows, macOS, Linux)
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-green-400 rounded-full"></div>
-                    File search operations
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-green-400 rounded-full"></div>
-                    Backup and synchronization tools
-                  </li>
-                </ul>
-              </div>
-
-              <div className="bg-gradient-to-r from-purple-900/30 to-purple-800/30 p-6 rounded-lg border border-purple-500">
-                <CompanyLogo name="Gaming Industry" color="bg-purple-500" />
-                <ul className="space-y-2 text-gray-300">
-                  <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-purple-400 rounded-full"></div>
-                    AI decision trees (Chess, Go)
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-purple-400 rounded-full"></div>
-                    Pathfinding algorithms
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-purple-400 rounded-full"></div>
-                    Procedural content generation
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </LearningCard>
-        </section>
 
         {/* Interview Questions */}
-     <section className="px-4 sm:px-6 md:px-8 py-8 md:py-12">
-  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 md:mb-10 text-center bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent">
-    🎤 Interview Questions & Answers
+        <section>
+          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent">
+            🎤 Interview Questions & Answers
+          </h2>
+
+          <div className="space-y-4">
+            {sections.interview_questions.map((qa, index) => (
+              <div
+                key={index}
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden"
+              >
+                <button
+                  onClick={() =>
+                    setSelectedQuestionIndex(
+                      selectedQuestionIndex === index ? -1 : index
+                    )
+                  }
+                  className="w-full p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                >
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                        {qa.question}
+                      </h3>
+                      <span
+                        className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${qa.difficulty === "Easy"
+                          ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+                          : qa.difficulty === "Medium"
+                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300"
+                            : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
+                          }`}
+                      >
+                        {qa.difficulty}
+                      </span>
+                    </div>
+                    <div className="ml-4">
+                      <svg
+                        className={`w-6 h-6 transition-transform duration-200 ${selectedQuestionIndex === index ? "rotate-180" : ""
+                          }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+
+                {selectedQuestionIndex === index && (
+                  <div className="px-6 pb-6 border-t border-gray-100 dark:border-gray-700">
+                    <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg mt-4">
+                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                        <strong>Answer:</strong> {qa.answer}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+
+        {/* projects */}
+        <section>
+  <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+    🔄 Recursion Project Ideas
   </h2>
 
-  <LearningCard title="Ace Your Technical Interviews">
-    <p className="text-sm sm:text-base md:text-lg text-gray-300 mb-6 sm:mb-8 md:mb-10 text-center">
-      These are real questions asked at top tech companies!
-    </p>
-
-    {/* Cards Grid */}
-    <div className="flex flex-col gap-6 sm:gap-8 lg:grid lg:grid-cols-2 xl:grid-cols-3">
-      
-      {/* EASY */}
-      <div className="bg-gradient-to-r from-green-900/20 to-green-800/20 p-4 sm:p-6 rounded-lg sm:rounded-xl border border-green-500 flex flex-col h-full">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
-          <DifficultyBadge level="EASY" color="bg-green-600 text-white" />
-          <h4 className="text-base sm:text-lg font-semibold text-green-400">Google, Amazon</h4>
+  <div className="grid md:grid-cols-2 gap-8">
+    {sections.recursion_projects.map((project, index) => (
+      <div
+        key={index}
+        className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-t-4 border-emerald-500"
+      >
+        <div className="mb-4">
+          <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
+            {project.title}
+          </h3>
+          <span
+            className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+              project.difficulty === "Beginner"
+                ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+                : project.difficulty === "Intermediate"
+                ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300"
+                : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
+            }`}
+          >
+            {project.difficulty}
+          </span>
         </div>
-        <p className="text-gray-300 mb-4 flex-1 text-sm sm:text-base">
-          Write a recursive function to calculate the power of a number.
+
+        <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          {project.description}
         </p>
-        <div className="w-full overflow-x-auto px-1 sm:px-2">
-          <CodeTabs
-            className="flex flex-col gap-4 w-full [&_pre]:w-full [&_pre]:whitespace-pre-wrap [&_pre]:break-words"
-            snippets={codeSnippets}
-          />
+
+        <div className="space-y-2">
+          <h4 className="font-semibold text-gray-800 dark:text-gray-200">
+            Technologies:
+          </h4>
+          <div className="flex flex-wrap gap-2">
+            {project.technologies.map((tech, techIndex) => (
+              <span
+                key={techIndex}
+                className="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 rounded-full text-sm font-medium"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
-
-      {/* MEDIUM */}
-      <div className="bg-gradient-to-r from-yellow-900/20 to-yellow-800/20 p-4 sm:p-6 rounded-lg sm:rounded-xl border border-yellow-500 flex flex-col h-full">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
-          <DifficultyBadge level="MEDIUM" color="bg-yellow-600 text-black" />
-          <h4 className="text-base sm:text-lg font-semibold text-yellow-400">Facebook, Microsoft</h4>
-        </div>
-        <p className="text-gray-300 mb-4 flex-1 text-sm sm:text-base">
-          Generate all possible combinations of n pairs of balanced parentheses.
-        </p>
-        <div className="w-full overflow-x-auto px-1 sm:px-2">
-          <CodeTabs snippets={powerSnippets} className="max-w-full" />
-        </div>
-      </div>
-
-      {/* HARD */}
-      <div className="bg-gradient-to-r from-red-900/20 to-red-800/20 p-4 sm:p-6 rounded-lg sm:rounded-xl border border-red-500 flex flex-col h-full">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
-          <DifficultyBadge level="HARD" color="bg-red-600 text-white" />
-          <h4 className="text-base sm:text-lg font-semibold text-red-400">Google, Netflix</h4>
-        </div>
-        <p className="text-gray-300 mb-4 flex-1 text-sm sm:text-base">
-          Solve the N-Queens problem: place N queens on N×N chessboard.
-        </p>
-        <div className="w-full overflow-x-auto px-1 sm:px-2">
-          <CodeTabs snippets={powerSnippets} className="max-w-full" />
-        </div>
-      </div>
-    </div>
-  </LearningCard>
+    ))}
+  </div>
 </section>
 
 
-        {/* Next Steps */}
-        <section>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 md:mb-8 text-center bg-gradient-to-r from-violet-600 to-pink-600 bg-clip-text text-transparent">
-            🚀 Hands-on Next Steps
-          </h2>
-
-          <LearningCard title="What's Next?">
-            <p className="text-gray-300 mb-6">
-              Ready to tackle more advanced topics? Here's your roadmap:
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-              <div className="bg-gradient-to-r from-green-900/30 to-green-800/30 p-6 rounded-lg border border-green-500 text-center hover:border-green-400 transition-colors cursor-pointer">
-                <div className="text-3xl mb-3">🌳</div>
-                <h4 className="text-lg font-semibold text-green-400 mb-2">Trees & BST</h4>
-                <p className="text-gray-300 text-sm">Master tree traversals using recursion</p>
-              </div>
-              <div className="bg-gradient-to-r from-blue-900/30 to-blue-800/30 p-6 rounded-lg border border-blue-500 text-center hover:border-blue-400 transition-colors cursor-pointer">
-                <div className="text-3xl mb-3">📊</div>
-                <h4 className="text-lg font-semibold text-blue-400 mb-2">Dynamic Programming</h4>
-                <p className="text-gray-300 text-sm">Optimize recursive solutions</p>
-              </div>
-              <div className="bg-gradient-to-r from-purple-900/30 to-purple-800/30 p-6 rounded-lg border border-purple-500 text-center hover:border-purple-400 transition-colors cursor-pointer">
-                <div className="text-3xl mb-3">🔍</div>
-                <h4 className="text-lg font-semibold text-purple-400 mb-2">Graph Algorithms</h4>
-                <p className="text-gray-300 text-sm">Apply recursion to pathfinding</p>
-              </div>
-            </div>
-          </LearningCard>
-        </section>
 
         {/* Call to Action */}
         <div className="bg-gradient-to-r from-purple-900 to-blue-900 rounded-2xl p-6 sm:p-8 text-center">
