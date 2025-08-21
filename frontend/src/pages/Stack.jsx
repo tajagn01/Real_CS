@@ -462,34 +462,30 @@ nav.goForward();`
     ],
 
     project_ideas: [
-      {
-        title: "Web Browser History Manager",
-        description:
-          "Build a browser-like navigation system with back/forward functionality, bookmark management, and tab history using stack operations.",
-        difficulty: "Beginner",
-        technologies: ["JavaScript", "HTML/CSS", "Local Storage", "DOM manipulation"],
-      },
-      {
-        title: "Mathematical Expression Evaluator",
-        description:
-          "Create a calculator that evaluates complex mathematical expressions with proper operator precedence and parentheses handling using operator and operand stacks.",
-        difficulty: "Intermediate", 
-        technologies: ["Python/Java", "Algorithm design", "UI framework", "Error handling"],
-      },
-      {
-        title: "Code Editor with Undo/Redo",
-        description:
-          "Develop a text editor with unlimited undo/redo functionality, syntax highlighting, and operation history visualization using command pattern and stacks.",
-        difficulty: "Advanced",
-        technologies: ["React/Vue", "State management", "Text processing", "Command pattern"],
-      },
-      {
-        title: "Function Call Tracer & Debugger",
-        description:
-          "Build a debugging tool that traces function calls, monitors call stack depth, detects recursion patterns, and identifies potential stack overflow conditions.",
-        difficulty: "Advanced",
-        technologies: ["C++/Python", "Debugging APIs", "Performance monitoring", "Visualization"],
-      },
+     {
+      "title": "Stack-Based Text Reversal Tool",
+      "description": "Reads a string and reverses words/characters using a stack. Can be extended to check for palindromes.",
+      "difficulty": "Beginner",
+      "technologies": ["Python"]
+    },
+    {
+      "title": "Infix to Postfix Expression Converter",
+      "description": "Converts algebraic expressions from infix form (A+B)*C into postfix (AB+C*) using stack operations. Optionally evaluate the postfix expression.",
+      "difficulty": "Intermediate",
+      "technologies": ["Java"]
+    },
+    {
+      "title": "Undo/Redo Text Editor",
+      "description": "A console-based text editor with undo and redo functionality. Uses two stacks: one for undo history and one for redo history.",
+      "difficulty": "Advanced",
+      "technologies": ["Python"]
+    },
+    {
+      "title": "Mini Virtual Machine with Call Stack",
+      "description": "Implements a simple interpreter for arithmetic expressions, simulating a call stack for function execution and detecting recursion/stack overflow.",
+      "difficulty": "Advanced",
+      "technologies": ["C++"]
+    },
     ],
   },
 };
