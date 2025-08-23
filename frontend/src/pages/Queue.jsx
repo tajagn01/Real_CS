@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+
 const queueData = {
   topic: "Queue",
   category: "Data Structures & Algorithms",
@@ -59,479 +60,20 @@ const queueData = {
       }
     },
 
-    code_examples: {
-      c: `// C Queue Implementation - Print Job Manager
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+  
+  code_examples: {
+    "c": "// C - Simple Queue Example\n#include &lt;stdio.h&gt;\n#define MAX 5\n\nint queue[MAX], front = 0, rear = -1, size = 0;\n\nvoid enqueue(int value) {\n    if (size == MAX) {\n        printf(\"Queue full!\\n\");\n        return;\n    }\n    rear = (rear + 1) % MAX;\n    queue[rear] = value;\n    size++;\n    printf(\"Enqueued: %d\\n\", value);\n}\n\nvoid dequeue() {\n    if (size == 0) {\n        printf(\"Queue empty!\\n\");\n        return;\n    }\n    printf(\"Dequeued: %d\\n\", queue[front]);\n    front = (front + 1) % MAX;\n    size--;\n}\n\nvoid showFront() {\n    if (size == 0) {\n        printf(\"Queue empty!\\n\");\n        return;\n    }\n    printf(\"Front: %d\\n\", queue[front]);\n}\n\nint main() {\n    enqueue(10);\n    enqueue(20);\n    enqueue(30);\n    showFront();\n    dequeue();\n    showFront();\n    return 0;\n}",
 
-#define MAX_QUEUE_SIZE 100
-#define MAX_JOB_LENGTH 256
+    "cpp": "// C++ - Simple Queue Example\n#include &lt;iostream&gt;\n#include &lt;queue&gt;\nusing namespace std;\n\nint main() {\n    queue&lt;int&gt; q;\n    q.push(10);\n    q.push(20);\n    q.push(30);\n\n    cout &lt;&lt; \"Front: \" &lt;&lt; q.front() &lt;&lt; endl;\n    q.pop();\n    cout &lt;&lt; \"Front after dequeue: \" &lt;&lt; q.front() &lt;&lt; endl;\n    cout &lt;&lt; \"Size: \" &lt;&lt; q.size() &lt;&lt; endl;\n    return 0;\n}",
 
-typedef struct {
-    char jobs[MAX_QUEUE_SIZE][MAX_JOB_LENGTH];
-    int front;
-    int rear;
-    int size;
-} PrintJobQueue;
+    "java": "// Java - Simple Queue Example\nimport java.util.*;\n\npublic class SimpleQueue {\n    public static void main(String[] args) {\n        Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();\n        q.add(10);\n        q.add(20);\n        q.add(30);\n\n        System.out.println(\"Front: \" + q.peek());\n        q.remove();\n        System.out.println(\"Front after dequeue: \" + q.peek());\n        System.out.println(\"Size: \" + q.size());\n    }\n}",
 
-// Initialize print job queue
-PrintJobQueue* createQueue() {
-    PrintJobQueue* queue = (PrintJobQueue*)malloc(sizeof(PrintJobQueue));
-    queue->front = 0;
-    queue->rear = -1;
-    queue->size = 0;
-    return queue;
-}
+    "python": "# Python - Simple Queue Example\nfrom collections import deque\n\nq = deque()\nq.append(10)\nq.append(20)\nq.append(30)\n\nprint(\"Front:\", q[0])\nq.popleft()\nprint(\"Front after dequeue:\", q[0])\nprint(\"Size:\", len(q))",
 
-// Add print job (Enqueue)
-void addPrintJob(PrintJobQueue* queue, char* jobName) {
-    if (queue->size >= MAX_QUEUE_SIZE) {
-        printf("⚠️  Print queue full! Cannot add more jobs.\\n");
-        return;
-    }
-    
-    queue->rear = (queue->rear + 1) % MAX_QUEUE_SIZE;
-    strcpy(queue->jobs[queue->rear], jobName);
-    queue->size++;
-    printf("✅ Added to queue: %s\\n", jobName);
-}
+    "javascript": "// JavaScript - Simple Queue Example\nclass Queue {\n    constructor() {\n        this.items = [];\n    }\n    enqueue(val) { this.items.push(val); }\n    dequeue() { return this.items.shift(); }\n    front() { return this.items[0]; }\n    size() { return this.items.length; }\n}\n\nconst q = new Queue();\nq.enqueue(10);\nq.enqueue(20);\nq.enqueue(30);\n\nconsole.log(\"Front:\", q.front());\nq.dequeue();\nconsole.log(\"Front after dequeue:\", q.front());\nconsole.log(\"Size:\", q.size());"
+  },
 
-// Process print job (Dequeue)
-void processPrintJob(PrintJobQueue* queue) {
-    if (queue->size <= 0) {
-        printf("⚠️  No jobs to process!\\n");
-        return;
-    }
-    
-    printf("🖨️  Processing: %s\\n", queue->jobs[queue->front]);
-    queue->front = (queue->front + 1) % MAX_QUEUE_SIZE;
-    queue->size--;
-    
-    if (queue->size > 0) {
-        printf("📋 Next job: %s\\n", queue->jobs[queue->front]);
-    } else {
-        printf("📭 Queue is now empty\\n");
-    }
-}
 
-// View next job (Front)
-void viewNextJob(PrintJobQueue* queue) {
-    if (queue->size <= 0) {
-        printf("📭 No jobs in queue\\n");
-        return;
-    }
-    printf("👁️  Next job: %s\\n", queue->jobs[queue->front]);
-}
-
-int main() {
-    PrintJobQueue* queue = createQueue();
-    
-    addPrintJob(queue, "Document1.pdf");
-    addPrintJob(queue, "Photo.jpg");
-    addPrintJob(queue, "Report.docx");
-    processPrintJob(queue);
-    viewNextJob(queue);
-    
-    free(queue);
-    return 0;
-}`,
-      cpp: `// C++ Queue Implementation - Customer Service System
-#include <iostream>
-#include <queue>
-#include <string>
-using namespace std;
-
-class CustomerServiceQueue {
-private:
-    queue<string> serviceQueue;
-    int ticketNumber;
-    
-public:
-    CustomerServiceQueue() : ticketNumber(1) {}
-    
-    void addCustomer(const string& customerName) {
-        string ticket = "Ticket #" + to_string(ticketNumber) + " - " + customerName;
-        serviceQueue.push(ticket);
-        
-        cout << "🎫 Added: " << ticket << endl;
-        cout << "📊 Queue position: " << serviceQueue.size() << endl;
-        ticketNumber++;
-    }
-    
-    void serveCustomer() {
-        if (serviceQueue.empty()) {
-            cout << "⚠️  No customers waiting!" << endl;
-            return;
-        }
-        
-        string currentCustomer = serviceQueue.front();
-        serviceQueue.pop();
-        
-        cout << "👥 Now serving: " << currentCustomer << endl;
-        
-        if (!serviceQueue.empty()) {
-            cout << "📋 Next: " << serviceQueue.front() << endl;
-        } else {
-            cout << "📭 No more customers waiting" << endl;
-        }
-    }
-    
-    void displayQueue() {
-        cout << "\\n📋 Current Service Queue:" << endl;
-        if (serviceQueue.empty()) {
-            cout << "   📭 No customers waiting" << endl;
-            return;
-        }
-        
-        queue<string> tempQueue = serviceQueue;
-        int position = 1;
-        
-        cout << "   👥 Now serving area:" << endl;
-        while (!tempQueue.empty()) {
-            if (position == 1) {
-                cout << "   👉 " << tempQueue.front() << " (Being served)" << endl;
-            } else {
-                cout << "   " << position << ". " << tempQueue.front() << endl;
-            }
-            tempQueue.pop();
-            position++;
-        }
-        
-        cout << "   Total waiting: " << serviceQueue.size() - 1 << " customers\\n" << endl;
-    }
-    
-    int getQueueSize() {
-        return serviceQueue.size();
-    }
-};
-
-int main() {
-    CustomerServiceQueue service;
-    
-    service.addCustomer("Alice Johnson");
-    service.addCustomer("Bob Smith");
-    service.addCustomer("Carol Davis");
-    service.displayQueue();
-    service.serveCustomer();
-    service.serveCustomer();
-    service.displayQueue();
-    
-    return 0;
-}`,
-      java: `// Java Queue Implementation - Task Scheduler
-import java.util.*;
-
-class Task {
-    private String name;
-    private int priority;
-    private String timestamp;
-    
-    public Task(String name, int priority) {
-        this.name = name;
-        this.priority = priority;
-        this.timestamp = new Date().toString();
-    }
-    
-    public String getName() { return name; }
-    public int getPriority() { return priority; }
-    public String getTimestamp() { return timestamp; }
-    
-    @Override
-    public String toString() {
-        return name + " (Priority: " + priority + ")";
-    }
-}
-
-public class TaskScheduler {
-    private Queue<Task> taskQueue;
-    private int totalTasksProcessed;
-    
-    public TaskScheduler() {
-        taskQueue = new LinkedList<>();
-        totalTasksProcessed = 0;
-    }
-    
-    public void addTask(String taskName, int priority) {
-        Task newTask = new Task(taskName, priority);
-        taskQueue.offer(newTask);
-        
-        System.out.println("✅ Task added: " + newTask);
-        System.out.println("📊 Tasks in queue: " + taskQueue.size());
-        System.out.println();
-    }
-    
-    public void processNextTask() {
-        if (taskQueue.isEmpty()) {
-            System.out.println("⚠️  No tasks to process!");
-            return;
-        }
-        
-        Task currentTask = taskQueue.poll();
-        totalTasksProcessed++;
-        
-        System.out.println("⚙️  Processing: " + currentTask);
-        System.out.println("✅ Task completed!");
-        
-        if (!taskQueue.isEmpty()) {
-            System.out.println("📋 Next task: " + taskQueue.peek());
-        } else {
-            System.out.println("🎉 All tasks completed!");
-        }
-        System.out.println();
-    }
-    
-    public void displayQueueStatus() {
-        System.out.println("📊 Task Scheduler Status:");
-        System.out.println("   Tasks in queue: " + taskQueue.size());
-        System.out.println("   Tasks processed: " + totalTasksProcessed);
-        
-        if (!taskQueue.isEmpty()) {
-            System.out.println("   Next task: " + taskQueue.peek());
-        }
-        System.out.println();
-    }
-    
-    public static void main(String[] args) {
-        TaskScheduler scheduler = new TaskScheduler();
-        
-        scheduler.addTask("Send Email", 2);
-        scheduler.addTask("Process Data", 1);
-        scheduler.addTask("Generate Report", 3);
-        scheduler.displayQueueStatus();
-        scheduler.processNextTask();
-        scheduler.processNextTask();
-        scheduler.displayQueueStatus();
-    }
-}`,
-      python: `# Python Queue Implementation - Web Request Handler
-from collections import deque
-import time
-import threading
-
-class WebRequestHandler:
-    def __init__(self, max_concurrent=3):
-        self.request_queue = deque()
-        self.processing_queue = deque()
-        self.max_concurrent = max_concurrent
-        self.request_id = 1
-        self.processed_count = 0
-    
-    def add_request(self, endpoint, method="GET", data=None):
-        request = {
-            'id': self.request_id,
-            'endpoint': endpoint,
-            'method': method,
-            'data': data,
-            'timestamp': time.time(),
-            'status': 'queued'
-        }
-        
-        self.request_queue.append(request)
-        print(f"🌐 Request #{self.request_id} queued: {method} {endpoint}")
-        print(f"📊 Requests in queue: {len(self.request_queue)}")
-        
-        self.request_id += 1
-        print()
-    
-    def process_next_request(self):
-        if not self.request_queue:
-            print("⚠️  No requests to process!")
-            return None
-        
-        if len(self.processing_queue) >= self.max_concurrent:
-            print(f"⚠️  Already processing {self.max_concurrent} requests!")
-            return None
-        
-        request = self.request_queue.popleft()
-        self.processing_queue.append(request)
-        request['status'] = 'processing'
-        
-        print(f"⚙️  Processing request #{request['id']}: {request['method']} {request['endpoint']}")
-        
-        # Simulate processing time
-        processing_time = 2  # seconds
-        print(f"⏳ Estimated processing time: {processing_time}s")
-        
-        # In real scenario, this would be async
-        time.sleep(processing_time)
-        
-        # Complete processing
-        self.complete_request(request['id'])
-        return request
-    
-    def complete_request(self, request_id):
-        for i, request in enumerate(self.processing_queue):
-            if request['id'] == request_id:
-                completed_request = self.processing_queue.popleft()
-                completed_request['status'] = 'completed'
-                self.processed_count += 1
-                
-                print(f"✅ Request #{request_id} completed!")
-                print(f"📈 Total processed: {self.processed_count}")
-                
-                if self.request_queue:
-                    next_request = list(self.request_queue)[0]
-                    print(f"📋 Next in queue: #{next_request['id']} {next_request['method']} {next_request['endpoint']}")
-                
-                print()
-                return completed_request
-        return None
-    
-    def display_status(self):
-        print("📊 Web Request Handler Status:")
-        print(f"   Queued requests: {len(self.request_queue)}")
-        print(f"   Processing requests: {len(self.processing_queue)}")
-        print(f"   Completed requests: {self.processed_count}")
-        
-        if self.request_queue:
-            print("\\n   📋 Queue preview:")
-            for i, req in enumerate(list(self.request_queue)[:3]):
-                print(f"      {i+1}. #{req['id']} {req['method']} {req['endpoint']}")
-            if len(self.request_queue) > 3:
-                print(f"      ... and {len(self.request_queue) - 3} more")
-        
-        print()
-
-# Example usage
-handler = WebRequestHandler()
-
-handler.add_request("/api/users", "GET")
-handler.add_request("/api/posts", "POST", {"title": "New Post"})
-handler.add_request("/api/comments", "GET")
-handler.display_status()
-
-handler.process_next_request()
-handler.process_next_request()`,
-      javascript: `// JavaScript Queue Implementation - Message Processing System
-class MessageProcessor {
-    constructor(maxConcurrent = 2) {
-        this.messageQueue = [];
-        this.processing = [];
-        this.completed = [];
-        this.maxConcurrent = maxConcurrent;
-        this.messageId = 1;
-    }
-    
-    addMessage(content, priority = 'normal', sender = 'Anonymous') {
-        const message = {
-            id: this.messageId++,
-            content,
-            priority,
-            sender,
-            timestamp: new Date().toLocaleTimeString(),
-            status: 'queued'
-        };
-        
-        this.messageQueue.push(message);
-        
-        console.log(\`📬 Message #\${message.id} queued from \${sender}\`);
-        console.log(\`📊 Messages in queue: \${this.messageQueue.length}\`);
-        this.displayQueuePreview();
-        console.log();
-    }
-    
-    async processNextMessage() {
-        if (this.messageQueue.length === 0) {
-            console.log("⚠️  No messages to process!");
-            return null;
-        }
-        
-        if (this.processing.length >= this.maxConcurrent) {
-            console.log(\`⚠️  Already processing \${this.maxConcurrent} messages!\`);
-            return null;
-        }
-        
-        const message = this.messageQueue.shift();
-        this.processing.push(message);
-        message.status = 'processing';
-        
-        console.log(\`⚙️  Processing message #\${message.id}: "\${message.content}"\`);
-        console.log(\`👤 From: \${message.sender} (\${message.priority} priority)\`);
-        
-        // Simulate processing time
-        const processingTime = Math.random() * 2000 + 1000; // 1-3 seconds
-        console.log(\`⏳ Processing time: \${Math.round(processingTime/1000)}s\`);
-        
-        setTimeout(() => {
-            this.completeMessage(message.id);
-        }, processingTime);
-        
-        return message;
-    }
-    
-    completeMessage(messageId) {
-        const messageIndex = this.processing.findIndex(msg => msg.id === messageId);
-        if (messageIndex !== -1) {
-            const completedMessage = this.processing.splice(messageIndex, 1)[0];
-            completedMessage.status = 'completed';
-            completedMessage.completedAt = new Date().toLocaleTimeString();
-            this.completed.push(completedMessage);
-            
-            console.log(\`✅ Message #\${messageId} processed successfully!\`);
-            console.log(\`📈 Total processed: \${this.completed.length}\`);
-            
-            if (this.messageQueue.length > 0) {
-                const nextMessage = this.messageQueue[0];
-                console.log(\`📋 Next: #\${nextMessage.id} from \${nextMessage.sender}\`);
-            } else if (this.processing.length === 0) {
-                console.log("🎉 All messages processed!");
-            }
-            
-            console.log();
-        }
-    }
-    
-    displayQueuePreview() {
-        if (this.messageQueue.length > 0) {
-            console.log("📋 Queue preview:");
-            const preview = this.messageQueue.slice(0, 3);
-            preview.forEach((msg, index) => {
-                console.log(\`   \${index + 1}. #\${msg.id} "\${msg.content.substring(0, 30)}\${msg.content.length > 30 ? '...' : ''}" - \${msg.sender}\`);
-            });
-            if (this.messageQueue.length > 3) {
-                console.log(\`   ... and \${this.messageQueue.length - 3} more messages\`);
-            }
-        }
-    }
-    
-    displayFullStatus() {
-        console.log("📊 Message Processing System Status:");
-        console.log(\`   Queued: \${this.messageQueue.length}\`);
-        console.log(\`   Processing: \${this.processing.length}\`);
-        console.log(\`   Completed: \${this.completed.length}\`);
-        
-        if (this.processing.length > 0) {
-            console.log("\\n   ⚙️  Currently processing:");
-            this.processing.forEach(msg => {
-                console.log(\`      #\${msg.id} from \${msg.sender}\`);
-            });
-        }
-        
-        this.displayQueuePreview();
-        console.log();
-    }
-}
-
-// Example usage
-const processor = new MessageProcessor();
-
-processor.addMessage("Welcome to our service!", "high", "System");
-processor.addMessage("Please update your profile", "normal", "Admin");
-processor.addMessage("New feature available", "low", "Marketing");
-
-processor.displayFullStatus();
-
-// Process messages
-processor.processNextMessage();
-processor.processNextMessage();
-
-// Add more messages
-setTimeout(() => {
-    processor.addMessage("Security alert", "high", "Security Team");
-    processor.displayFullStatus();
-}, 3000);`
-    },
 
     interview_questions: [
       {
@@ -633,11 +175,15 @@ const highlightSyntax = (code, language) => {
 
 export default function EnhancedQueuePage() {
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
-  const [queueElements, setQueueElements] = useState([10, 20, 30, 40]);
-  const [inputValue, setInputValue] = useState("");
-  const [animatingIndex, setAnimatingIndex] = useState(-1);
+  // const [queueElements, setQueueElements] = useState([10, 20, 30, 40]);
+  // const [inputValue, setInputValue] = useState("");
+  // const [animatingIndex, setAnimatingIndex] = useState(-1);
   const [selectedQuestionIndex, setSelectedQuestionIndex] = useState(-1);
-  const [operation, setOperation] = useState("");
+  // const [operation, setOperation] = useState("");
+   const [queueElements, setQueueElements] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+  const [operation, setOperation] = useState(null);
+  const [animatingIndex, setAnimatingIndex] = useState(null);
   
   // Process scheduling state
   const [processes, setProcesses] = useState(["P1", "P2", "P3"]);
@@ -656,37 +202,45 @@ export default function EnhancedQueuePage() {
     }
   }, [animatingIndex]);
 
-  const enqueueElement = () => {
-    if (inputValue !== "") {
-      const newElement = parseInt(inputValue, 10) || 0;
-      setQueueElements([...queueElements, newElement]);
-      setAnimatingIndex(queueElements.length);
-      setOperation("ENQUEUE");
-      setInputValue("");
-      
-      setTimeout(() => setOperation(""), 1000);
-    }
+ const enqueueElement = () => {
+    if (!inputValue) return;
+    const num = parseInt(inputValue, 10);
+    if (isNaN(num)) return;
+
+    setQueueElements([...queueElements, num]);
+    setOperation("ENQUEUE");
+    setAnimatingIndex(queueElements.length);
+
+    setTimeout(() => setAnimatingIndex(null), 1000);
+   
   };
 
+  // ✅ Dequeue function
   const dequeueElement = () => {
-    if (queueElements.length > 0) {
-      setAnimatingIndex(0);
-      setOperation("DEQUEUE");
-      
-      setTimeout(() => {
-        setQueueElements(queueElements.slice(1));
-        setOperation("");
-      }, 500);
-    }
+    if (queueElements.length === 0) return;
+    setQueueElements(queueElements.slice(1));
+    setOperation("DEQUEUE");
+    setAnimatingIndex(0);
+
+    setTimeout(() => setAnimatingIndex(null), 1000);
   };
 
+  // ✅ Front function
   const frontElement = () => {
-    if (queueElements.length > 0) {
-      setAnimatingIndex(0);
-      setOperation("FRONT");
-      
-      setTimeout(() => setOperation(""), 1000);
-    }
+    if (queueElements.length === 0) return;
+    setOperation("FRONT");
+    setAnimatingIndex(0);
+
+    setTimeout(() => setAnimatingIndex(null), 1000);
+  };
+
+  // ✅ Rear function
+  const rearElement = () => {
+    if (queueElements.length === 0) return;
+    setOperation("REAR");
+    setAnimatingIndex(queueElements.length - 1);
+
+    setTimeout(() => setAnimatingIndex(null), 1000);
   };
 
   const simulateProcessScheduling = () => {
@@ -712,148 +266,171 @@ export default function EnhancedQueuePage() {
       }
     }
   };
+const QueueVisualization = () => (
+  <div className="m-4 sm:m-10 p-4 sm:p-6 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-purple-200 dark:border-purple-800 shadow-xl">
+    <h3 className="text-xl sm:text-2xl font-bold mb-6 text-center text-purple-800 dark:text-purple-200">
+      🚶‍♂️ Queue Interactive Demo
+    </h3>
 
-  const QueueVisualization = () => (
-    <div className="p-6 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-purple-200 dark:border-purple-800">
-      <h3 className="text-2xl font-bold mb-6 text-center text-purple-800 dark:text-purple-200">
-        🚶‍♂️ Queue Interactive Demo
-      </h3>
-      
-      {/* Queue Visual */}
-      <div className="flex justify-center mb-6">
-        <div className="relative">
-          {/* Front Label */}
-          <div className="text-center mb-2">
-            <span className="text-sm text-purple-600 dark:text-purple-300 font-medium">FRONT</span>
-            <div className="text-xl">⬇️</div>
-          </div>
-          
-          {/* Queue Elements - Horizontal Layout */}
-          <div className="flex">
-            {queueElements.map((value, index) => (
-              <div
-                key={index}
-                className={`w-16 h-16 border-2 border-purple-400 dark:border-purple-600 flex items-center justify-center transition-all duration-500 ${
-                  animatingIndex === index
-                    ? operation === "ENQUEUE" 
-                      ? "bg-green-400 border-green-500 animate-bounce scale-110"
-                      : operation === "DEQUEUE"
-                      ? "bg-red-400 border-red-500 animate-pulse scale-110"
-                      : operation === "FRONT"
-                      ? "bg-yellow-400 border-yellow-500 animate-pulse scale-110"
-                      : "bg-purple-200 dark:bg-purple-700"
+    {/* Queue Visual */}
+    <div className="flex justify-center mb-6 px-2">
+      <div className="relative flex flex-wrap justify-center items-start gap-2 py-12">
+        {queueElements.map((value, index) => (
+          <div key={index} className="relative">
+            {/* FRONT Indicator */}
+            {index === 0 && (
+              <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-sm sm:text-base text-purple-600 dark:text-purple-300 font-medium text-center">
+                FRONT
+                <div className="text-lg sm:text-xl">⬇️</div>
+              </div>
+            )}
+
+            {/* Queue Box */}
+            <div
+              className={`w-16 h-16 sm:w-20 sm:h-20 border-2 border-purple-400 dark:border-purple-600 flex items-center justify-center transition-all duration-500 ${
+                animatingIndex === index
+                  ? operation === "ENQUEUE"
+                    ? "bg-green-400 border-green-500 animate-bounce scale-110"
+                    : operation === "DEQUEUE"
+                    ? "bg-red-400 border-red-500 animate-pulse scale-110"
+                    : operation === "FRONT"
+                    ? "bg-yellow-400 border-yellow-500 animate-pulse scale-110"
+                    : operation === "REAR"
+                    ? "bg-blue-400 border-blue-500 animate-pulse scale-110"
                     : "bg-purple-200 dark:bg-purple-700"
-                } ${index === 0 ? "border-l-4 border-l-purple-600" : ""} ${index === queueElements.length - 1 ? "border-r-4 border-r-purple-600" : ""}`}
-                style={{ 
-                  marginLeft: index === 0 ? '0px' : '-2px',
-                  zIndex: queueElements.length - index 
-                }}
-              >
-                <div className="font-bold text-lg text-purple-800 dark:text-purple-200">
-                  {value}
-                </div>
+                  : "bg-purple-200 dark:bg-purple-700"
+              }`}
+            >
+              <div className="font-bold text-base sm:text-lg text-purple-800 dark:text-purple-200">
+                {value}
               </div>
-            ))}
-          </div>
-          
-          {queueElements.length === 0 && (
-            <div className="w-64 h-16 border-2 border-dashed border-gray-400 flex items-center justify-center">
-              <span className="text-gray-500 text-sm">Empty Queue</span>
             </div>
-          )}
-          
-          {/* Rear Label */}
-          <div className="text-center mt-2">
-            <div className="text-xl">⬆️</div>
-            <span className="text-sm text-purple-600 dark:text-purple-300 font-medium">REAR</span>
+
+            {/* REAR Indicator */}
+            {index === queueElements.length - 1 && (
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-sm sm:text-base text-purple-600 dark:text-purple-300 font-medium text-center">
+                <div className="text-lg sm:text-xl">⬆️</div>
+                REAR
+              </div>
+            )}
           </div>
-          
-          {/* Front and Rear indicators */}
-          {queueElements.length > 0 && (
-            <>
-              <div className="absolute -top-8 left-0 text-sm text-purple-600 dark:text-purple-300 font-medium">
-                FRONT →
-              </div>
-              <div className="absolute -bottom-8 right-0 text-sm text-purple-600 dark:text-purple-300 font-medium">
-                ← REAR
-              </div>
-            </>
-          )}
-        </div>
+        ))}
+
+        {queueElements.length === 0 && (
+          <div className="w-64 h-16 border-2 border-dashed border-gray-400 flex items-center justify-center">
+            <span className="text-gray-500 text-sm">Empty Queue</span>
+          </div>
+        )}
       </div>
+    </div>
 
-      {/* Operation Status */}
-      {operation && (
-        <div className="text-center mb-4">
-          <span className={`px-4 py-2 rounded-lg font-bold text-white ${
-            operation === "ENQUEUE" ? "bg-green-500" :
-            operation === "DEQUEUE" ? "bg-red-500" : "bg-yellow-500"
-          }`}>
-            {operation} Operation
-          </span>
-        </div>
-      )}
-
-      {/* Queue Info */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow mb-4">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-          <div>
-            <span className="text-sm text-gray-500">Queue Size</span>
-            <div className="text-2xl font-bold text-purple-600">{queueElements.length}</div>
-          </div>
-          <div>
-            <span className="text-sm text-gray-500">Front Element</span>
-            <div className="text-2xl font-bold text-purple-600">
-              {queueElements.length > 0 ? queueElements[0] : "None"}
-            </div>
-          </div>
-          <div>
-            <span className="text-sm text-gray-500">Rear Element</span>
-            <div className="text-2xl font-bold text-purple-600">
-              {queueElements.length > 0 ? queueElements[queueElements.length - 1] : "None"}
-            </div>
-          </div>
-        </div>
+    {/* Operation Status */}
+    {operation && (
+      <div className="text-center mb-4">
+        <span
+          className={`px-4 py-2 rounded-lg font-bold text-white text-sm sm:text-base ${
+            operation === "ENQUEUE"
+              ? "bg-green-500"
+              : operation === "DEQUEUE"
+              ? "bg-red-500"
+              : operation === "FRONT"
+              ? "bg-yellow-500"
+              : "bg-blue-500"
+          }`}
+        >
+          {operation} Operation
+        </span>
       </div>
+    )}
 
-      {/* Queue Operations */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-        <h4 className="text-lg font-bold mb-3 text-center">Queue Operations</h4>
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-          <input
-            type="number"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Enter value"
-            className="px-4 py-2 border-2 border-purple-300 dark:border-purple-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-purple-500 transition-colors duration-200"
-          />
-          <div className="flex gap-2">
-            <button
-              onClick={enqueueElement}
-              disabled={!inputValue}
-              className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-            >
-              📥 Enqueue
-            </button>
-            <button
-              onClick={dequeueElement}
-              disabled={queueElements.length === 0}
-              className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-            >
-              📤 Dequeue
-            </button>
-            <button
-              onClick={frontElement}
-              disabled={queueElements.length === 0}
-              className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-lg hover:from-yellow-600 hover:to-yellow-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-            >
-              👁️ Front
-            </button>
+    {/* Queue Info */}
+    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+        <div>
+          <span className="text-xs sm:text-sm text-gray-500">Queue Size</span>
+          <div className="text-xl sm:text-2xl font-bold text-purple-600">
+            {queueElements.length}
+          </div>
+        </div>
+        <div>
+          <span className="text-xs sm:text-sm text-gray-500">Front Element</span>
+          <div className="text-xl sm:text-2xl font-bold text-purple-600">
+            {queueElements.length > 0 ? queueElements[0] : "None"}
+          </div>
+        </div>
+        <div>
+          <span className="text-xs sm:text-sm text-gray-500">Rear Element</span>
+          <div className="text-xl sm:text-2xl font-bold text-purple-600">
+            {queueElements.length > 0
+              ? queueElements[queueElements.length - 1]
+              : "None"}
           </div>
         </div>
       </div>
     </div>
-  );
+
+    {/* Queue Operations */}
+    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+      <h4 className="text-lg font-bold mb-3 text-center">Queue Operations</h4>
+      <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:items-center">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => {
+            const val = e.target.value;
+            if (/^\d*$/.test(val)) {
+              setInputValue(val);
+            }
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && inputValue !== "") {
+              e.preventDefault();
+              enqueueElement();
+            }
+          }}
+          placeholder="Enter value"
+          className="w-full sm:w-auto px-4 py-2 border-2 border-purple-300 dark:border-purple-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-purple-500 transition-colors duration-200"
+        />
+
+        <div className="flex flex-wrap justify-center gap-2">
+          <button
+            onClick={enqueueElement}
+            disabled={!inputValue}
+            className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+          >
+            📥 Enqueue
+          </button>
+          <button
+            onClick={dequeueElement}
+            disabled={queueElements.length === 0}
+            className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+          >
+            📤 Dequeue
+          </button>
+          <button
+            onClick={frontElement}
+            disabled={queueElements.length === 0}
+            className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-lg hover:from-yellow-600 hover:to-yellow-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+          >
+            👁️ Front
+          </button>
+          <button
+            onClick={rearElement}
+            disabled={queueElements.length === 0}
+            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+          >
+            🔙 Rear
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+
+
+
+
 
   const ProcessScheduler = () => (
     <div className="p-6 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border-2 border-amber-200 dark:border-amber-800">
@@ -1051,12 +628,12 @@ export default function EnhancedQueuePage() {
         </section>
 
         {/* Process Scheduling Demo */}
-        <section>
+        {/* <section>
           <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
             ⚙️ Practical Application: Process Scheduling
           </h2>
           <ProcessScheduler />
-        </section>
+        </section> */}
 
         {/* Implementation Types */}
         <section>
