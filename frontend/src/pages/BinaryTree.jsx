@@ -15,7 +15,7 @@ const binaryTreeData = {
         "Picture a tournament bracket where each match eliminates half the contestants, or think of how you search through a phone book by opening to the middle and deciding which half to search next!",
       key_operations: [
         "🌱 Insert - Add new node maintaining BST property",
-        "🗑️ Delete - Remove node while preserving structure", 
+        "🗑️ Delete - Remove node while preserving structure",
         "🔍 Search - Find specific value efficiently",
         "🚶 Traversal - Visit nodes in specific order",
         "📏 Height - Calculate tree depth",
@@ -24,7 +24,7 @@ const binaryTreeData = {
       industry_applications: [
         "🗃️ Databases - B+ trees for indexing and quick queries",
         "🗂️ File Systems - Directory structures and file organization",
-        "🔍 Search Engines - Efficient data retrieval algorithms", 
+        "🔍 Search Engines - Efficient data retrieval algorithms",
         "🎮 Gaming - Decision trees for AI and pathfinding",
         "💼 Finance - Option pricing models and risk analysis",
         "🧮 Compilers - Abstract syntax trees for code parsing",
@@ -1160,44 +1160,43 @@ export default function EnhancedBinaryTreePage() {
   // Tree visualization component
   const TreeVisualization = () => {
     const sortedNodes = [...treeNodes].sort((a, b) => a - b);
-    const treeHeight = Math.ceil(Math.log2(sortedNodes.length + 1));
     
-    const getNodePosition = (value, index, level) => {
-      const totalWidth = 400;
-      const levelWidth = totalWidth / Math.pow(2, level);
-      const position = (index % Math.pow(2, level)) * levelWidth + levelWidth / 2;
-      return position;
-    };
-
-    const renderTreeLevel = (nodes, level) => {
+    const treeStructure = (nodes) => {
       if (nodes.length === 0) return null;
-      
+      const mid = Math.floor(nodes.length / 2);
+      const root = nodes[mid];
+      const left = nodes.slice(0, mid);
+      const right = nodes.slice(mid + 1);
+
       return (
-        <div key={level} className="flex justify-center items-center h-20 relative">
-          {nodes.map((value, index) => (
-            <div
-              key={value}
-              className={`absolute w-12 h-12 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-all duration-500 ${
-                animatingNode === value
-                  ? operation === "INSERT" 
-                    ? "bg-green-400 border-green-500 animate-bounce scale-125"
-                    : operation === "DELETE"
-                    ? "bg-red-400 border-red-500 animate-pulse scale-125"
-                    : "bg-purple-200 dark:bg-purple-700 border-purple-400"
-                  : searchPath.includes(value)
-                  ? "bg-yellow-400 border-yellow-500 animate-pulse scale-110"
-                  : traversalOrder.includes(value)
-                  ? `bg-blue-400 border-blue-500 animate-pulse scale-110`
-                  : "bg-purple-200 dark:bg-purple-700 border-purple-400 dark:border-purple-600"
-              } text-purple-800 dark:text-purple-200`}
-              style={{
-                left: `${getNodePosition(value, index, level)}px`,
-                marginLeft: '-24px'
-              }}
-            >
-              {value}
+        <div className="flex flex-col items-center">
+          <div className={`w-12 h-12 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-all duration-500 transform ${
+            animatingNode === root
+              ? operation === "INSERT"
+                ? "bg-green-400 border-green-500 animate-pulse scale-125"
+                : operation === "DELETE"
+                ? "bg-red-400 border-red-500 animate-pulse scale-125"
+                : "bg-purple-200 dark:bg-purple-700 border-purple-400"
+              : searchPath.includes(root)
+              ? "bg-yellow-400 border-yellow-500 animate-pulse scale-110"
+              : traversalOrder.includes(root)
+              ? "bg-blue-400 border-blue-500 animate-pulse scale-110"
+              : "bg-purple-200 dark:bg-purple-700 border-purple-400 dark:border-purple-600"
+          } text-purple-800 dark:text-purple-200`}>
+            {root}
+          </div>
+          {(left.length > 0 || right.length > 0) && (
+            <div className="flex justify-between w-full mt-4">
+              <div className="flex-1 text-center border-t-2 border-dashed border-gray-300 dark:border-gray-600 pt-4 relative">
+                <div className="absolute top-0 left-1/2 w-px h-full bg-transparent"></div>
+                {treeStructure(left)}
+              </div>
+              <div className="flex-1 text-center border-t-2 border-dashed border-gray-300 dark:border-gray-600 pt-4 relative">
+                <div className="absolute top-0 left-1/2 w-px h-full bg-transparent"></div>
+                {treeStructure(right)}
+              </div>
             </div>
-          ))}
+          )}
         </div>
       );
     };
@@ -1210,49 +1209,13 @@ export default function EnhancedBinaryTreePage() {
         
         {/* Tree Visual */}
         <div className="flex justify-center mb-6">
-          <div className="relative w-96 h-64 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 overflow-hidden">
-            {treeNodes.length === 0 ? (
+          <div className="relative w-full h-auto p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 overflow-hidden min-h-[200px]">
+            {sortedNodes.length === 0 ? (
               <div className="flex items-center justify-center h-full">
                 <span className="text-gray-500 dark:text-gray-400 text-lg">Empty Tree</span>
               </div>
             ) : (
-              <div className="p-4 space-y-2">
-                {/* Simple tree representation */}
-                <div className="flex justify-center">
-                  <div className={`w-12 h-12 rounded-full border-2 border-purple-400 dark:border-purple-600 bg-purple-200 dark:bg-purple-700 flex items-center justify-center font-bold ${
-                    sortedNodes.length > 0 && (animatingNode === sortedNodes[Math.floor(sortedNodes.length / 2)] || searchPath.includes(sortedNodes[Math.floor(sortedNodes.length / 2)]))
-                      ? "animate-pulse scale-110 bg-yellow-400 border-yellow-500" 
-                      : ""
-                  }`}>
-                    {sortedNodes.length > 0 ? sortedNodes[Math.floor(sortedNodes.length / 2)] : ''}
-                  </div>
-                </div>
-                
-                {/* Level 2 */}
-                {sortedNodes.length > 1 && (
-                  <div className="flex justify-center space-x-16">
-                    {sortedNodes.slice(0, Math.floor(sortedNodes.length / 2)).map((value, idx) => (
-                      <div key={value} className={`w-10 h-10 rounded-full border-2 border-purple-400 dark:border-purple-600 bg-purple-200 dark:bg-purple-700 flex items-center justify-center text-sm font-bold ${
-                        animatingNode === value || searchPath.includes(value) || traversalOrder.includes(value)
-                          ? "animate-pulse scale-110 bg-yellow-400 border-yellow-500" 
-                          : ""
-                      }`}>
-                        {value}
-                      </div>
-                    ))}
-                    
-                    {sortedNodes.slice(Math.floor(sortedNodes.length / 2) + 1).map((value, idx) => (
-                      <div key={value} className={`w-10 h-10 rounded-full border-2 border-purple-400 dark:border-purple-600 bg-purple-200 dark:bg-purple-700 flex items-center justify-center text-sm font-bold ${
-                        animatingNode === value || searchPath.includes(value) || traversalOrder.includes(value)
-                          ? "animate-pulse scale-110 bg-yellow-400 border-yellow-500" 
-                          : ""
-                      }`}>
-                        {value}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+              treeStructure(sortedNodes)
             )}
           </div>
         </div>

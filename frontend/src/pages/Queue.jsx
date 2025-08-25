@@ -537,9 +537,12 @@ const QueueVisualization = () => (
       <main className="max-w-7xl mx-auto px-6 py-12 space-y-16">
         {/* Student Hook */}
         <section className="transform hover:scale-105 transition-transform duration-300">
-          <h2 className="text-4xl font-bold mb-6 text-center bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-            🎯 Why Queues Matter
-          </h2>
+       <h2 className="text-4xl font-bold mb-6 text-center">
+    🎯
+    <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+        Why Queues Matter
+    </span>
+</h2>
           <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border-l-8 border-purple-500">
             <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-200 italic">
               {sections.student_hook}
@@ -549,10 +552,12 @@ const QueueVisualization = () => (
 
         {/* Queue Fundamentals */}
         <section>
-          <h2 className="text-5xl font-bold mb-8 text-center bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-            📚 Queue Fundamentals
-          </h2>
-          
+          <h2 className="text-5xl font-bold mb-8 text-center">
+    📚
+    <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+        Queue Fundamentals
+    </span>
+</h2>
           {/* Concept */}
           <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 border-purple-500">
             <h3 className="text-2xl font-bold mb-4 text-purple-700 dark:text-purple-300">💡 Understanding Queues</h3>
@@ -637,9 +642,12 @@ const QueueVisualization = () => (
 
         {/* Implementation Types */}
         <section>
-          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent">
-            🏗️ Implementation Approaches
-          </h2>
+          <h2 class="text-4xl font-bold mb-8 text-center">
+    🏗️
+    <span class="bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent">
+        Implementation Approaches
+    </span>
+</h2>
           <div className="grid md:grid-cols-2 gap-8">
             {Object.entries(sections.implementation_types).map(([type, details]) => (
               <div key={type} className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl">
@@ -674,9 +682,12 @@ const QueueVisualization = () => (
 
         {/* Code Examples */}
         <section>
-          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-            💻 Implementation Examples
-          </h2>
+         <h2 className="text-4xl font-bold mb-8 text-center">
+    💻
+    <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+        Implementation Examples
+    </span>
+</h2>
           
           {/* Language Selector */}
           <div className="flex flex-wrap justify-center gap-4 mb-8">
@@ -729,9 +740,12 @@ const QueueVisualization = () => (
 
         {/* Interview Questions */}
         <section>
-          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-            🎤 Interview Questions
-          </h2>
+          <h2 className="text-4xl font-bold mb-8 text-center">
+    🎤
+    <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+        Interview Questions
+    </span>
+</h2>
           
           <div className="space-y-4">
             {sections.interview_questions.map((qa, index) => (

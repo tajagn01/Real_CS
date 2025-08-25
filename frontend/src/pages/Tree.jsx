@@ -1,774 +1,825 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 
-// Data for the Trie page
-const trieData = {
-  topic: "Trie (Prefix Tree)",
+const treeData = {
+  topic: "Trees",
   category: "Data Structures & Algorithms",
   sections: {
     student_hook:
-      "Ever wondered how your phone's keyboard suggests words as you type, or how Google provides instant search suggestions? The magic behind this is often a Trie! It's a special tree that stores strings, making prefix-based searches incredibly fast. Think of it as a super-optimized dictionary index that helps you find not just words, but any words that *start with* what you're typing, almost instantly.",
+      "Imagine you're navigating a vast family tree or the file system on your computer. You start at the top (the root), and to find someone or a specific file, you follow branches down through generations or folders. Trees work exactly like this—they are a non-linear way to organize data hierarchically, making it incredibly efficient for searching, sorting, and storing information that has a natural hierarchy.",
 
-    concept: {
+    // General Tree Concepts
+    generalConcepts: {
       concept:
-        "A Trie, also known as a Prefix Tree or Digital Tree, is a tree-like data structure that stores a dynamic set of strings. Each node in the trie represents a single character. A path from the root to a node represents a prefix, and if a node is marked as an 'end-of-word' node, that path represents a complete word stored in the trie.",
+        "A tree is a non-linear data structure that simulates a hierarchical tree structure, with a root value and subtrees of children with a parent node. Unlike an array, elements are not stored sequentially. Instead, they are connected via nodes and edges.",
       realWorldExample:
-        "Think of an autocomplete system. When you type 'ca', the system instantly suggests 'car', 'cat', 'castle'. The Trie structure allows it to quickly find all words that share the prefix 'ca' by simply traversing the 'c' -> 'a' path.",
+        "Think of a file system on your computer: the root directory (C: or /) branches out into folders, which in turn contain sub-folders and files. Or an organizational chart showing management structure!",
       industry_applications: [
-        "🔍 Autocomplete & Search Suggestions (Google, IDEs)",
-        "✍️ Spell Checkers & Auto-Correct (Word Processors)",
-        "📚 Dictionaries & T9 Predictive Text (Mobile Phones)",
-        "🌐 IP Routing Tables (Network Routers)",
-        "🧬 Bioinformatics for DNA sequence matching",
-        "🎮 Word games like Boggle or Scrabble solvers",
+        "🌐 Web Dev - DOM (Document Object Model) structure",
+        "📂 OS - File and directory systems",
+        "💻 Compilers - Abstract Syntax Trees (AST)",
+        "📊 Databases - B-Trees for indexing",
+        "🤖 AI - Decision trees for classification",
+        "🎮 Gaming - Scene graphs for organizing objects",
       ],
       advantages: [
-        "🚀 O(L) fast prefix search (L = length of prefix)",
-        "🧠 Memory efficient for datasets with many common prefixes",
-        "🔄 Alphabetically ordered retrieval of words",
-        "🎯 Excellent for 'Longest Prefix Match' algorithms",
+        "🔍 Efficient searching and sorting",
+        "💾 Flexible for hierarchical data",
+        "➕ Efficient insertions and deletions",
+        "🎯 Great for parent-child relationships",
       ],
       disadvantages: [
-        "💾 Can be memory-intensive if strings don't share prefixes",
-        "🐌 Slower than hash tables for single word lookups",
-        "🔧 More complex to implement than simple arrays or lists",
-        "📝 Best suited for character-based or digital data",
+        "📈 More complex to implement than arrays",
+        "🚶 Slower to traverse than arrays",
+        "🧩 Can become unbalanced, leading to poor performance",
+        "⚠️ No random access (O(n) for a search)",
+      ],
+    },
+
+    // Binary Tree Concepts
+    binaryTree: {
+      concept:
+        "A binary tree is a special type of tree where each node can have at most two children, referred to as the left child and the right child. This constraint makes them highly efficient for search and traversal algorithms, forming the basis for many other advanced tree types.",
+      realWorldExample:
+        "A phone's contact list could be organized as a binary search tree. To find a name, you decide whether to go left (names before) or right (names after) at each node, quickly narrowing down the search space.",
+      industry_applications: [
+        "🌐 Web Dev - Binary Search Trees for fast data lookup",
+        "🏥 Healthcare - Medical diagnosis systems",
+        "📦 Data Compression - Huffman coding trees",
+        "🗺️ Pathfinding - A* search algorithms in games",
+        "💻 Machine Learning - Classification and regression trees",
+        "🔐 Cryptography - Merkle trees for data verification",
       ],
     },
 
     code_examples: {
-      javascript: `// JavaScript Trie Example - Autocomplete System
-class TrieNode {
-    constructor() {
-        this.children = {};
-        this.isEndOfWord = false;
-    }
-}
+      c: `// C Tree Example - Simple Binary Tree Traversal
+#include <stdio.h>
+#include <stdlib.h>
 
-class Trie {
-    constructor() {
-        this.root = new TrieNode();
-    }
-
-    // Insert a word into the trie
-    insert(word) {
-        let current = this.root;
-        for (const char of word) {
-            if (!current.children[char]) {
-                current.children[char] = new TrieNode();
-            }
-            current = current.children[char];
-        }
-        current.isEndOfWord = true;
-    }
-
-    // Search for a word in the trie
-    search(word) {
-        let current = this.root;
-        for (const char of word) {
-            if (!current.children[char]) {
-                return false; // Word not found
-            }
-            current = current.children[char];
-        }
-        return current.isEndOfWord; // Return true only if it's a complete word
-    }
-
-    // Check if any word starts with a given prefix
-    startsWith(prefix) {
-        let current = this.root;
-        for (const char of prefix) {
-            if (!current.children[char]) {
-                return false;
-            }
-            current = current.children[char];
-        }
-        return true;
-    }
-}
-
-// Demo
-const trie = new Trie();
-trie.insert("apple");
-trie.insert("app");
-trie.insert("apricot");
-
-console.log("Search 'apple':", trie.search("apple"));   // true
-console.log("Search 'app':", trie.search("app"));     // true
-console.log("Search 'appl':", trie.search("appl"));   // false
-console.log("Prefix 'app':", trie.startsWith("app")); // true
-console.log("Prefix 'apr':", trie.startsWith("apr")); // true
-console.log("Prefix 'b':", trie.startsWith("b"));     // false`,
-      python: `# Python Trie Example - Contact Search
-class TrieNode:
-    def __init__(self):
-        self.children = {}
-        self.is_end_of_word = False
-
-class Trie:
-    def __init__(self):
-        self.root = TrieNode()
-
-    def insert(self, word):
-        current = self.root
-        for char in word:
-            if char not in current.children:
-                current.children[char] = TrieNode()
-            current = current.children[char]
-        current.is_end_of_word = True
-
-    def search(self, word):
-        current = self.root
-        for char in word:
-            if char not in current.children:
-                return False
-            current = current.children[char]
-        return current.is_end_of_word
-
-    def starts_with(self, prefix):
-        current = self.root
-        for char in prefix:
-            if char not in current.children:
-                return False
-            current = current.children[char]
-        return True
-
-# Demo
-contact_trie = Trie()
-contacts = ["peter", "piper", "picked", "pepper"]
-for contact in contacts:
-    contact_trie.insert(contact)
-
-print(f"Search 'peter': {contact_trie.search('peter')}") # True
-print(f"Search 'pick': {contact_trie.search('pick')}")   # False
-print(f"Prefix 'pi': {contact_trie.starts_with('pi')}")   # True
-print(f"Prefix 'pep': {contact_trie.starts_with('pep')}") # True`,
-      java: `// Java Trie Example - Dictionary
-import java.util.HashMap;
-import java.util.Map;
-
-class TrieNode {
-    Map<Character, TrieNode> children = new HashMap<>();
-    boolean isEndOfWord = false;
-}
-
-class Trie {
-    private final TrieNode root;
-
-    public Trie() {
-        root = new TrieNode();
-    }
-
-    public void insert(String word) {
-        TrieNode current = root;
-        for (char ch : word.toCharArray()) {
-            current.children.putIfAbsent(ch, new TrieNode());
-            current = current.children.get(ch);
-        }
-        current.isEndOfWord = true;
-    }
-
-    public boolean search(String word) {
-        TrieNode current = root;
-        for (char ch : word.toCharArray()) {
-            TrieNode node = current.children.get(ch);
-            if (node == null) {
-                return false;
-            }
-            current = node;
-        }
-        return current.isEndOfWord;
-    }
-
-    public boolean startsWith(String prefix) {
-        TrieNode current = root;
-        for (char ch : prefix.toCharArray()) {
-            TrieNode node = current.children.get(ch);
-            if (node == null) {
-                return false;
-            }
-            current = node;
-        }
-        return true;
-    }
-}
-
-// Demo
-public class Main {
-    public static void main(String[] args) {
-        Trie dictionary = new Trie();
-        dictionary.insert("hello");
-        dictionary.insert("world");
-        dictionary.insert("hell");
-
-        System.out.println("Search 'hello': " + dictionary.search("hello"));   // true
-        System.out.println("Search 'hell': " + dictionary.search("hell"));     // true
-        System.out.println("Prefix 'wor': " + dictionary.startsWith("wor"));   // true
-        System.out.println("Prefix 'java': " + dictionary.startsWith("java"));   // false
-    }
-}`,
-      cpp: `// C++ Trie Example - Word Filter
-#include <iostream>
-#include <unordered_map>
-#include <string>
-#include <vector>
-
-class TrieNode {
-public:
-    std::unordered_map<char, TrieNode*> children;
-    bool isEndOfWord;
-
-    TrieNode() : isEndOfWord(false) {}
+// Node structure for a binary tree
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
 };
 
-class Trie {
-private:
-    TrieNode* root;
+// Function to create a new node
+struct Node* newNode(int data) {
+    struct Node* node = (struct Node*)malloc(sizeof(struct Node));
+    node->data = data;
+    node->left = NULL;
+    node->right = NULL;
+    return node;
+}
 
-public:
-    Trie() {
-        root = new TrieNode();
-    }
-
-    void insert(const std::string& word) {
-        TrieNode* current = root;
-        for (char ch : word) {
-            if (current->children.find(ch) == current->children.end()) {
-                current->children[ch] = new TrieNode();
-            }
-            current = current->children[ch];
-        }
-        current->isEndOfWord = true;
-    }
-
-    bool search(const std::string& word) {
-        TrieNode* current = root;
-        for (char ch : word) {
-            if (current->children.find(ch) == current->children.end()) {
-                return false;
-            }
-            current = current->children[ch];
-        }
-        return current->isEndOfWord;
-    }
-
-    bool startsWith(const std::string& prefix) {
-        TrieNode* current = root;
-        for (char ch : prefix) {
-            if (current->children.find(ch) == current->children.end()) {
-                return false;
-            }
-            current = current->children[ch];
-        }
-        return true;
-    }
-};
+// Function to perform in-order traversal
+void printInorder(struct Node* node) {
+    if (node == NULL) return;
+    printInorder(node->left);
+    printf("%d ", node->data);
+    printInorder(node->right);
+}
 
 int main() {
-    Trie badWordsFilter;
-    badWordsFilter.insert("spam");
-    badWordsFilter.insert("virus");
+    // Create the tree
+    struct Node* root = newNode(1);
+    root->left = newNode(2);
+    root->right = newNode(3);
+    root->left->left = newNode(4);
+    root->left->right = newNode(5);
 
-    std::cout << "Contains 'spam'? " << (badWordsFilter.search("spam") ? "Yes" : "No") << std::endl;
-    std::cout << "Is 'sp' a prefix? " << (badWordsFilter.startsWith("sp") ? "Yes" : "No") << std::endl;
+    printf("In-order traversal of binary tree is: \\n");
+    printInorder(root);
+    printf("\\n");
     return 0;
 }`,
+      cpp: `// C++ Tree Example - Binary Search Tree (BST)
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// Node structure
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+};
+
+// Function to insert a node into BST
+Node* insert(Node* root, int data) {
+    if (root == nullptr) {
+        return new Node(data);
+    }
+    if (data < root->data) {
+        root->left = insert(root->left, data);
+    } else if (data > root->data) {
+        root->right = insert(root->right, data);
+    }
+    return root;
+}
+
+// Function to find a value in BST
+bool search(Node* root, int data) {
+    if (root == nullptr) {
+        return false;
+    }
+    if (root->data == data) {
+        return true;
+    }
+    return data < root->data ? search(root->left, data) : search(root->right, data);
+}
+
+int main() {
+    Node* root = nullptr;
+    root = insert(root, 50);
+    insert(root, 30);
+    insert(root, 20);
+    insert(root, 40);
+    insert(root, 70);
+    insert(root, 60);
+    insert(root, 80);
+    
+    cout << "Searching for 40: " << (search(root, 40) ? "Found" : "Not Found") << endl;
+    cout << "Searching for 99: " << (search(root, 99) ? "Found" : "Not Found") << endl;
+    return 0;
+}`,
+      java: `// Java Tree Example - Binary Tree Traversal
+import java.util.Stack;
+
+class TreeNode {
+    int data;
+    TreeNode left, right;
+    public TreeNode(int item) {
+        data = item;
+        left = right = null;
+    }
+}
+
+public class BinaryTreeTraversal {
+    TreeNode root;
+    public BinaryTreeTraversal() { root = null; }
+
+    // Pre-order traversal
+    void preOrder(TreeNode node) {
+        if (node == null) return;
+        System.out.print(node.data + " ");
+        preOrder(node.left);
+        preOrder(node.right);
+    }
+
+    // In-order traversal
+    void inOrder(TreeNode node) {
+        if (node == null) return;
+        inOrder(node.left);
+        System.out.print(node.data + " ");
+        inOrder(node.right);
+    }
+
+    public static void main(String[] args) {
+        BinaryTreeTraversal tree = new BinaryTreeTraversal();
+        tree.root = new TreeNode(1);
+        tree.root.left = new TreeNode(2);
+        tree.root.right = new TreeNode(3);
+        tree.root.left.left = new TreeNode(4);
+        tree.root.left.right = new TreeNode(5);
+
+        System.out.println("Pre-order traversal:");
+        tree.preOrder(tree.root);
+        System.out.println("\\nIn-order traversal:");
+        tree.inOrder(tree.root);
+    }
+}`,
+      python: `# Python Tree Example - Binary Search Tree (BST)
+class Node:
+    def __init__(self, key):
+        self.left = None
+        self.right = None
+        self.val = key
+
+def insert(root, key):
+    if root is None:
+        return Node(key)
+    else:
+        if root.val < key:
+            root.right = insert(root.right, key)
+        else:
+            root.left = insert(root.left, key)
+    return root
+
+def inorder_traversal(root):
+    if root:
+        inorder_traversal(root.left)
+        print(root.val, end=" ")
+        inorder_traversal(root.right)
+
+# Create a sample BST
+r = Node(50)
+r = insert(r, 30)
+r = insert(r, 20)
+r = insert(r, 40)
+r = insert(r, 70)
+r = insert(r, 60)
+r = insert(r, 80)
+
+print("In-order traversal of the BST:")
+inorder_traversal(r)
+print()`,
+      javascript: `// JavaScript Tree Example - Binary Search Tree
+class Node {
+  constructor(data) {
+    this.data = data;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+class BinarySearchTree {
+  constructor() {
+    this.root = null;
+  }
+
+  insert(data) {
+    const newNode = new Node(data);
+    if (this.root === null) {
+      this.root = newNode;
+      return;
+    }
+    let current = this.root;
+    while (true) {
+      if (data < current.data) {
+        if (current.left === null) {
+          current.left = newNode;
+          return;
+        }
+        current = current.left;
+      } else {
+        if (current.right === null) {
+          current.right = newNode;
+          return;
+        }
+        current = current.right;
+      }
+    }
+  }
+
+  inorder(node = this.root) {
+    if (node !== null) {
+      this.inorder(node.left);
+      console.log(node.data);
+      this.inorder(node.right);
+    }
+  }
+}
+
+const bst = new BinarySearchTree();
+bst.insert(10);
+bst.insert(5);
+bst.insert(15);
+bst.insert(2);
+bst.insert(7);
+bst.insert(12);
+bst.insert(20);
+
+console.log("In-order traversal of the BST:");
+bst.inorder();`,
     },
 
     interview_questions: [
       {
-        question: "What is the primary advantage of a Trie over a Hash Map for storing a dictionary?",
+        question: "What is the difference between a Tree and a Graph?",
         answer:
-          "Tries are much more efficient for prefix-based searches (like autocomplete). While a hash map has O(1) average lookup, it can't efficiently find all keys with a given prefix. A Trie can do this in O(L) time where L is the prefix length.",
+          "A tree is a type of graph with specific constraints. Trees are connected and acyclic (no cycles), and they have a single root node. Graphs can have cycles and can be disconnected.",
         difficulty: "Easy",
       },
       {
-        question: "How would you implement a function to find all words in a Trie that match a given prefix?",
+        question: "Explain the three main types of tree traversal.",
         answer:
-          "First, traverse the Trie to the node corresponding to the end of the prefix. Then, perform a Depth First Search (DFS) from that node, collecting all words formed by the paths to 'end-of-word' nodes.",
+          "Pre-order: root -> left -> right. In-order: left -> root -> right. Post-order: left -> right -> root. They are used for different purposes, such as copying a tree (pre-order) or getting a sorted list from a BST (in-order).",
         difficulty: "Medium",
       },
       {
-        question: "How does the memory usage of a Trie scale with the number of words and their length?",
+        question: "What is a Binary Search Tree (BST) and what are its properties?",
         answer:
-          "Memory usage is proportional to the total number of characters in all unique prefixes, not the total number of characters in all words. If words share long prefixes (e.g., 'application', 'applicable'), memory savings are significant. If they don't, Tries can be memory-intensive.",
+          "A BST is a binary tree where for every node, all values in its left subtree are less than the node's value, and all values in its right subtree are greater. This property allows for efficient searching, insertion, and deletion.",
         difficulty: "Medium",
       },
       {
-        question: "Explain how to implement the delete operation in a Trie.",
+        question: "How do you find the lowest common ancestor of two nodes in a binary tree?",
         answer:
-          "Traverse to the word's final node and set its 'isEndOfWord' flag to false. Then, backtrack recursively. If a node has no children and is not an 'end-of-word', it can be safely removed from its parent's children map. This process continues up to the root.",
+          "You can use recursion. If a node is an ancestor of both, a recursive call on its left and right children will return non-null. The current node is the LCA. If not, the LCA is in whichever subtree returns a non-null value.",
         difficulty: "Hard",
+      },
+      {
+        question: "What are the advantages and disadvantages of using trees?",
+        answer:
+          "Advantages: Efficient for hierarchical data, fast searching (O(log n) in balanced trees), and flexible for insertion/deletion. Disadvantages: More complex implementation, potential for imbalance (leading to O(n) worst-case performance), and no direct random access.",
+        difficulty: "Easy",
       },
     ],
 
     project_ideas: [
       {
-        title: "Autocomplete Search Bar",
+        title: "File System Explorer",
         description:
-          "Build a React component for a search bar that suggests a list of possible completions as the user types, using a Trie to store the dictionary of words.",
+          "Build a command-line or GUI application that mimics a file system, allowing users to navigate, create, and delete directories and files, all represented by a tree data structure.",
         difficulty: "Beginner",
-        technologies: ["React", "JavaScript", "CSS", "Trie"],
+        technologies: ["Python", "JavaScript/Node.js", "File I/O"],
       },
       {
-        title: "Real-time Spell Checker",
+        title: "Contact Manager with Auto-Complete",
         description:
-          "Create a text area that highlights misspelled words in real-time. As the user types, check each word against a dictionary stored in a Trie.",
+          "Create a contact manager that stores contact names in a Trie (a type of tree) to provide fast auto-completion suggestions as the user types.",
         difficulty: "Intermediate",
-        technologies: ["JavaScript", "HTML/CSS", "Trie", "DOM Manipulation"],
+        technologies: ["JavaScript/React", "Trie Data Structure", "UI/UX"],
       },
       {
-        title: "IP Routing Table Simulator",
+        title: "Expression Evaluator",
         description:
-          "Develop a tool that simulates how network routers use Tries (specifically a Radix Trie) to find the longest prefix match for routing IP packets efficiently.",
+          "Develop a program that takes a mathematical expression (e.g., '2 + 3 * 5') and builds an expression tree to correctly evaluate the result based on operator precedence.",
         difficulty: "Advanced",
-        technologies: ["Python/Node.js", "Trie", "Networking Concepts"],
+        technologies: ["C++", "C", "Stack", "Tree Traversal"],
+      },
+      {
+        title: "Basic AI for a Chess Game",
+        description:
+          "Use a Minimax algorithm with a game tree to create a simple AI opponent for a game like Tic-Tac-Toe or a simplified chess problem.",
+        difficulty: "Advanced",
+        technologies: ["Python", "Game Logic", "Recursion", "Algorithm design"],
       },
     ],
   },
 };
 
-// --- Trie Data Structure Logic ---
-class TrieNode {
-    constructor(char = null) {
-        this.char = char;
-        this.children = {};
-        this.isEndOfWord = false;
-        // For visualization
-        this.id = Math.random().toString(36).substr(2, 9);
-    }
-}
-
-class Trie {
-    constructor() {
-        this.root = new TrieNode(' ');
-    }
-
-    insert(word) {
-        let current = this.root;
-        for (const char of word) {
-            if (!current.children[char]) {
-                current.children[char] = new TrieNode(char);
-            }
-            current = current.children[char];
-        }
-        current.isEndOfWord = true;
-    }
-
-    delete(word) {
-        const _deleteRecursively = (current, word, index) => {
-            if (index === word.length) {
-                if (!current.isEndOfWord) return false;
-                current.isEndOfWord = false;
-                return Object.keys(current.children).length === 0;
-            }
-            
-            const char = word[index];
-            const childNode = current.children[char];
-            if (!childNode) return false;
-
-            const shouldDeleteChild = _deleteRecursively(childNode, word, index + 1);
-
-            if (shouldDeleteChild) {
-                delete current.children[char];
-                return !current.isEndOfWord && Object.keys(current.children).length === 0;
-            }
-            return false;
-        };
-        _deleteRecursively(this.root, word, 0);
-    }
-
-    getPrefixPath(prefix) {
-        const path = [];
-        let current = this.root;
-        path.push(current);
-        for (const char of prefix) {
-            if (!current.children[char]) return [];
-            current = current.children[char];
-            path.push(current);
-        }
-        return path;
-    }
-}
-
-// --- Visualization Component ---
-const TrieVisualization = ({ trieRoot, highlightedPath, animationPath }) => {
-    const layout = useMemo(() => {
-        const nodes = [];
-        const edges = [];
-        const levelWidths = {};
-        const levelCounts = {};
-
-        function getLevelWidths(node, depth) {
-            levelWidths[depth] = (levelWidths[depth] || 0) + 1;
-            Object.values(node.children).forEach(child => getLevelWidths(child, depth + 1));
-        }
-        getLevelWidths(trieRoot, 0);
-
-        function buildLayout(node, depth, parentPos) {
-            const levelWidth = levelWidths[depth] || 1;
-            levelCounts[depth] = (levelCounts[depth] || 0) + 1;
-
-            const x = (levelCounts[depth] - 0.5 * (levelWidth-1) ) * 90;
-            const y = depth * 100;
-
-            nodes.push({ node, x, y });
-
-            if (parentPos) {
-                edges.push({ from: parentPos, to: { x, y } });
-            }
-
-            Object.values(node.children)
-                .sort((a,b) => a.char.localeCompare(b.char))
-                .forEach(child => buildLayout(child, depth + 1, { x, y }));
-        }
-
-        buildLayout(trieRoot, 0, null);
-
-        // Center the whole tree
-        const xCoords = nodes.map(n => n.x);
-        const minX = Math.min(...xCoords);
-        const maxX = Math.max(...xCoords);
-        const totalWidth = maxX - minX;
-
-        nodes.forEach(n => {
-            n.x -= (minX + totalWidth / 2);
-        });
-        edges.forEach(e => {
-            e.from.x -= (minX + totalWidth / 2);
-            e.to.x -= (minX + totalWidth / 2);
-        });
-
-
-        return { nodes, edges };
-    }, [trieRoot]);
-
-    const highlightedIds = new Set(highlightedPath.map(node => node.id));
-    const animationIds = new Set(animationPath.map(node => node.id));
-
-    return (
-        <div className="relative w-full min-h-[400px] flex items-center justify-center overflow-auto p-4">
-            <svg className="absolute top-0 left-0 w-full h-full" style={{ transform: 'translate(50%, 50px)' }}>
-                <g>
-                    {edges.map((edge, i) => (
-                        <line
-                            key={i}
-                            x1={edge.from.x}
-                            y1={edge.from.y}
-                            x2={edge.to.x}
-                            y2={edge.to.y}
-                            className="stroke-gray-300 dark:stroke-gray-600"
-                            strokeWidth="2"
-                        />
-                    ))}
-                </g>
-            </svg>
-            <div className="relative" style={{ top: '50px' }}>
-                {nodes.map(({ node, x, y }) => {
-                    const isHighlighted = highlightedIds.has(node.id);
-                    const isAnimating = animationIds.has(node.id);
-                    const isEndOfWord = node.isEndOfWord;
-                    
-                    return (
-                        <div
-                            key={node.id}
-                            className={`absolute w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg border-2 transition-all duration-300 ${
-                                isAnimating ? "bg-yellow-400 border-yellow-600 scale-125" :
-                                isHighlighted ? "bg-blue-500 border-blue-700 text-white" :
-                                isEndOfWord ? "bg-green-400 border-green-600" :
-                                "bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-500"
-                            }`}
-                            style={{
-                                transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`,
-                            }}
-                        >
-                            {node.char.trim() || ' रूट'}
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
-    );
-};
-
-// Syntax highlighting function (reused from Array.jsx)
+// Syntax highlighting function
 const highlightSyntax = (code, language) => {
-    // This function can be copied directly from the provided Array.jsx file
-    const keywords = { /* ... keywords from Array.jsx ... */ };
-    // ... rest of the function logic
-    return code; // Placeholder: copy the full function for actual highlighting
+  const keywords = {
+    c: ['int', 'float', 'double', 'char', 'void', 'return', 'if', 'else', 'for', 'while', 'printf', 'include', 'main', 'struct', 'typedef', 'malloc', 'NULL', 'stdlib'],
+    cpp: ['int', 'float', 'double', 'char', 'void', 'return', 'if', 'else', 'for', 'while', 'cout', 'cin', 'using', 'namespace', 'std', 'include', 'main', 'string', 'bool', 'class', 'struct', 'nullptr', 'new'],
+    java: ['public', 'private', 'static', 'void', 'int', 'double', 'String', 'class', 'return', 'if', 'else', 'for', 'while', 'System', 'main', 'println', 'printf', 'import', 'null'],
+    python: ['def', 'return', 'if', 'else', 'elif', 'for', 'while', 'import', 'from', 'class', 'print', 'len', 'range', 'True', 'False', 'None'],
+    javascript: ['function', 'const', 'let', 'var', 'return', 'if', 'else', 'for', 'while', 'class', 'this', 'console', 'log', 'true', 'false', 'null', 'undefined', 'new']
+  };
+
+  const strings = /"[^"]*"|'[^']*'|`[^`]*`/g;
+  const comments = language === 'python' ? /#.*$/gm : /\/\/.*$|\/\*[\s\S]*?\*\//gm;
+  const numbers = /\b\d+\.?\d*\b/g;
+
+  let highlightedCode = code;
+
+  highlightedCode = highlightedCode.replace(strings, match => `<span style="color: #22c55e;">${match}</span>`);
+  highlightedCode = highlightedCode.replace(comments, match => `<span style="color: #6b7280;">${match}</span>`);
+  highlightedCode = highlightedCode.replace(numbers, match => `<span style="color: #f97316;">${match}</span>`);
+
+  if (keywords[language]) {
+    keywords[language].forEach(keyword => {
+      const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+      highlightedCode = highlightedCode.replace(regex, match => `<span style="color: #3b82f6;">${match}</span>`);
+    });
+  }
+
+  return highlightedCode;
 };
 
-export default function TriePage() {
-    const [selectedLanguage, setSelectedLanguage] = useState("javascript");
-    const [selectedQuestionIndex, setSelectedQuestionIndex] = useState(-1);
+// New Tree Visualization Component
+const TreeVisualization = () => {
+  const [selectedNode, setSelectedNode] = useState(10);
+  const [animatingNode, setAnimatingNode] = useState(null);
 
-    // --- Interactive Trie State ---
-    const [trie, setTrie] = useState(() => {
-      const initialTrie = new Trie();
-      ["cat", "car", "cart", "dog", "do"].forEach(word => initialTrie.insert(word));
-      return initialTrie;
-    });
-    const [inputValue, setInputValue] = useState("");
-    const [searchQuery, setSearchQuery] = useState("");
-    const [highlightedPath, setHighlightedPath] = useState([]);
-    const [animationPath, setAnimationPath] = useState([]);
-    const [operationMessage, setOperationMessage] = useState("");
+  // Mock data for the visualization component
+  const mockTree = {
+    value: 10,
+    left: {
+      value: 5,
+      left: { value: 2, left: null, right: null },
+      right: { value: 7, left: null, right: null },
+    },
+    right: {
+      value: 15,
+      left: { value: 12, left: null, right: null },
+      right: { value: 20, left: null, right: null },
+    },
+  };
 
-    const { topic, category, sections } = trieData;
-    const languages = ["javascript", "python", "java", "cpp"];
+  useEffect(() => {
+    if (animatingNode !== null) {
+      const timer = setTimeout(() => setAnimatingNode(null), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [animatingNode]);
 
-    // Update highlights when search query changes
-    useEffect(() => {
-        const path = trie.getPrefixPath(searchQuery);
-        setHighlightedPath(path);
+  const renderNode = (node, depth = 0) => {
+    if (!node) return null;
 
-        if (searchQuery) {
-            if (path.length > 0) {
-                const lastNode = path[path.length - 1];
-                if (lastNode.isEndOfWord && path.length - 1 === searchQuery.length) {
-                    setOperationMessage(`✅ Found full word: "${searchQuery}"`);
-                } else {
-                    setOperationMessage(`🔵 Found prefix: "${searchQuery}"`);
-                }
-            } else {
-                setOperationMessage(`❌ Prefix not found: "${searchQuery}"`);
-            }
-        } else {
-            setOperationMessage("");
-            setHighlightedPath([]);
-        }
-    }, [searchQuery, trie]);
-
-    const handleInsert = useCallback(() => {
-        const word = inputValue.toLowerCase().trim();
-        if (!word) return;
-
-        let currentPath = [trie.root];
-        let current = trie.root;
-        let delay = 0;
-
-        for (const char of word) {
-            setTimeout(() => {
-                if (current.children[char]) {
-                    current = current.children[char];
-                    currentPath.push(current);
-                    setAnimationPath([...currentPath]);
-                }
-            }, delay);
-            delay += 200;
-        }
-
-        setTimeout(() => {
-            const newTrie = new Trie();
-            // A simple way to "clone" is to re-insert all words. For production, a deep clone would be better.
-            // This is a simplified approach for the educational tool.
-            function traverseAndInsert(node, prefix) {
-                if(node.isEndOfWord) newTrie.insert(prefix);
-                Object.values(node.children).forEach(child => traverseAndInsert(child, prefix + child.char));
-            }
-            traverseAndInsert(trie.root, "");
-            
-            newTrie.insert(word);
-            setTrie(newTrie);
-            setAnimationPath([]);
-            setOperationMessage(`Inserted "${word}"`);
-            setInputValue("");
-        }, delay);
-    }, [inputValue, trie]);
-    
-    const handleDelete = useCallback(() => {
-      const word = inputValue.toLowerCase().trim();
-      if (!word) return;
-
-      const path = trie.getPrefixPath(word);
-      if (path.length - 1 === word.length && path[path.length-1].isEndOfWord) {
-        // As with insert, we recreate the trie for state update simplicity.
-        const newTrie = new Trie();
-        function traverseAndInsert(node, prefix) {
-            if(node.isEndOfWord) newTrie.insert(prefix);
-            Object.values(node.children).forEach(child => traverseAndInsert(child, prefix + child.char));
-        }
-        traverseAndInsert(trie.root, "");
-        
-        newTrie.delete(word);
-        setTrie(newTrie);
-        setOperationMessage(`Deleted "${word}"`);
-        setInputValue("");
-        setSearchQuery("");
-      } else {
-        setOperationMessage(`Cannot delete: "${word}" not found.`);
-      }
-    }, [inputValue, trie]);
+    const isSelected = node.value === selectedNode;
+    const isAnimating = node.value === animatingNode;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/20 text-gray-900 dark:text-white">
-            <header className="py-16 text-center bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white relative overflow-hidden">
-                <div className="absolute inset-0 bg-black/10"></div>
-                <div className="relative z-10">
-                    <h1 className="text-6xl font-extrabold mb-4 animate-pulse">{topic}</h1>
-                    <p className="text-xl">{category}</p>
-                    <div className="mt-6 flex justify-center space-x-4 text-sm">
-                        <span className="px-3 py-1 bg-white/20 rounded-full">🔍 Autocomplete</span>
-                        <span className="px-3 py-1 bg-white/20 rounded-full">✍️ Spell Check</span>
-                        <span className="px-3 py-1 bg-white/20 rounded-full">🚀 Fast Prefix Search</span>
-                    </div>
-                </div>
-            </header>
-
-            <main className="max-w-7xl mx-auto px-6 py-12 space-y-16">
-                {/* Student Hook */}
-                <section className="transform hover:scale-105 transition-transform duration-300">
-                    <h2 className="text-4xl font-bold mb-6 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                        🎯 Why Tries Matter
-                    </h2>
-                    <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border-l-8 border-blue-500">
-                        <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-200 italic">
-                            {sections.student_hook}
-                        </p>
-                    </div>
-                </section>
-                
-                {/* --- Main Trie Section --- */}
-                <section>
-                    <h2 className="text-5xl font-bold mb-8 text-center bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                        🌳 Trie - The Prefix Tree
-                    </h2>
-                    
-                    <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 border-blue-500">
-                        <h3 className="text-2xl font-bold mb-4 text-blue-700 dark:text-blue-300">💡 Understanding Tries</h3>
-                        <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200 mb-4">
-                            {sections.concept.concept}
-                        </p>
-                        <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border-l-4 border-blue-400">
-                            <p className="text-blue-800 dark:text-blue-200 font-medium">
-                                <span className="font-bold">Real-world example:</span> {sections.concept.realWorldExample}
-                            </p>
-                        </div>
-                    </div>
-                    
-                    {/* Interactive Demo */}
-                    <div className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-blue-200 dark:border-blue-800">
-                        <h3 className="text-2xl font-bold mb-6 text-center text-blue-800 dark:text-blue-200">
-                            🌳 Trie Interactive Demo
-                        </h3>
-                        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow mb-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="flex flex-col sm:flex-row items-center gap-2">
-                                    <input
-                                        type="text"
-                                        value={inputValue}
-                                        onChange={(e) => setInputValue(e.target.value)}
-                                        placeholder="Enter word..."
-                                        className="w-full px-4 py-2 border-2 border-blue-300 dark:border-blue-600 rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:border-blue-500 transition-colors"
-                                    />
-                                    <div className="flex gap-2">
-                                        <button onClick={handleInsert} className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 transform hover:scale-105 shadow-lg w-full sm:w-auto">Insert</button>
-                                        <button onClick={handleDelete} className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 transform hover:scale-105 shadow-lg w-full sm:w-auto">Delete</button>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                   <input
-                                        type="text"
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value.toLowerCase().trim())}
-                                        placeholder="Search for prefix..."
-                                        className="w-full px-4 py-2 border-2 border-purple-300 dark:border-purple-600 rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:border-purple-500 transition-colors"
-                                    />
-                                </div>
-                            </div>
-                             {operationMessage && <p className="text-center mt-4 font-semibold text-gray-700 dark:text-gray-200">{operationMessage}</p>}
-                        </div>
-                        <TrieVisualization trieRoot={trie.root} highlightedPath={highlightedPath} animationPath={animationPath} />
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-8 mt-8">
-                        {/* Advantages */}
-                        <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-green-500">
-                           <h3 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-300">✅ Advantages</h3>
-                           <ul className="space-y-3">
-                              {sections.concept.advantages.map((item, i) => <li key={i} className="flex items-start space-x-3"><span className="text-lg">{item.split(' ')[0]}</span><span className="text-gray-700 dark:text-gray-300">{item.substring(2)}</span></li>)}
-                           </ul>
-                        </div>
-                        {/* Disadvantages */}
-                        <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-red-500">
-                           <h3 className="text-2xl font-bold mb-4 text-red-700 dark:text-red-300">❌ Disadvantages</h3>
-                           <ul className="space-y-3">
-                              {sections.concept.disadvantages.map((item, i) => <li key={i} className="flex items-start space-x-3"><span className="text-lg">{item.split(' ')[0]}</span><span className="text-gray-700 dark:text-gray-300">{item.substring(2)}</span></li>)}
-                           </ul>
-                        </div>
-                    </div>
-                    
-                    <div className="mt-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
-                        <h3 className="text-2xl font-bold mb-6 text-center text-blue-700 dark:text-blue-300">🏢 Tries in Industry</h3>
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {sections.concept.industry_applications.map((app, i) => (
-                                <div key={i} className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border-l-4 border-blue-400 hover:shadow-lg transition-shadow">
-                                    <p className="text-gray-700 dark:text-gray-300">{app}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-                
-                {/* Performance Analysis */}
-                <section>
-                    <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent">
-                        ⚡ Performance Analysis
-                    </h2>
-                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
-                        <table className="w-full text-center">
-                            <thead className="bg-gray-100 dark:bg-gray-700">
-                                <tr>
-                                    <th className="p-4 font-semibold">Operation</th>
-                                    <th className="p-4 font-semibold">Time Complexity</th>
-                                    <th className="p-4 font-semibold">Space Complexity</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
-                                {[{op: "Insert", time: "O(L)", space: "O(L*N)"}, {op: "Search", time: "O(L)", space: "O(1)"}, {op: "Delete", time: "O(L)", space: "O(1)"}].map(row => (
-                                    <tr key={row.op} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="p-4 font-medium">{row.op}</td>
-                                        <td className="p-4"><span className="px-3 py-1 rounded bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300 font-mono text-sm">{row.time}</span></td>
-                                        <td className="p-4"><span className="px-3 py-1 rounded bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 font-mono text-sm">{row.space}</span></td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                             <caption className="text-left p-4 text-sm text-gray-600 dark:text-gray-400">
-                                L = length of the word, N = number of words. Space complexity for the structure is O(alphabet_size * L * N) in the worst case.
-                            </caption>
-                        </table>
-                    </div>
-                </section>
-                
-                {/* Code Examples */}
-                <section>
-                    {/* ... Code Examples JSX (copied and adapted from Array.jsx) ... */}
-                </section>
-                
-                {/* Interview Questions */}
-                <section>
-                    {/* ... Interview Questions JSX (copied and adapted from Array.jsx) ... */}
-                </section>
-                
-                {/* Project Ideas */}
-                <section>
-                    {/* ... Project Ideas JSX (copied and adapted from Array.jsx) ... */}
-                </section>
-            </main>
-
-            <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-12 mt-16">
-                <div className="max-w-7xl mx-auto px-6 text-center">
-                    <h3 className="text-2xl font-bold mb-4">Master Tries Today! 🚀</h3>
-                    <p className="text-lg text-gray-300 mb-6">
-                        From autocomplete to spell checkers, Tries are the key to efficient string and prefix operations!
-                    </p>
-                    <div className="flex justify-center space-x-4 text-sm">
-                        <span className="px-4 py-2 bg-white/10 rounded-full">📚 Learn</span>
-                        <span className="px-4 py-2 bg-white/10 rounded-full">💻 Practice</span>
-                        <span className="px-4 py-2 bg-white/10 rounded-full">🎯 Master</span>
-                    </div>
-                </div>
-            </footer>
+      <div className="flex flex-col items-center">
+        <div
+          className={`
+            w-16 h-16 rounded-full border-2 flex items-center justify-center cursor-pointer transition-all duration-300
+            ${isSelected ? "bg-blue-500 border-blue-600 text-white shadow-xl scale-110" : "bg-white dark:bg-gray-800 border-blue-300 dark:border-blue-600 text-blue-800 dark:text-blue-200 hover:scale-105"}
+            ${isAnimating ? "animate-bounce" : ""}
+          `}
+          onClick={() => {
+            setSelectedNode(node.value);
+            setAnimatingNode(node.value);
+          }}
+        >
+          <span className="font-bold text-lg">{node.value}</span>
         </div>
+        {(node.left || node.right) && (
+          <div className="flex justify-center w-full mt-4">
+            {node.left && (
+              <div className="flex flex-col items-center w-1/2">
+                <div className="w-px h-6 bg-gray-400 dark:bg-gray-600 transform translate-y-2"></div>
+                <div className="w-full flex justify-end">
+                  <div className="w-1/2 h-px bg-gray-400 dark:bg-gray-600 transform translate-y-px"></div>
+                </div>
+              </div>
+            )}
+            {node.right && (
+              <div className="flex flex-col items-center w-1/2">
+                <div className="w-px h-6 bg-gray-400 dark:bg-gray-600 transform translate-y-2"></div>
+                <div className="w-full flex justify-start">
+                  <div className="w-1/2 h-px bg-gray-400 dark:bg-gray-600 transform translate-y-px"></div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        <div className="flex justify-center w-full space-x-8 mt-[-10px]">
+          {renderNode(node.left, depth + 1)}
+          {renderNode(node.right, depth + 1)}
+        </div>
+      </div>
     );
+  };
+
+  return (
+    <div className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-blue-200 dark:border-blue-800">
+      <h3 className="text-2xl font-bold mb-6 text-center text-blue-800 dark:text-blue-200">
+        🌳 Binary Tree Interactive Demo
+      </h3>
+      <div className="flex justify-center items-center py-8 overflow-x-auto">
+        {renderNode(mockTree)}
+      </div>
+      <div className="mt-8 bg-white dark:bg-gray-800 p-4 rounded-lg shadow text-center">
+        <span className="text-sm text-gray-500">Selected Node Value</span>
+        <div className="text-2xl font-bold text-blue-600">
+          {selectedNode}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+export default function EnhancedTreePage() {
+  const [selectedLanguage, setSelectedLanguage] = useState("javascript");
+  const [selectedQuestionIndex, setSelectedQuestionIndex] = useState(-1);
+
+  const { topic, category, sections } = treeData;
+  const languages = ["c", "cpp", "java", "python", "javascript"];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/20 text-gray-900 dark:text-white">
+      {/* Animated Header */}
+      <header className="py-16 text-center bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="relative z-10">
+          <h1 className="text-6xl font-extrabold mb-4 animate-pulse">{topic}</h1>
+          <p className="text-xl">{category}</p>
+          <div className="mt-6">
+            <div className="flex justify-center space-x-4 text-sm">
+              <span className="px-3 py-1 bg-white/20 rounded-full">🌳 General Trees</span>
+              <span className="px-3 py-1 bg-white/20 rounded-full">🌿 Binary Trees</span>
+              <span className="px-3 py-1 bg-white/20 rounded-full">🔍 BSTs</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-6 py-12 space-y-16">
+        {/* Student Hook */}
+        <section className="transform hover:scale-105 transition-transform duration-300">
+          <h2 className="text-4xl font-bold mb-6 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            🎯 Why Trees Matter
+          </h2>
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border-l-8 border-blue-500">
+            <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-200 italic">
+              {sections.student_hook}
+            </p>
+          </div>
+        </section>
+
+        {/* General Tree Section */}
+        <section>
+          <h2 className="text-5xl font-bold mb-8 text-center bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            🌳 Trees - Hierarchical Data Structure
+          </h2>
+
+          {/* General Concept */}
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 border-blue-500">
+            <h3 className="text-2xl font-bold mb-4 text-blue-700 dark:text-blue-300">💡 Understanding Trees</h3>
+            <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200 mb-4">
+              {sections.generalConcepts.concept}
+            </p>
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border-l-4 border-blue-400">
+              <p className="text-blue-800 dark:text-blue-200 font-medium">
+                <span className="font-bold">Real-world example:</span> {sections.generalConcepts.realWorldExample}
+              </p>
+            </div>
+          </div>
+
+          {/* Advantages & Disadvantages */}
+          <div className="grid md:grid-cols-2 gap-8 mt-8">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-green-500">
+              <h3 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-300">✅ Advantages</h3>
+              <ul className="space-y-3">
+                {sections.generalConcepts.advantages.map((advantage, index) => (
+                  <li key={index} className="flex items-start space-x-3">
+                    <span className="text-green-500 text-lg">{advantage.split(' ')[0]}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{advantage.substring(2)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-red-500">
+              <h3 className="text-2xl font-bold mb-4 text-red-700 dark:text-red-300">❌ Disadvantages</h3>
+              <ul className="space-y-3">
+                {sections.generalConcepts.disadvantages.map((disadvantage, index) => (
+                  <li key={index} className="flex items-start space-x-3">
+                    <span className="text-red-500 text-lg">{disadvantage.split(' ')[0]}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{disadvantage.substring(2)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Industry Applications */}
+          <div className="mt-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
+            <h3 className="text-2xl font-bold mb-6 text-center text-blue-700 dark:text-blue-300">🏢 Trees in Industry</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {sections.generalConcepts.industry_applications.map((application, index) => (
+                <div
+                  key={index}
+                  className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border-l-4 border-blue-400 hover:shadow-lg transition-shadow duration-300"
+                >
+                  <p className="text-gray-700 dark:text-gray-300">{application}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Binary Tree Section */}
+        <section>
+          <h2 className="text-5xl font-bold mb-8 text-center bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+            🌿 Binary Trees - Specialized Trees
+          </h2>
+
+          {/* Binary Tree Concept */}
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 border-green-500">
+            <h3 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-300">💡 Understanding Binary Trees</h3>
+            <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200 mb-4">
+              {sections.binaryTree.concept}
+            </p>
+            <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border-l-4 border-green-400">
+              <p className="text-green-800 dark:text-green-200 font-medium">
+                <span className="font-bold">Real-world example:</span> {sections.binaryTree.realWorldExample}
+              </p>
+            </div>
+          </div>
+
+          {/* Binary Tree Interactive Demo */}
+          <TreeVisualization />
+
+          {/* Binary Tree Industry Applications */}
+          <div className="mt-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
+            <h3 className="text-2xl font-bold mb-6 text-center text-green-700 dark:text-green-300">🏢 Binary Trees in Industry</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {sections.binaryTree.industry_applications.map((application, index) => (
+                <div
+                  key={index}
+                  className="bg-green-50 dark:bg-green-900/20 p-4 rounded-xl border-l-4 border-green-400 hover:shadow-lg transition-shadow duration-300"
+                >
+                  <p className="text-gray-700 dark:text-gray-300">{application}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Code Examples */}
+        <section>
+          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-rose-600 to-orange-600 bg-clip-text text-transparent">
+            💻 Real-World Code Examples
+          </h2>
+
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+            {/* Language Selector */}
+            <div className="bg-gray-100 dark:bg-gray-700 p-4">
+              <div className="flex flex-wrap justify-center gap-2">
+                {languages.map((lang) => (
+                  <button
+                    key={lang}
+                    onClick={() => setSelectedLanguage(lang)}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                      selectedLanguage === lang
+                        ? "bg-rose-500 text-white shadow-lg"
+                        : "bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-500"
+                    }`}
+                  >
+                    {lang.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Code Display with Syntax Highlighting */}
+            <div className="p-6">
+              <pre className="bg-gray-900 text-white p-6 rounded-xl overflow-x-auto text-sm leading-relaxed">
+                <code
+                  dangerouslySetInnerHTML={{
+                    __html: highlightSyntax(sections.code_examples[selectedLanguage], selectedLanguage)
+                  }}
+                />
+              </pre>
+            </div>
+          </div>
+        </section>
+
+        {/* Time & Space Complexity Analysis */}
+        <section>
+          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent">
+            ⚡ Performance Analysis
+          </h2>
+
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+            <table className="w-full text-xs sm:text-sm md:text-base">
+              <thead className="bg-gray-100 dark:bg-gray-700">
+                <tr>
+                  <th className="px-2 py-2 sm:px-4 sm:py-3 text-left font-semibold text-gray-800 dark:text-gray-200">Operation</th>
+                  <th className="px-2 py-2 sm:px-4 sm:py-3 text-center font-semibold text-gray-800 dark:text-gray-200">Time</th>
+                  <th className="px-2 py-2 sm:px-4 sm:py-3 text-center font-semibold text-gray-800 dark:text-gray-200">Space</th>
+                  <th className="px-2 py-2 sm:px-4 sm:py-3 text-left font-semibold text-gray-800 dark:text-gray-200">Notes (for BST)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
+                {[
+                  { operation: "Access/Search", time: "O(log n)", space: "O(h)", notes: "Fast in balanced trees, worst-case O(n)" },
+                  { operation: "Insertion", time: "O(log n)", space: "O(h)", notes: "Fast in balanced trees, worst-case O(n)" },
+                  { operation: "Deletion", time: "O(log n)", space: "O(h)", notes: "Fast in balanced trees, worst-case O(n)" },
+                  { operation: "Traversal (DFS)", time: "O(n)", space: "O(h)", notes: "Requires visiting every node once" },
+                  { operation: "Traversal (BFS)", time: "O(n)", space: "O(w)", notes: "Level by level, O(w) for max width" }
+                ].map((row, index) => (
+                  <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150">
+                    <td className="px-2 py-2 sm:px-4 sm:py-3 font-medium text-gray-800 dark:text-gray-200">{row.operation}</td>
+                    <td className="px-2 py-2 sm:px-4 sm:py-3 text-center">
+                      <span className={`px-2 py-1 rounded text-[10px] sm:text-xs font-mono ${
+                        row.time === "O(n)" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300" :
+                        "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+                      }`}>
+                        {row.time}
+                      </span>
+                    </td>
+                    <td className="px-2 py-2 sm:px-4 sm:py-3 text-center">
+                      <span className="px-2 py-1 rounded text-[10px] sm:text-xs font-mono bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                        {row.space}
+                      </span>
+                    </td>
+                    <td className="px-2 py-2 sm:px-4 sm:py-3 text-gray-700 dark:text-gray-300 text-[11px] sm:text-sm">{row.notes}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* Interview Questions */}
+        <section>
+          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent">
+            🎤 Interview Questions & Answers
+          </h2>
+
+          <div className="space-y-4">
+            {sections.interview_questions.map((qa, index) => (
+              <div
+                key={index}
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden"
+              >
+                <button
+                  onClick={() => setSelectedQuestionIndex(selectedQuestionIndex === index ? -1 : index)}
+                  className="w-full p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                >
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                        {qa.question}
+                      </h3>
+                      <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                        qa.difficulty === "Easy" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300" :
+                        qa.difficulty === "Medium" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300" :
+                        "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
+                      }`}>
+                        {qa.difficulty}
+                      </span>
+                    </div>
+                    <div className="ml-4">
+                      <svg
+                        className={`w-6 h-6 transition-transform duration-200 ${
+                          selectedQuestionIndex === index ? "rotate-180" : ""
+                        }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+
+                {selectedQuestionIndex === index && (
+                  <div className="px-6 pb-6 border-t border-gray-100 dark:border-gray-700">
+                    <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg mt-4">
+                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                        <strong>Answer:</strong> {qa.answer}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Project Ideas */}
+        <section>
+          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-violet-600 to-pink-600 bg-clip-text text-transparent">
+            🚀 Hands-on Project Ideas
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {sections.project_ideas.map((project, index) => (
+              <div
+                key={index}
+                className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-t-4 border-violet-500"
+              >
+                <div className="mb-4">
+                  <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
+                    {project.title}
+                  </h3>
+                  <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                    project.difficulty === "Beginner" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300" :
+                    project.difficulty === "Intermediate" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300" :
+                    "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
+                  }`}>
+                    {project.difficulty}
+                  </span>
+                </div>
+
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  {project.description}
+                </p>
+
+                <div className="space-y-2">
+                  <h4 className="font-semibold text-gray-800 dark:text-gray-200">Technologies:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {project.technologies.map((tech, techIndex) => (
+                      <span
+                        key={techIndex}
+                        className="px-3 py-1 bg-violet-100 dark:bg-violet-900/30 text-violet-800 dark:text-violet-300 rounded-full text-sm font-medium"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-12 mt-16">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h3 className="text-2xl font-bold mb-4">Master Trees Today! 🌳</h3>
+          <p className="text-lg text-gray-300 mb-6">
+            From simple binary trees to complex search algorithms—trees are your foundation for modeling hierarchical data.
+          </p>
+          <div className="flex justify-center space-x-4 text-sm">
+            <span className="px-4 py-2 bg-white/10 rounded-full">📚 Learn</span>
+            <span className="px-4 py-2 bg-white/10 rounded-full">💻 Practice</span>
+            <span className="px-4 py-2 bg-white/10 rounded-full">🎯 Master</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
 }

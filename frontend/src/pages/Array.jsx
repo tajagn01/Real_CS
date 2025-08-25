@@ -91,206 +91,150 @@ const arrayData = {
       ],
     },
 
-    code_examples: {
-      c: `// C Array Example - Student Grades System
-#include <stdio.h>
+code_examples: {
+  c: `// C Example - Student Marks (1D & 2D Arrays)
+#include &lt;stdio.h&gt;
 
 int main() {
-    // 1D Array - Store grades for 5 subjects
-    int grades[5] = {85, 92, 78, 95, 88};
+    // 1D Array: Marks of 1 student in 3 subjects
+    int marks1D[3] = {85, 90, 78};
     
-    printf("=== Student Grade Report ===\\n");
-    
-    // Display all grades
-    for(int i = 0; i < 5; i++) {
-        printf("Subject %d: %d%%\\n", i+1, grades[i]);
+    printf("=== 1D Array - Single Student ===\\n");
+    for(int i = 0; i &lt; 3; i++) {
+        printf("Subject %d: %d\\n", i+1, marks1D[i]);
     }
     
-    // Calculate average
-    int sum = 0;
-    for(int i = 0; i < 5; i++) {
-        sum += grades[i];
-    }
-    printf("\\nAverage Grade: %.1f%%\\n", sum/5.0);
+    // 2D Array: Marks of 3 students in 3 subjects
+    int marks2D[3][3] = {
+        {85, 90, 78},
+        {92, 88, 95},
+        {76, 85, 89}
+    };
     
-    // Find highest grade
-    int highest = grades[0];
-    for(int i = 1; i < 5; i++) {
-        if(grades[i] > highest) {
-            highest = grades[i];
+    printf("\\n=== 2D Array - Multiple Students ===\\n");
+    for(int i = 0; i &lt; 3; i++) {
+        printf("Student %d: ", i+1);
+        for(int j = 0; j &lt; 3; j++) {
+            printf("%d ", marks2D[i][j]);
         }
+        printf("\\n");
     }
-    printf("Highest Grade: %d%%\\n", highest);
     
     return 0;
 }`,
-      cpp: `// C++ Array Example - Temperature Monitoring
-#include <iostream>
-#include <algorithm>
+
+  cpp: `// C++ Example - Student Marks (1D & 2D Arrays)
+#include &lt;iostream&gt;
 using namespace std;
 
 int main() {
-    // 1D Array - Daily temperatures for a week
-    double temperatures[7] = {23.5, 25.2, 22.8, 26.1, 24.3, 21.9, 23.7};
-    string days[7] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+    // 1D Array: Marks of 1 student in 3 subjects
+    int marks1D[3] = {85, 90, 78};
     
-    cout << "=== Weekly Temperature Report ===\\n";
-    
-    // Display daily temperatures
-    for(int i = 0; i < 7; i++) {
-        cout << days[i] << ": " << temperatures[i] << "°C\\n";
+    cout &lt;&lt; "=== 1D Array - Single Student ===\\n";
+    for(int i = 0; i &lt; 3; i++) {
+        cout &lt;&lt; "Subject " &lt;&lt; i+1 &lt;&lt; ": " &lt;&lt; marks1D[i] &lt;&lt; "\\n";
     }
     
-    // Find min and max temperatures
-    double minTemp = *min_element(temperatures, temperatures + 7);
-    double maxTemp = *max_element(temperatures, temperatures + 7);
+    // 2D Array: Marks of 3 students in 3 subjects
+    int marks2D[3][3] = {
+        {85, 90, 78},
+        {92, 88, 95},
+        {76, 85, 89}
+    };
     
-    cout << "\\nColdest Day: " << minTemp << "°C\\n";
-    cout << "Hottest Day: " << maxTemp << "°C\\n";
-    
-    // Calculate average temperature
-    double sum = 0;
-    for(int i = 0; i < 7; i++) {
-        sum += temperatures[i];
+    cout &lt;&lt; "\\n=== 2D Array - Multiple Students ===\\n";
+    for(int i = 0; i &lt; 3; i++) {
+        cout &lt;&lt; "Student " &lt;&lt; i+1 &lt;&lt; ": ";
+        for(int j = 0; j &lt; 3; j++) {
+            cout &lt;&lt; marks2D[i][j] &lt;&lt; " ";
+        }
+        cout &lt;&lt; "\\n";
     }
-    cout << "Average Temperature: " << sum/7.0 << "°C\\n";
     
     return 0;
 }`,
-      java: `// Java Array Example - Inventory Management
-public class InventorySystem {
+
+  java: `// Java Example - Student Marks (1D & 2D Arrays)
+public class StudentMarks {
     public static void main(String[] args) {
-        // 1D Arrays - Product inventory system
-        String[] products = {"Laptop", "Mouse", "Keyboard", "Monitor", "Headphones"};
-        int[] quantities = {15, 50, 30, 8, 25};
-        double[] prices = {999.99, 29.99, 79.99, 299.99, 149.99};
+        // 1D Array: Marks of 1 student in 3 subjects
+        int[] marks1D = {85, 90, 78};
         
-        System.out.println("=== Inventory Report ===");
-        
-        // Display inventory
-        for(int i = 0; i < products.length; i++) {
-            System.out.printf("%-12s | Qty: %2d | Price: $%.2f | Value: $%.2f%n", 
-                products[i], quantities[i], prices[i], 
-                quantities[i] * prices[i]);
+        System.out.println("=== 1D Array - Single Student ===");
+        for(int i = 0; i &lt; marks1D.length; i++) {
+            System.out.println("Subject " + (i+1) + ": " + marks1D[i]);
         }
         
-        // Calculate total inventory value
-        double totalValue = 0;
-        for(int i = 0; i < products.length; i++) {
-            totalValue += quantities[i] * prices[i];
-        }
+        // 2D Array: Marks of 3 students in 3 subjects
+        int[][] marks2D = {
+            {85, 90, 78},
+            {92, 88, 95},
+            {76, 85, 89}
+        };
         
-        System.out.printf("%nTotal Inventory Value: $%.2f%n", totalValue);
-        
-        // Find low stock items (less than 20 units)
-        System.out.println("\\n=== Low Stock Alert ===");
-        for(int i = 0; i < products.length; i++) {
-            if(quantities[i] < 20) {
-                System.out.println("⚠️  " + products[i] + " (Only " + quantities[i] + " left)");
+        System.out.println("\\n=== 2D Array - Multiple Students ===");
+        for(int i = 0; i &lt; marks2D.length; i++) {
+            System.out.print("Student " + (i+1) + ": ");
+            for(int j = 0; j &lt; marks2D[i].length; j++) {
+                System.out.print(marks2D[i][j] + " ");
             }
+            System.out.println();
         }
     }
 }`,
-      python: `# Python Array Example - Sales Analytics
-import statistics
 
-def analyze_sales():
-    # 1D Array - Monthly sales data
-    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-              "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    sales = [45000, 52000, 48000, 61000, 55000, 67000,
-             71000, 69000, 58000, 62000, 75000, 82000]
-    
-    print("=== Annual Sales Report ===")
-    
-    # Display monthly sales
-    for i in range(len(months)):
-        print("{0}: ${1}".format(months[i], format(sales[i], ",")))
-    
-    # Statistical analysis
-    total_sales = sum(sales)
-    average_sales = statistics.mean(sales)
-    best_month_idx = sales.index(max(sales))
-    worst_month_idx = sales.index(min(sales))
-    
-    print("\\n=== Performance Summary ===")
-    print("Total Annual Sales: ${0}".format(format(total_sales, ",")))
-    print("Average Monthly Sales: ${0}".format(format(int(average_sales), ",")))
-    print("Best Month: {0} (${1})".format(months[best_month_idx], format(max(sales), ",")))
-    print("Worst Month: {0} (${1})".format(months[worst_month_idx], format(min(sales), ",")))
-    
-    # Growth trend analysis
-    print("\\n=== Growth Analysis ===")
-    q1_sales = sum(sales[0:3])
-    q4_sales = sum(sales[9:12])
-    growth = ((q4_sales - q1_sales) / q1_sales) * 100
-    print("Q1 Sales: ${0}".format(format(q1_sales, ",")))
-    print("Q4 Sales: ${0}".format(format(q4_sales, ",")))
-    print("Year-over-Year Growth: {0:.1f}%".format(growth))
+  python: `# Python Example - Student Marks (1D & 2D Arrays)
 
-# Run the analysis
-analyze_sales()`,
-      javascript: `// JavaScript Array Example - Social Media Analytics
-class SocialMediaAnalytics {
-    constructor() {
-        // 1D Arrays - Social media engagement data
-        this.platforms = ['Instagram', 'Twitter', 'Facebook', 'TikTok', 'YouTube'];
-        this.followers = [125000, 89000, 156000, 78000, 234000];
-        this.engagement = [8.5, 6.2, 4.8, 12.1, 7.3]; // percentage
-        this.dailyPosts = [2, 5, 1, 3, 1];
-    }
-    
-    generateReport() {
-        console.log('=== Social Media Performance Report ===');
-        
-        // Display platform metrics
-        this.platforms.forEach((platform, index) => {
-            const followers = this.followers[index].toLocaleString();
-            const engagementRate = this.engagement[index];
-            const posts = this.dailyPosts[index];
-            
-            console.log(\`\${platform}:\`);
-            console.log(\`  📊 Followers: \${followers}\`);
-            console.log(\`  💖 Engagement: \${engagementRate}%\`);
-            console.log(\`  📝 Daily Posts: \${posts}\`);
-            console.log('');
-        });
-        
-        // Calculate totals and averages
-        const totalFollowers = this.followers.reduce((sum, count) => sum + count, 0);
-        const avgEngagement = this.engagement.reduce((sum, rate) => sum + rate, 0) / this.platforms.length;
-        
-        // Find best performing platform
-        const bestEngagementIndex = this.engagement.indexOf(Math.max(...this.engagement));
-        const mostFollowersIndex = this.followers.indexOf(Math.max(...this.followers));
-        
-        console.log('=== Summary Statistics ===');
-        console.log(\`Total Followers: \${totalFollowers.toLocaleString()}\`);
-        console.log(\`Average Engagement: \${avgEngagement.toFixed(1)}%\`);
-        console.log(\`Best Engagement: \${this.platforms[bestEngagementIndex]} (\${this.engagement[bestEngagementIndex]}%)\`);
-        console.log(\`Most Followers: \${this.platforms[mostFollowersIndex]} (\${this.followers[mostFollowersIndex].toLocaleString()})\`);
-        
-        // Growth recommendations
-        this.generateRecommendations();
-    }
-    
-    generateRecommendations() {
-        console.log('\\n=== Growth Recommendations ===');
-        
-        this.platforms.forEach((platform, index) => {
-            if (this.engagement[index] < 5) {
-                console.log(\`🔴 \${platform}: Low engagement - consider more interactive content\`);
-            } else if (this.engagement[index] > 10) {
-                console.log(\`🟢 \${platform}: Excellent engagement - scale up posting\`);
-            }
-        });
-    }
+# 1D Array: Marks of 1 student in 3 subjects
+marks1D = [85, 90, 78]
+
+print("=== 1D Array - Single Student ===")
+for i in range(len(marks1D)):
+    print(f"Subject {i+1}: {marks1D[i]}")
+
+# 2D Array: Marks of 3 students in 3 subjects
+marks2D = [
+    [85, 90, 78],
+    [92, 88, 95],
+    [76, 85, 89]
+]
+
+print("\\n=== 2D Array - Multiple Students ===")
+for i in range(len(marks2D)):
+    print(f"Student {i+1}: ", end="")
+    for j in range(len(marks2D[i])):
+        print(marks2D[i][j], end=" ")
+    print()`,
+
+  javascript: `// JavaScript Example - Student Marks (1D & 2D Arrays)
+
+// 1D Array: Marks of 1 student in 3 subjects
+let marks1D = [85, 90, 78];
+
+console.log("=== 1D Array - Single Student ===");
+for(let i = 0; i &lt; marks1D.length; i++) {
+    console.log("Subject " + (i+1) + ": " + marks1D[i]);
 }
 
-// Run the analytics
-const analytics = new SocialMediaAnalytics();
-analytics.generateReport();`,
-    },
+// 2D Array: Marks of 3 students in 3 subjects
+let marks2D = [
+    [85, 90, 78],
+    [92, 88, 95],
+    [76, 85, 89]
+];
+
+console.log("\\n=== 2D Array - Multiple Students ===");
+for(let i = 0; i &lt; marks2D.length; i++) {
+    let row = "Student " + (i+1) + ": ";
+    for(let j = 0; j &lt; marks2D[i].length; j++) {
+        row += marks2D[i][j] + " ";
+    }
+    console.log(row);
+}`
+},
+
+
 
     interview_questions: [
       {
@@ -458,9 +402,12 @@ export default function EnhancedArrayPage() {
 
   const ArrayVisualization1D = () => (
     <div className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-blue-200 dark:border-blue-800">
-      <h3 className="text-2xl font-bold mb-6 text-center text-blue-800 dark:text-blue-200">
-        📊 1D Array Interactive Demo
-      </h3>
+      <h3 className="text-2xl font-bold mb-6 text-center">
+    📊
+    <span className="text-blue-800 dark:text-blue-200">
+        1D Array Interactive Demo
+    </span>
+</h3>
       
       <div className="flex flex-wrap justify-center gap-3 mb-6">
         {arrayValues.map((value, index) => (
@@ -547,9 +494,12 @@ export default function EnhancedArrayPage() {
 
   const ArrayVisualization2D = () => (
     <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border-2 border-green-200 dark:border-green-800">
-      <h3 className="text-2xl font-bold mb-6 text-center text-green-800 dark:text-green-200">
-        🎯 2D Array Interactive Demo
-      </h3>
+     <h3 className="text-2xl font-bold mb-6 text-center">
+    🎯
+    <span className="text-green-800 dark:text-green-200">
+        2D Array Interactive Demo
+    </span>
+</h3>
       
       <div className="flex justify-center mb-6">
         <div className="grid grid-cols-3 gap-2">
@@ -600,9 +550,12 @@ export default function EnhancedArrayPage() {
 
   const ArrayVisualization3D = () => (
     <div className="p-6 bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 rounded-xl border-2 border-purple-200 dark:border-purple-800">
-      <h3 className="text-2xl font-bold mb-6 text-center text-purple-800 dark:text-purple-200">
-        🧊 3D Array Interactive Demo
-      </h3>
+     <h3 className="text-2xl font-bold mb-6 text-center">
+    🧊
+    <span className="text-purple-800 dark:text-purple-200">
+        3D Array Interactive Demo
+    </span>
+</h3>
       
       <div className="flex justify-center gap-8 mb-6">
         {array3D.map((layer, depthIndex) => (
@@ -693,9 +646,12 @@ export default function EnhancedArrayPage() {
 
         {/* 1D Arrays Section */}
         <section>
-          <h2 className="text-5xl font-bold mb-8 text-center bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            📊 1D Arrays - Linear Data Structure
-          </h2>
+          <h2 class="text-5xl font-bold mb-8 text-center">
+    📊
+    <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+        1D Arrays - Linear Data Structure
+    </span>
+</h2>
           
           {/* 1D Concept */}
           <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 border-blue-500">
@@ -742,8 +698,12 @@ export default function EnhancedArrayPage() {
 
           {/* 1D Industry Applications */}
           <div className="mt-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
-            <h3 className="text-2xl font-bold mb-6 text-center text-blue-700 dark:text-blue-300">🏢 1D Arrays in Industry</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+<h3 className="text-2xl font-bold mb-6 text-center">
+    🏢
+    <span className="text-blue-700 dark:text-blue-300">
+        1D Arrays in Industry
+    </span>
+</h3>            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {sections.oneDimensional.industry_applications.map((application, index) => (
                 <div
                   key={index}
@@ -758,10 +718,12 @@ export default function EnhancedArrayPage() {
 
         {/* 2D Arrays Section */}
         <section>
-          <h2 className="text-5xl font-bold mb-8 text-center bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-            🎯 2D Arrays - Matrix Data Structure
-          </h2>
-          
+         <h2 class="text-5xl font-bold mb-8 text-center">
+    🎯
+    <span class="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+        2D Arrays - Matrix Data Structure
+    </span>
+</h2>
           {/* 2D Concept */}
           <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 border-green-500">
             <h3 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-300">💡 Understanding 2D Arrays</h3>
@@ -807,8 +769,12 @@ export default function EnhancedArrayPage() {
 
           {/* 2D Industry Applications */}
           <div className="mt-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
-            <h3 className="text-2xl font-bold mb-6 text-center text-green-700 dark:text-green-300">🏢 2D Arrays in Industry</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+<h3 className="text-2xl font-bold mb-6 text-center">
+    🏢
+    <span className="text-green-700 dark:text-green-300">
+        2D Arrays in Industry
+    </span>
+</h3>            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {sections.twoDimensional.industry_applications.map((application, index) => (
                 <div
                   key={index}
@@ -823,9 +789,12 @@ export default function EnhancedArrayPage() {
 
         {/* 3D Arrays Section */}
         <section>
-          <h2 className="text-5xl font-bold mb-8 text-center bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">
-            🧊 3D Arrays - Cube Data Structure
-          </h2>
+       <h2 className="text-5xl font-bold mb-8 text-center">
+    🧊
+    <span className="bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">
+        3D Arrays - Cube Data Structure
+    </span>
+</h2>
           
           {/* 3D Concept */}
           <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 border-purple-500">
@@ -872,8 +841,12 @@ export default function EnhancedArrayPage() {
 
           {/* 3D Industry Applications */}
           <div className="mt-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
-            <h3 className="text-2xl font-bold mb-6 text-center text-purple-700 dark:text-purple-300">🏢 3D Arrays in Industry</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+<h3 className="text-2xl font-bold mb-6 text-center">
+    🏢
+    <span className="text-purple-700 dark:text-purple-300">
+        3D Arrays in Industry
+    </span>
+</h3>            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {sections.threeDimensional.industry_applications.map((application, index) => (
                 <div
                   key={index}
@@ -888,9 +861,12 @@ export default function EnhancedArrayPage() {
 
         {/* Code Examples */}
         <section>
-          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-rose-600 to-orange-600 bg-clip-text text-transparent">
-            💻 Real-World Code Examples
-          </h2>
+         <h2 className="text-4xl font-bold mb-8 text-center">
+    💻
+    <span className="bg-gradient-to-r from-rose-600 to-orange-600 bg-clip-text text-transparent">
+        Real-World Code Examples
+    </span>
+</h2>
           
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
             {/* Language Selector */}
@@ -913,15 +889,41 @@ export default function EnhancedArrayPage() {
             </div>
             
             {/* Code Display with Syntax Highlighting */}
-            <div className="p-6">
-              <pre className="bg-gray-900 text-white p-6 rounded-xl overflow-x-auto text-sm leading-relaxed">
-                <code 
-                  dangerouslySetInnerHTML={{ 
-                    __html: highlightSyntax(sections.code_examples[selectedLanguage], selectedLanguage) 
-                  }}
-                />
-              </pre>
-            </div>
+           <div className="p-6">
+  <div className="relative"> {/* Use a relative container for positioning */}
+    <pre className="bg-gray-900 text-white p-6 rounded-xl overflow-x-auto text-sm leading-relaxed">
+      <code
+        dangerouslySetInnerHTML={{
+          __html: highlightSyntax(sections.code_examples[selectedLanguage], selectedLanguage)
+        }}
+      />
+    </pre>
+    {/* The copy button is positioned inside the relative container */}
+    <button
+      className="absolute top-2 right-2 p-2 rounded-md text-white bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400"
+      onClick={() => {
+        // Here you'll add the logic to copy the code to the clipboard
+        const codeText = sections.code_examples[selectedLanguage];
+        navigator.clipboard.writeText(codeText);
+      }}
+    >
+      {/* You can use an SVG for the copy icon */}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-5 w-5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+      </svg>
+    </button>
+  </div>
+</div>
           </div>
         </section>
 

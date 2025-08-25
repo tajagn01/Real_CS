@@ -12,6 +12,8 @@ import LinkedList from './LinkedList';
 import BinaryTree from './BinaryTree';
 import HashTable from './HashTable';
 import Heap from './Heap';
+import DynamicProgramming from './DynamicProgramming'
+import Tree from './Tree'
 
 
 import Graph from './Grap';
