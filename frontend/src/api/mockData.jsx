@@ -226,102 +226,257 @@ export const dsaData = {
 
 
 export const aimlData = {
-  title: "Artificial Intelligence & Machine Learning",
-  concepts: [
+  title: "Artificial Intelligence & Machine Learning",
+  concepts: [
     {
-      id: "linear-regression",
-      name: "Linear Regression",
-      description: "A statistical method to model relationship between dependent and independent variables",
-      definition: "Linear regression is a fundamental machine learning algorithm that models the relationship between a dependent variable and independent variables by fitting a linear equation. It assumes that the relationship between variables is linear and tries to find the best line that minimizes the sum of squared residuals.",
-      useCase: "Linear regression is widely used in business for sales forecasting, in economics for predicting GDP, in healthcare for drug dosage calculations, in real estate for price prediction, and in marketing for ROI analysis. It's often the starting point for more complex predictive models.",
-      code: `import numpy as np
-from sklearn.linear_model import LinearRegression
-import matplotlib.pyplot as plt
+      id: "what-is-aiml",
+      name: "What is AI & ML?",
+      description: "An introduction to Artificial Intelligence and Machine Learning — the science of making machines smart.",
+      definition: "Artificial Intelligence (AI) is a broad field of computer science focused on creating systems that can perform tasks that typically require human intelligence. Machine Learning (ML) is a subset of AI where algorithms are trained on data to learn patterns and make predictions without being explicitly programmed.",
+      useCase: "AI powers virtual assistants like Siri and Alexa.\nML is used in spam filters to learn what emails are junk.\nAI in games creates intelligent non-player characters (NPCs).\nML models predict stock prices based on historical data.\nAI systems help doctors diagnose diseases from medical images.",
+      code: null,
+      questions: [
+        {
+          question: "What is the key difference between traditional programming and machine learning?",
+          hint: "Think about how the rules are created.",
+          answer: "In traditional programming, humans write explicit rules for the computer to follow. In machine learning, the machine learns the rules itself by analyzing data."
+        }
+      ]
+    },
+    {
+      id: "types-of-ml",
+      name: "Types of Machine Learning",
+      description: "The three main paradigms: Supervised, Unsupervised, and Reinforcement Learning.",
+      definition: "Machine Learning is primarily categorized into three types: \n1. **Supervised Learning:** Learning from labeled data to make predictions (e.g., classifying images). \n2. **Unsupervised Learning:** Finding hidden patterns or structures in unlabeled data (e.g., customer segmentation). \n3. **Reinforcement Learning:** An agent learns to make decisions by performing actions in an environment to maximize a cumulative reward (e.g., training a bot to play a game).",
+      useCase: "Supervised: Predicting house prices, spam detection.\nUnsupervised: Grouping similar news articles, anomaly detection.\nReinforcement: Training self-driving cars, robotics, game AI.",
+      code: null,
+      questions: [
+        {
+          question: "If you have a dataset of emails and their sentiment (positive/negative), which type of ML would you use to predict the sentiment of new emails?",
+          hint: "The data has labels (positive/negative).",
+          answer: "Supervised Learning, because the training data is labeled with the correct outcomes."
+        }
+      ]
+    },
+    {
+      id: "linear-regression",
+      name: "Linear Regression",
+      description: "A statistical method to model the relationship between variables.",
+      definition: "Linear regression is a fundamental supervised learning algorithm that models the relationship between a dependent variable and one or more independent variables by fitting a linear equation. It tries to find the best line that minimizes the sum of squared differences between the predicted and actual values.",
+      useCase: "Linear regression is widely used in business for sales forecasting, in economics for predicting GDP, in real estate for price prediction, and in marketing for ROI analysis. It's often the starting point for more complex predictive models.",
+      code: `from sklearn.linear_model import LinearRegression
+import numpy as np
 
-# Generate sample data
+# Sample data
 X = np.array([[1], [2], [3], [4], [5]])
-y = np.array([2, 4, 6, 8, 10])
+y = np.array([2, 4, 5, 4, 8])
 
 # Create and train model
 model = LinearRegression()
 model.fit(X, y)
 
-# Make predictions
-predictions = model.predict(X)
-
-# Model parameters
+# Get slope and intercept
 print(f"Slope: {model.coef_[0]}")
 print(f"Intercept: {model.intercept_}")
 
-# Simple implementation from scratch
-class SimpleLinearRegression:
-    def fit(self, X, y):
-        n = len(X)
-        self.slope = (n * sum(X * y) - sum(X) * sum(y)) / (n * sum(X**2) - sum(X)**2)
-        self.intercept = (sum(y) - self.slope * sum(X)) / n
+# Make a prediction
+print(f"Prediction for X=6: {model.predict([[6]])[0]}")`,
+      questions: [
+        {
+          question: "What are the key assumptions of linear regression?",
+          hint: "Think about linearity, independence, and the distribution of errors.",
+          answer: "The key assumptions are: a linear relationship between variables, independence of errors, homoscedasticity (constant variance of errors), and normality of the error distribution."
+        }
+      ]
+    },
+    {
+      id: "logistic-regression",
+      name: "Logistic Regression",
+      description: "A classification algorithm for predicting a binary outcome (e.g., yes/no).",
+      definition: "Despite its name, Logistic Regression is used for classification, not regression. It models the probability of a discrete outcome by fitting data to a logistic (sigmoid) function. It's a powerful and interpretable algorithm for binary classification problems.",
+      useCase: "Predicting if a customer will churn or not.\nEmail spam detection (spam or not spam).\nMedical diagnosis (e.g., predicting the presence of a disease).\nCredit scoring to determine if a loan application should be approved.",
+      code: `from sklearn.linear_model import LogisticRegression
+from sklearn.datasets import make_classification
 
-    def predict(self, X):
-        return self.slope * X + self.intercept`,
+# Generate sample data
+X, y = make_classification(n_samples=100, n_features=2, n_redundant=0, n_informative=2, random_state=1)
+
+# Create and train model
+model = LogisticRegression()
+model.fit(X, y)
+
+# Make a prediction
+print(f"Prediction for a new data point: {model.predict([[0.5, -1.5]])[0]}")
+print(f"Prediction probability: {model.predict_proba([[0.5, -1.5]])}")`,
+      questions: [
+        {
+          question: "What is the role of the sigmoid function in logistic regression?",
+          hint: "It transforms the output into a specific range.",
+          answer: "The sigmoid function maps any real-valued number into a value between 0 and 1, which is interpreted as the probability of the class label."
+        }
+      ]
+    },
+    {
+      id: "decision-tree",
+      name: "Decision Tree",
+      description: "A flowchart-like model for making decisions based on features.",
+      definition: "A Decision Tree is a supervised learning algorithm that works by splitting the data into subsets based on the value of input features. It creates a tree-like model of decisions and their possible consequences. Each internal node represents a 'test' on an attribute, each branch represents the outcome of the test, and each leaf node represents a class label.",
+      useCase: "Customer segmentation for marketing campaigns.\nIdentifying risk factors for diseases in healthcare.\nCredit scoring models in finance.\nAs a building block for more complex models like Random Forests.",
+      code: `from sklearn.tree import DecisionTreeClassifier
+from sklearn.datasets import load_iris
+
+# Load data
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# Create and train model
+clf = DecisionTreeClassifier()
+clf.fit(X, y)
+
+# Make a prediction
+prediction = clf.predict([[5.1, 3.5, 1.4, 0.2]])
+print(f"Prediction: {iris.target_names[prediction][0]}")`,
       questions: [
         {
-          question: "What assumptions does linear regression make?",
-          hint: "Think about linearity, independence, homoscedasticity, and normality",
-          answer: "Linear relationship, independence of residuals, homoscedasticity (constant variance), normality of residuals, and no multicollinearity among features."
+          question: "What is a major disadvantage of a single Decision Tree?",
+          hint: "Think about how it learns the training data.",
+          answer: "Decision Trees are prone to overfitting, meaning they can learn the training data too well, including its noise, and may not generalize well to new, unseen data."
         }
       ]
     },
     {
-      id: "neural-networks",
-      name: "Neural Networks",
-      description: "Computing systems inspired by biological neural networks",
-      definition: "Neural networks are computing systems inspired by biological neural networks. They consist of interconnected nodes (neurons) organized in layers that can learn complex patterns in data through training. Each connection has a weight that adjusts during learning to minimize prediction errors.",
-      useCase: "Neural networks power image recognition in social media, natural language processing in chatbots, recommendation systems in streaming platforms, autonomous vehicles, medical diagnosis, financial fraud detection, and voice assistants like Siri and Alexa.",
-      code: `import numpy as np
+      id: "random-forest",
+      name: "Random Forest",
+      description: "An ensemble learning method that builds multiple decision trees.",
+      definition: "A Random Forest is an ensemble learning algorithm that operates by constructing a multitude of decision trees at training time. For a classification task, the output of the random forest is the class selected by most trees. It's a powerful method that corrects for the overfitting habit of single decision trees.",
+      useCase: "Predicting stock market trends.\nImage classification and object detection.\nIdentifying fraudulent transactions.\nRecommending products to e-commerce customers.",
+      code: `from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import make_classification
 
-class NeuralNetwork:
-    def __init__(self, input_size, hidden_size, output_size):
-        # Initialize weights randomly
-        self.W1 = np.random.randn(input_size, hidden_size) * 0.1
-        self.b1 = np.zeros((1, hidden_size))
-        self.W2 = np.random.randn(hidden_size, output_size) * 0.1
-        self.b2 = np.zeros((1, output_size))
+# Generate sample data
+X, y = make_classification(n_samples=1000, n_features=4, n_informative=2, n_redundant=0, random_state=42)
 
-    def sigmoid(self, x):
-        return 1 / (1 + np.exp(-np.clip(x, -250, 250)))
+# Create and train model
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
+clf.fit(X, y)
 
-    def sigmoid_derivative(self, x):
-        return x * (1 - x)
-
-    def forward(self, X):
-        self.z1 = np.dot(X, self.W1) + self.b1
-        self.a1 = self.sigmoid(self.z1)
-        self.z2 = np.dot(self.a1, self.W2) + self.b2
-        self.a2 = self.sigmoid(self.z2)
-        return self.a2
-
-    def backward(self, X, y, output):
-        m = X.shape[0]
-
-        # Calculate gradients
-        dz2 = output - y
-        dW2 = np.dot(self.a1.T, dz2) / m
-        db2 = np.sum(dz2, axis=0, keepdims=True) / m
-
-        da1 = np.dot(dz2, self.W2.T)
-        dz1 = da1 * self.sigmoid_derivative(self.a1)
-        dW1 = np.dot(X.T, dz1) / m
-        db1 = np.sum(dz1, axis=0, keepdims=True) / m
-
-        return dW1, db1, dW2, db2`,
+# Make a prediction
+prediction = clf.predict([[0, 0, 0, 0]])
+print(f"Prediction: {prediction[0]}")`,
       questions: [
         {
-          question: "What is backpropagation and why is it important?",
-          hint: "It's about calculating gradients to update weights efficiently",
-          answer: "Backpropagation calculates gradients of loss function with respect to weights by applying chain rule backwards through network, enabling efficient weight updates."
+          question: "Why is a Random Forest generally better than a single Decision Tree?",
+          hint: "It combines many 'weak' learners.",
+          answer: "It reduces overfitting by averaging the results of many decision trees trained on different subsets of the data. This 'wisdom of the crowd' approach leads to better generalization and higher accuracy."
+        }
+      ]
+    },
+    {
+      id: "k-means-clustering",
+      name: "K-Means Clustering",
+      description: "An unsupervised algorithm for partitioning data into K distinct clusters.",
+      definition: "K-Means is a popular unsupervised clustering algorithm. It aims to partition 'n' observations into 'k' clusters in which each observation belongs to the cluster with the nearest mean (cluster centroid). It's an iterative algorithm that tries to minimize the distance between data points and their assigned cluster's center.",
+      useCase: "Segmenting customers based on purchasing behavior.\nGrouping documents or news articles by topic.\nImage compression by grouping similar colors.\nIdentifying distinct celestial objects in astronomy data.",
+      code: `from sklearn.cluster import KMeans
+import numpy as np
+
+# Generate sample data
+X = np.array([[1, 2], [1, 4], [1, 0], [10, 2], [10, 4], [10, 0]])
+
+# Create and train model (with k=2 clusters)
+kmeans = KMeans(n_clusters=2, random_state=0, n_init='auto')
+kmeans.fit(X)
+
+# Get cluster labels and centers
+print(f"Labels: {kmeans.labels_}")
+print(f"Cluster Centers: \\n{kmeans.cluster_centers_}")`,
+      questions: [
+        {
+          question: "What is the main challenge when using K-Means?",
+          hint: "How do you choose 'K'?",
+          answer: "The main challenge is choosing the optimal number of clusters, 'K'. A poor choice for K can lead to meaningless clusters. Techniques like the 'Elbow Method' are often used to help determine a good value for K."
+        }
+      ]
+    },
+    {
+      id: "neural-networks",
+      name: "Neural Networks",
+      description: "Computing systems inspired by the structure of the human brain.",
+      definition: "Neural networks are computing systems inspired by biological neural networks. They consist of interconnected nodes (neurons) organized in layers that can learn complex patterns in data. Each connection has a weight that is adjusted during training to minimize prediction errors, a process known as learning.",
+      useCase: "Neural networks power image recognition, natural language processing in chatbots, recommendation systems in streaming platforms, autonomous vehicles, medical diagnosis, financial fraud detection, and voice assistants like Siri and Alexa.",
+      code: `import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+
+# Define a simple sequential model
+model = Sequential([
+    # Input layer and first hidden layer
+    Dense(128, activation='relu', input_shape=(784,)),
+    # Second hidden layer
+    Dense(64, activation='relu'),
+    # Output layer
+    Dense(10, activation='softmax') # 10 output classes
+])
+
+# Display the model's architecture
+model.summary()`,
+      questions: [
+        {
+          question: "What is backpropagation and why is it important?",
+          hint: "It's an algorithm for training neural networks.",
+          answer: "Backpropagation is an algorithm that calculates the gradient of the loss function with respect to the network's weights. It is crucial because it allows the network to learn efficiently by adjusting the weights to minimize error."
+        }
+      ]
+    },
+    {
+      id: "cnn",
+      name: "Convolutional Neural Network (CNN)",
+      description: "A class of deep neural networks, most commonly applied to analyzing visual imagery.",
+      definition: "CNNs are a specialized type of neural network designed for processing data with a grid-like topology, such as an image. They use special layers called convolutional layers and pooling layers to automatically and adaptively learn spatial hierarchies of features, from simple edges to complex objects.",
+      useCase: "Image classification (e.g., identifying cats vs. dogs).\nObject detection in self-driving cars.\nFacial recognition systems.\nMedical image analysis for diagnosing diseases.",
+      code: `# A conceptual representation using Keras/TensorFlow
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+
+model = Sequential([
+  # Convolutional Layer: Learns features from the image
+  Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 3)),
+  # Pooling Layer: Reduces the spatial dimensions
+  MaxPooling2D((2, 2)),
+  # Flatten Layer: Converts 2D feature maps to a 1D vector
+  Flatten(),
+  # Dense Layer: A standard fully connected layer
+  Dense(128, activation='relu'),
+  # Output Layer
+  Dense(1, activation='sigmoid') # Binary classification
+])
+
+model.summary()`,
+      questions: [
+        {
+          question: "What is the primary purpose of a pooling layer in a CNN?",
+          hint: "It's about reducing size and complexity.",
+          answer: "The primary purpose of a pooling layer is to progressively reduce the spatial size of the representation, which reduces the number of parameters and computation in the network. This also helps in making the detected features more robust to changes in position."
+        }
+      ]
+    },
+    {
+      id: "overfitting-underfitting",
+      name: "Overfitting & Underfitting",
+      description: "The fundamental challenge of model generalization in machine learning.",
+      definition: "**Overfitting** occurs when a model learns the training data too well, including the noise and random fluctuations. It performs well on training data but poorly on new, unseen data. **Underfitting** occurs when a model is too simple to capture the underlying trend of the data. It performs poorly on both training and new data.",
+      useCase: "Overfitting: A model that perfectly predicts house prices in a specific neighborhood but fails in the next one.\nUnderfitting: Using a simple linear model to predict a complex, non-linear stock market trend.\nTechniques like cross-validation, regularization (L1/L2), and adding more data are used to combat these issues.",
+      code: null,
+      questions: [
+        {
+          question: "How can you detect overfitting?",
+          hint: "Compare the model's performance on different datasets.",
+          answer: "Overfitting is typically detected when the model has a very high accuracy on the training data but a much lower accuracy on a separate validation or test dataset."
         }
       ]
     }
-  ]
+  ]
 };
 
 export const webdevData = {

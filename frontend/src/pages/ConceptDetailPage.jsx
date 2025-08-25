@@ -11,6 +11,11 @@ import Queue from './Queue';
 import LinkedList from './LinkedList';
 import BinaryTree from './BinaryTree';
 import HashTable from './HashTable';
+import Heap from './Heap';
+
+
+import Graph from './Grap';
+import { Import } from 'lucide-react';
 
 const dataMapping = {
   dsa: dsaData,
@@ -44,6 +49,13 @@ const ConceptDetailPage = () => {
 
   // Render a different component for each concept
   switch (conceptId) {
+    case 'tree':
+    case 'trie':
+      if (domain === 'dsa') return <Tree />;
+      break;
+    case 'heap':
+      if (domain === 'dsa') return <Heap />;
+      break;
     case 'learningRoadmap':
       if (domain === 'dsa') return <LearningRoadmap />;
       break;
@@ -72,7 +84,17 @@ case 'binaryTree':
 case 'hashTable':
   if (domain === 'dsa') return <HashTable />;
   break;
+    case 'dynamic-programming':
+      if (domain === 'dsa') return <DynamicProgramming />;
+      break;
+   case 'sorting-algorithms':
+      if (domain === 'dsa') return <SortingAlgorithm />;
+      break;
+    case 'graph':
+      if (domain === 'dsa') return <Graph />;
+      break;
 
+  
 
     // Add more cases for other custom pages
     default:
