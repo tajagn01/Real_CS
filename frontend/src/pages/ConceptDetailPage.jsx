@@ -20,6 +20,13 @@ import FrontendDev from './FrontendDev';
 import BackendDev from './BackendDev';
 import DatabasesWeb from './DatabasesWeb';
 import FutureWeb from './FutureWeb';
+import FullStack from './FullStack';
+import WebPerformance from './WebPerformance';
+import WebSecurity from './WebSecurity';
+import WebDevOps from './WebDevOps';
+import WebPWA from './WebPWA';
+import WebTesting from './WebTesting';
+import WebSystemDesign from './WebSystemDesign';
 import AIMLRoadmap from './AIMLRoadmap';
 import MathFoundations from './MathFoundations';
 import CoreMLAlgorithms from './CoreMLAlgorithms';
@@ -177,6 +184,27 @@ if (domain === 'aiml') return <AimlUseInIndustry />;
       break;
     case 'future-web':
       if (domain === 'webdev') return <FutureWeb />;
+      break;
+    case 'fullstack':
+      if (domain === 'webdev') return <FullStack />;
+      break;
+    case 'performance':
+      if (domain === 'webdev') return <WebPerformance />;
+      break;
+    case 'security':
+      if (domain === 'webdev') return <WebSecurity />;
+      break;
+    case 'devops':
+      if (domain === 'webdev') return <WebDevOps />;
+      break;
+    case 'pwa':
+      if (domain === 'webdev') return <WebPWA />;
+      break;
+    case 'testing':
+      if (domain === 'webdev') return <WebTesting />;
+      break;
+    case 'system-design':
+      if (domain === 'webdev') return <WebSystemDesign />;
       break;
 
 
