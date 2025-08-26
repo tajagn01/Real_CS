@@ -226,590 +226,410 @@ export const dsaData = {
 
 
 export const aimlData = {
-  title: "Artificial Intelligence & Machine Learning",
-  concepts: [
+  title: "Artificial Intelligence & Machine Learning",
+  concepts: [
     {
-      id: "what-is-aiml",
-      name: "What is AI & ML?",
-      description: "An introduction to Artificial Intelligence and Machine Learning — the science of making machines smart.",
-      definition: "Artificial Intelligence (AI) is a broad field of computer science focused on creating systems that can perform tasks that typically require human intelligence. Machine Learning (ML) is a subset of AI where algorithms are trained on data to learn patterns and make predictions without being explicitly programmed.",
-      useCase: "AI powers virtual assistants like Siri and Alexa.\nML is used in spam filters to learn what emails are junk.\nAI in games creates intelligent non-player characters (NPCs).\nML models predict stock prices based on historical data.\nAI systems help doctors diagnose diseases from medical images.",
-      code: null,
-      questions: [
-        {
-          question: "What is the key difference between traditional programming and machine learning?",
-          hint: "Think about how the rules are created.",
-          answer: "In traditional programming, humans write explicit rules for the computer to follow. In machine learning, the machine learns the rules itself by analyzing data."
-        }
-      ]
-    },
-    {
-      id: "types-of-ml",
-      name: "Types of Machine Learning",
-      description: "The three main paradigms: Supervised, Unsupervised, and Reinforcement Learning.",
-      definition: "Machine Learning is primarily categorized into three types: \n1. **Supervised Learning:** Learning from labeled data to make predictions (e.g., classifying images). \n2. **Unsupervised Learning:** Finding hidden patterns or structures in unlabeled data (e.g., customer segmentation). \n3. **Reinforcement Learning:** An agent learns to make decisions by performing actions in an environment to maximize a cumulative reward (e.g., training a bot to play a game).",
-      useCase: "Supervised: Predicting house prices, spam detection.\nUnsupervised: Grouping similar news articles, anomaly detection.\nReinforcement: Training self-driving cars, robotics, game AI.",
+      id: "what-is-ai-ml",
+      name: "What is AI & ML?",
+      description: "Foundations, history, and evolution of Artificial Intelligence and Machine Learning.",
+      definition: "Artificial Intelligence (AI) is the field of creating systems that mimic human intelligence, while Machine Learning (ML) is a subset of AI that focuses on algorithms that learn patterns from data. AI aims for intelligent behavior, ML enables that by using data-driven models.",
+      useCase: "Early AI: Symbolic reasoning systems in the 1950s.\nML Revolution: Statistical learning, neural networks.\nModern Era: Deep learning, transformers, generative AI.\nFuture: General AI, self-learning systems, and quantum-accelerated AI.",
       code: null,
-      questions: [
-        {
-          question: "If you have a dataset of emails and their sentiment (positive/negative), which type of ML would you use to predict the sentiment of new emails?",
-          hint: "The data has labels (positive/negative).",
-          answer: "Supervised Learning, because the training data is labeled with the correct outcomes."
-        }
-      ]
-    },
-    {
-      id: "linear-regression",
-      name: "Linear Regression",
-      description: "A statistical method to model the relationship between variables.",
-      definition: "Linear regression is a fundamental supervised learning algorithm that models the relationship between a dependent variable and one or more independent variables by fitting a linear equation. It tries to find the best line that minimizes the sum of squared differences between the predicted and actual values.",
-      useCase: "Linear regression is widely used in business for sales forecasting, in economics for predicting GDP, in real estate for price prediction, and in marketing for ROI analysis. It's often the starting point for more complex predictive models.",
-      code: `from sklearn.linear_model import LinearRegression
-import numpy as np
-
-# Sample data
-X = np.array([[1], [2], [3], [4], [5]])
-y = np.array([2, 4, 5, 4, 8])
-
-# Create and train model
-model = LinearRegression()
-model.fit(X, y)
-
-# Get slope and intercept
-print(f"Slope: {model.coef_[0]}")
-print(f"Intercept: {model.intercept_}")
-
-# Make a prediction
-print(f"Prediction for X=6: {model.predict([[6]])[0]}")`,
-      questions: [
-        {
-          question: "What are the key assumptions of linear regression?",
-          hint: "Think about linearity, independence, and the distribution of errors.",
-          answer: "The key assumptions are: a linear relationship between variables, independence of errors, homoscedasticity (constant variance of errors), and normality of the error distribution."
-        }
-      ]
-    },
-    {
-      id: "logistic-regression",
-      name: "Logistic Regression",
-      description: "A classification algorithm for predicting a binary outcome (e.g., yes/no).",
-      definition: "Despite its name, Logistic Regression is used for classification, not regression. It models the probability of a discrete outcome by fitting data to a logistic (sigmoid) function. It's a powerful and interpretable algorithm for binary classification problems.",
-      useCase: "Predicting if a customer will churn or not.\nEmail spam detection (spam or not spam).\nMedical diagnosis (e.g., predicting the presence of a disease).\nCredit scoring to determine if a loan application should be approved.",
-      code: `from sklearn.linear_model import LogisticRegression
-from sklearn.datasets import make_classification
-
-# Generate sample data
-X, y = make_classification(n_samples=100, n_features=2, n_redundant=0, n_informative=2, random_state=1)
-
-# Create and train model
-model = LogisticRegression()
-model.fit(X, y)
-
-# Make a prediction
-print(f"Prediction for a new data point: {model.predict([[0.5, -1.5]])[0]}")
-print(f"Prediction probability: {model.predict_proba([[0.5, -1.5]])}")`,
-      questions: [
-        {
-          question: "What is the role of the sigmoid function in logistic regression?",
-          hint: "It transforms the output into a specific range.",
-          answer: "The sigmoid function maps any real-valued number into a value between 0 and 1, which is interpreted as the probability of the class label."
-        }
-      ]
-    },
-    {
-      id: "decision-tree",
-      name: "Decision Tree",
-      description: "A flowchart-like model for making decisions based on features.",
-      definition: "A Decision Tree is a supervised learning algorithm that works by splitting the data into subsets based on the value of input features. It creates a tree-like model of decisions and their possible consequences. Each internal node represents a 'test' on an attribute, each branch represents the outcome of the test, and each leaf node represents a class label.",
-      useCase: "Customer segmentation for marketing campaigns.\nIdentifying risk factors for diseases in healthcare.\nCredit scoring models in finance.\nAs a building block for more complex models like Random Forests.",
-      code: `from sklearn.tree import DecisionTreeClassifier
-from sklearn.datasets import load_iris
-
-# Load data
-iris = load_iris()
-X, y = iris.data, iris.target
-
-# Create and train model
-clf = DecisionTreeClassifier()
-clf.fit(X, y)
-
-# Make a prediction
-prediction = clf.predict([[5.1, 3.5, 1.4, 0.2]])
-print(f"Prediction: {iris.target_names[prediction][0]}")`,
-      questions: [
-        {
-          question: "What is a major disadvantage of a single Decision Tree?",
-          hint: "Think about how it learns the training data.",
-          answer: "Decision Trees are prone to overfitting, meaning they can learn the training data too well, including its noise, and may not generalize well to new, unseen data."
-        }
-      ]
+      questions: []
     },
     {
-      id: "random-forest",
-      name: "Random Forest",
-      description: "An ensemble learning method that builds multiple decision trees.",
-      definition: "A Random Forest is an ensemble learning algorithm that operates by constructing a multitude of decision trees at training time. For a classification task, the output of the random forest is the class selected by most trees. It's a powerful method that corrects for the overfitting habit of single decision trees.",
-      useCase: "Predicting stock market trends.\nImage classification and object detection.\nIdentifying fraudulent transactions.\nRecommending products to e-commerce customers.",
-      code: `from sklearn.ensemble import RandomForestClassifier
-from sklearn.datasets import make_classification
-
-# Generate sample data
-X, y = make_classification(n_samples=1000, n_features=4, n_informative=2, n_redundant=0, random_state=42)
-
-# Create and train model
-clf = RandomForestClassifier(n_estimators=100, random_state=42)
-clf.fit(X, y)
-
-# Make a prediction
-prediction = clf.predict([[0, 0, 0, 0]])
-print(f"Prediction: {prediction[0]}")`,
-      questions: [
-        {
-          question: "Why is a Random Forest generally better than a single Decision Tree?",
-          hint: "It combines many 'weak' learners.",
-          answer: "It reduces overfitting by averaging the results of many decision trees trained on different subsets of the data. This 'wisdom of the crowd' approach leads to better generalization and higher accuracy."
-        }
-      ]
-    },
-    {
-      id: "k-means-clustering",
-      name: "K-Means Clustering",
-      description: "An unsupervised algorithm for partitioning data into K distinct clusters.",
-      definition: "K-Means is a popular unsupervised clustering algorithm. It aims to partition 'n' observations into 'k' clusters in which each observation belongs to the cluster with the nearest mean (cluster centroid). It's an iterative algorithm that tries to minimize the distance between data points and their assigned cluster's center.",
-      useCase: "Segmenting customers based on purchasing behavior.\nGrouping documents or news articles by topic.\nImage compression by grouping similar colors.\nIdentifying distinct celestial objects in astronomy data.",
-      code: `from sklearn.cluster import KMeans
-import numpy as np
-
-# Generate sample data
-X = np.array([[1, 2], [1, 4], [1, 0], [10, 2], [10, 4], [10, 0]])
-
-# Create and train model (with k=2 clusters)
-kmeans = KMeans(n_clusters=2, random_state=0, n_init='auto')
-kmeans.fit(X)
-
-# Get cluster labels and centers
-print(f"Labels: {kmeans.labels_}")
-print(f"Cluster Centers: \\n{kmeans.cluster_centers_}")`,
-      questions: [
-        {
-          question: "What is the main challenge when using K-Means?",
-          hint: "How do you choose 'K'?",
-          answer: "The main challenge is choosing the optimal number of clusters, 'K'. A poor choice for K can lead to meaningless clusters. Techniques like the 'Elbow Method' are often used to help determine a good value for K."
-        }
-      ]
-    },
-    {
-      id: "neural-networks",
-      name: "Neural Networks",
-      description: "Computing systems inspired by the structure of the human brain.",
-      definition: "Neural networks are computing systems inspired by biological neural networks. They consist of interconnected nodes (neurons) organized in layers that can learn complex patterns in data. Each connection has a weight that is adjusted during training to minimize prediction errors, a process known as learning.",
-      useCase: "Neural networks power image recognition, natural language processing in chatbots, recommendation systems in streaming platforms, autonomous vehicles, medical diagnosis, financial fraud detection, and voice assistants like Siri and Alexa.",
-      code: `import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-
-# Define a simple sequential model
-model = Sequential([
-    # Input layer and first hidden layer
-    Dense(128, activation='relu', input_shape=(784,)),
-    # Second hidden layer
-    Dense(64, activation='relu'),
-    # Output layer
-    Dense(10, activation='softmax') # 10 output classes
-])
-
-# Display the model's architecture
-model.summary()`,
-      questions: [
-        {
-          question: "What is backpropagation and why is it important?",
-          hint: "It's an algorithm for training neural networks.",
-          answer: "Backpropagation is an algorithm that calculates the gradient of the loss function with respect to the network's weights. It is crucial because it allows the network to learn efficiently by adjusting the weights to minimize error."
-        }
-      ]
-    },
-    {
-      id: "cnn",
-      name: "Convolutional Neural Network (CNN)",
-      description: "A class of deep neural networks, most commonly applied to analyzing visual imagery.",
-      definition: "CNNs are a specialized type of neural network designed for processing data with a grid-like topology, such as an image. They use special layers called convolutional layers and pooling layers to automatically and adaptively learn spatial hierarchies of features, from simple edges to complex objects.",
-      useCase: "Image classification (e.g., identifying cats vs. dogs).\nObject detection in self-driving cars.\nFacial recognition systems.\nMedical image analysis for diagnosing diseases.",
-      code: `# A conceptual representation using Keras/TensorFlow
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
-
-model = Sequential([
-  # Convolutional Layer: Learns features from the image
-  Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 3)),
-  # Pooling Layer: Reduces the spatial dimensions
-  MaxPooling2D((2, 2)),
-  # Flatten Layer: Converts 2D feature maps to a 1D vector
-  Flatten(),
-  # Dense Layer: A standard fully connected layer
-  Dense(128, activation='relu'),
-  # Output Layer
-  Dense(1, activation='sigmoid') # Binary classification
-])
-
-model.summary()`,
-      questions: [
-        {
-          question: "What is the primary purpose of a pooling layer in a CNN?",
-          hint: "It's about reducing size and complexity.",
-          answer: "The primary purpose of a pooling layer is to progressively reduce the spatial size of the representation, which reduces the number of parameters and computation in the network. This also helps in making the detected features more robust to changes in position."
-        }
-      ]
-    },
-    {
-      id: "overfitting-underfitting",
-      name: "Overfitting & Underfitting",
-      description: "The fundamental challenge of model generalization in machine learning.",
-      definition: "**Overfitting** occurs when a model learns the training data too well, including the noise and random fluctuations. It performs well on training data but poorly on new, unseen data. **Underfitting** occurs when a model is too simple to capture the underlying trend of the data. It performs poorly on both training and new data.",
-      useCase: "Overfitting: A model that perfectly predicts house prices in a specific neighborhood but fails in the next one.\nUnderfitting: Using a simple linear model to predict a complex, non-linear stock market trend.\nTechniques like cross-validation, regularization (L1/L2), and adding more data are used to combat these issues.",
+      id: "industrial-applications",
+      name: "Industrial Applications & Use Cases",
+      description: "How AI/ML transforms industries through automation, prediction, and intelligence.",
+      definition: "AI/ML applications span multiple domains—healthcare, finance, manufacturing, logistics, marketing, and robotics. They reduce costs, automate tasks, and enable predictive intelligence.",
+      useCase: "Healthcare: Medical imaging, drug discovery.\nFinance: Fraud detection, algorithmic trading.\nRetail: Recommendation engines (Amazon, Netflix).\nManufacturing: Predictive maintenance, quality control.\nAutonomous Systems: Self-driving cars, drones.",
       code: null,
-      questions: [
-        {
-          question: "How can you detect overfitting?",
-          hint: "Compare the model's performance on different datasets.",
-          answer: "Overfitting is typically detected when the model has a very high accuracy on the training data but a much lower accuracy on a separate validation or test dataset."
-        }
-      ]
+      questions: []
+    },
+    {
+      id: "ai-ml-roadmap",
+      name: "AI/ML Learning Roadmap",
+      description: "A step-by-step learning journey from beginner to expert to researcher.",
+      definition: "The roadmap covers mathematical foundations, core algorithms, deep learning, applied domains, and advanced frontiers like AGI and quantum AI. It ensures structured progression.",
+      useCase: "Beginner: Learn Python, basic math, simple ML algorithms.\nIntermediate: Master deep learning (CNNs, RNNs, transformers).\nExpert: Work with MLOps, scalable systems.\nResearcher: Push into frontier AI (AGI, neuromorphic, quantum ML).",
+      code: null,
+      questions: []
+    },
+    {
+      id: "math-foundations",
+      name: "Mathematical & Theoretical Foundations",
+      description: "The core mathematical pillars that support AI/ML theory and practice.",
+      definition: "AI/ML relies on Linear Algebra (vectors, matrices), Probability & Statistics (uncertainty, inference), Calculus (gradients, optimization), and Optimization Theory (minimizing error).",
+      useCase: "Linear Algebra: Represent neural network weights.\nCalculus: Backpropagation with gradients.\nProbability: Bayesian inference, uncertainty modeling.\nOptimization: Gradient descent, convex optimization.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "core-ml-algorithms",
+      name: "Core Machine Learning Algorithms",
+      description: "Fundamental ML methods used across industries.",
+      definition: "Core ML includes supervised learning (regression, classification), unsupervised learning (clustering, dimensionality reduction), and ensemble methods (boosting, bagging).",
+      useCase: "Regression: Predicting house prices.\nClassification: Spam detection.\nClustering: Customer segmentation.\nEnsemble: Random forests for robust predictions.\nDimensionality Reduction: PCA for visualization.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "deep-learning",
+      name: "Deep Learning",
+      description: "Neural networks and advanced architectures for complex data.",
+      definition: "Deep Learning uses multi-layered neural networks to learn hierarchical representations of data. Includes CNNs (images), RNNs/LSTMs (sequences), Transformers & Attention (NLP, vision).",
+      useCase: "CNN: Image classification.\nRNN/LSTM: Stock prediction, text generation.\nTransformers: Large language models (GPT, BERT).\nGANs: Image synthesis.\nDiffusion: AI art generation.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "nlp",
+      name: "Natural Language Processing (NLP)",
+      description: "AI for human language understanding and generation.",
+      definition: "NLP enables machines to understand, generate, and interact with human language. It includes embeddings, transformers, multimodal models, and generative AI (LLMs).",
+      useCase: "Sentiment analysis, Chatbots, Machine translation, Summarization, Multimodal AI like text-to-image.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "computer-vision",
+      name: "Computer Vision",
+      description: "Teaching machines to see, interpret, and generate visual content.",
+      definition: "Computer Vision applies ML/DL to process and understand images and videos. Includes CNNs, object detection, GANs, diffusion models, and 3D vision.",
+      useCase: "Face recognition, Medical imaging, Autonomous vehicles, AR/VR, Industrial inspection.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "reinforcement-learning",
+      name: "Reinforcement Learning (RL)",
+      description: "Learning through interaction with environments using rewards and penalties.",
+      definition: "RL is based on Markov Decision Processes where an agent learns optimal actions by maximizing cumulative reward. Includes Q-learning, Policy Gradients, and Actor-Critic methods.",
+      useCase: "Robotics control, Game AI (AlphaGo), Financial portfolio optimization, Supply chain automation.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "mlops",
+      name: "MLOps & AI Systems Engineering",
+      description: "Engineering discipline for building, deploying, and maintaining AI models.",
+      definition: "MLOps combines ML with DevOps, covering pipelines, deployment, monitoring, scalability, and cloud/edge AI systems.",
+      useCase: "Model versioning, Continuous training, Edge inference for IoT, Cloud AI services (AWS Sagemaker, GCP Vertex).",
+      code: null,
+      questions: []
+    },
+    {
+      id: "ai-for-data-science",
+      name: "AI for Data Science & Analytics",
+      description: "Applying AI/ML for data exploration, prediction, and decision-making.",
+      definition: "AI enhances data science workflows via automated feature engineering, predictive analytics, and large-scale ML integration with big data systems.",
+      useCase: "Churn prediction, Sales forecasting, Customer analytics, Fraud detection in big data pipelines.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "responsible-ai",
+      name: "Ethics, Bias & Responsible AI",
+      description: "Ensuring fairness, transparency, and accountability in AI systems.",
+      definition: "Responsible AI involves detecting and mitigating bias, ensuring explainability, creating transparent decision-making systems, and complying with regulations.",
+      useCase: "Fair credit scoring, Explainable healthcare models, Ethical AI for hiring, Policy compliance.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "ai-for-business",
+      name: "AI for Business & Wealth Creation",
+      description: "Using AI for financial growth, productivity, and startups.",
+      definition: "AI drives innovation and wealth creation by automating processes, enabling smart analytics, and opening new markets in healthcare, finance, manufacturing, and startups.",
+      useCase: "Algorithmic trading, AI-driven manufacturing, SaaS AI startups, Productivity assistants (Copilot, ChatGPT).",
+      code: null,
+      questions: []
+    },
+    {
+      id: "future-research",
+      name: "Future & Frontier Research",
+      description: "Exploring the next frontiers of AI beyond current deep learning systems.",
+      definition: "Includes Quantum ML, Neuromorphic AI (brain-inspired), Artificial General Intelligence (AGI), Bio-inspired AI, and self-learning adaptive systems.",
+      useCase: "Quantum speedups for optimization, Brain-like chips, Self-evolving AI agents, AI-driven scientific discovery.",
+      code: null,
+      questions: []
     }
-  ]
-};
+  ]
+}
 
 export const webdevData = {
   title: "Web Development",
   concepts: [
     {
-      id: "react-hooks",
-      name: "React Hooks",
-      description: "Functions that let you use state and lifecycle features in functional components",
-      definition: "React Hooks are functions that allow you to use state and other React features in functional components. They were introduced in React 16.8 as a way to write components without classes, making code more reusable and easier to understand.",
-      useCase: "Hooks are used throughout modern React applications for state management (useState), side effects (useEffect), context consumption (useContext), performance optimization (useMemo, useCallback), and custom logic reuse. They're essential in building scalable React applications.",
-      code: `import React, { useState, useEffect, useMemo } from 'react';
-
-// useState Hook
-function Counter() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <div>
-      <p>Count: {count}</p>
-      <button onClick={() => setCount(count + 1)}>
-        Increment
-      </button>
-    </div>
-  );
-}
-
-// useEffect Hook
-function UserProfile({ userId }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchUser() {
-      setLoading(true);
-      const response = await fetch(\`/api/users/\${userId}\`);
-      const userData = await response.json();
-      setUser(userData);
-      setLoading(false);
-    }
-
-    fetchUser();
-  }, [userId]); // Dependency array
-
-  if (loading) return <div>Loading...</div>;
-  return <div>Hello, {user?.name}!</div>;
-}
-
-// Custom Hook
-function useLocalStorage(key, initialValue) {
-  const [storedValue, setStoredValue] = useState(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      return initialValue;
-    }
-  });
-
-  const setValue = (value) => {
-    try {
-      setStoredValue(value);
-      window.localStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  return [storedValue, setValue];
-}`,
-      questions: [
-        {
-          question: "What's the difference between useState and useRef?",
-          hint: "Think about re-rendering and mutable values",
-          answer: "useState triggers re-renders when state changes, while useRef stores mutable values that persist across renders without triggering re-renders."
-        }
-      ]
+      id: "what-is-webdev",
+      name: "What is Web Development?",
+      description: "Foundations, history, and evolution of Web Development.",
+      definition: "Web Development is the discipline of building websites and web applications that run on the internet. It spans frontend, backend, and full-stack systems. It has evolved from static HTML pages to dynamic, scalable, and interactive experiences.",
+      useCase: "History: Static pages (1990s).\nPresent: Interactive SPAs, cloud-native apps.\nFuture: Web3, AI-driven web, immersive AR/VR web.",
+      code: null,
+      questions: []
     },
     {
-      id: "rest-apis",
-      name: "REST APIs",
-      description: "Architectural style for designing networked applications using HTTP methods",
-      definition: "REST (Representational State Transfer) is an architectural style for designing networked applications. It uses standard HTTP methods (GET, POST, PUT, DELETE) to perform operations on resources identified by URLs. RESTful APIs are stateless, cacheable, and provide a uniform interface.",
-      useCase: "REST APIs are the backbone of modern web applications, enabling communication between frontend and backend, mobile app integration, third-party service integration, microservices architecture, and data exchange between different systems. Examples include Twitter API, GitHub API, and payment gateways.",
-      code: `// Express.js REST API Example
-const express = require('express');
-const app = express();
-
-app.use(express.json());
-
-// In-memory data store
-let users = [
-  { id: 1, name: 'John Doe', email: 'john@example.com' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com' }
-];
-
-// GET /api/users - Retrieve all users
-app.get('/api/users', (req, res) => {
-  res.json(users);
-});
-
-// GET /api/users/:id - Retrieve specific user
-app.get('/api/users/:id', (req, res) => {
-  const user = users.find(u => u.id === parseInt(req.params.id));
-  if (!user) return res.status(404).json({ error: 'User not found' });
-  res.json(user);
-});
-
-// POST /api/users - Create new user
-app.post('/api/users', (req, res) => {
-  const { name, email } = req.body;
-  const newUser = {
-    id: users.length + 1,
-    name,
-    email
-  };
-  users.push(newUser);
-  res.status(201).json(newUser);
-});
-
-// PUT /api/users/:id - Update user
-app.put('/api/users/:id', (req, res) => {
-  const user = users.find(u => u.id === parseInt(req.params.id));
-  if (!user) return res.status(404).json({ error: 'User not found' });
-
-  user.name = req.body.name || user.name;
-  user.email = req.body.email || user.email;
-  res.json(user);
-});
-
-// DELETE /api/users/:id - Delete user
-app.delete('/api/users/:id', (req, res) => {
-  const index = users.findIndex(u => u.id === parseInt(req.params.id));
-  if (index === -1) return res.status(404).json({ error: 'User not found' });
-
-  users.splice(index, 1);
-  res.status(204).send();
-});
-
-app.listen(3000, () => console.log('Server running on port 3000'));`,
-      questions: [
-        {
-          question: "What are the key principles of REST?",
-          hint: "Think about statelessness, uniform interface, client-server, and caching",
-          answer: "Stateless communication, uniform interface, client-server architecture, cacheability, layered system, and code on demand (optional)."
-        }
-      ]
+      id: "industrial-applications",
+      name: "Industrial Applications & Use Cases",
+      description: "How Web Development powers industries through digital platforms and services.",
+      definition: "Web Development is at the core of digital transformation across industries, enabling commerce, education, healthcare, and entertainment platforms.",
+      useCase: "E-commerce: Amazon, Flipkart.\nFinance: Online banking & trading.\nHealthcare: Telemedicine portals.\nEducation: Coursera, edX.\nSocial: Facebook, Twitter.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "webdev-roadmap",
+      name: "Web Development Learning Roadmap",
+      description: "Step-by-step roadmap from beginner to expert to researcher.",
+      definition: "The roadmap covers static websites, dynamic applications, full-stack, scalable systems, and cutting-edge research in Web3 & AI-driven apps.",
+      useCase: "Beginner: HTML, CSS, JavaScript basics.\nIntermediate: React, Node.js, Databases.\nExpert: DevOps, scalable architectures.\nResearcher: Web3, AI-driven web, immersive 3D.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "foundations",
+      name: "Foundations of the Web",
+      description: "Core building blocks of the internet and web technologies.",
+      definition: "HTML (structure), CSS (style), JavaScript (logic), DOM (document object model), browser rendering, and HTTP form the base of all web applications.",
+      useCase: "HTML for content.\nCSS for responsive design.\nJavaScript for dynamic behavior.\nDOM for manipulation.\nBrowser rendering optimization.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "frontend-development",
+      name: "Frontend Development",
+      description: "Designing and building interactive user interfaces.",
+      definition: "Frontend involves creating user-facing parts of applications using modern JavaScript, frameworks (React, Vue, Angular, Svelte), and UI/UX design.",
+      useCase: "React for SPAs.\nVue/Angular for enterprise UIs.\nSvelte for lightweight apps.\nAccessibility and UI principles for inclusive design.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "backend-development",
+      name: "Backend Development",
+      description: "Server-side systems, APIs, and authentication.",
+      definition: "Backend focuses on handling data, business logic, authentication, and serving APIs. Common stacks include Node.js, Django, Express, and Spring Boot.",
+      useCase: "REST & GraphQL APIs.\nAuthentication with JWT, OAuth.\nBusiness logic for e-commerce.\nServer-side rendering for SEO.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "databases",
+      name: "Databases & Data Handling",
+      description: "Persistent storage, optimization, and real-time data handling.",
+      definition: "Includes SQL (PostgreSQL, MySQL), NoSQL (MongoDB, Redis), ORMs, caching, and database optimization strategies.",
+      useCase: "Relational DB for transactions.\nNoSQL for scalability.\nRedis for caching.\nRealtime data with Firebase or WebSockets.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "fullstack",
+      name: "Full-Stack Development",
+      description: "Bridging frontend and backend into integrated systems.",
+      definition: "Full-stack development integrates frontend and backend, using monolithic or microservices-based architectures.",
+      useCase: "MERN/MEAN stack apps.\nMicroservices APIs.\nEnd-to-end development for startups.\nMonolith → microservices migration.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "performance",
+      name: "Web Performance & Optimization",
+      description: "Techniques to make web applications fast and efficient.",
+      definition: "Covers Core Web Vitals, rendering speed, lazy loading, caching, CDNs, and optimization strategies for scalability.",
+      useCase: "Lighthouse audits.\nCDN caching.\nLazy loading images.\nCore Web Vitals optimization.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "security",
+      name: "Security in Web Development",
+      description: "Protecting applications from vulnerabilities and attacks.",
+      definition: "Covers OWASP Top 10, HTTPS, secure authentication (JWT, OAuth), and protection against XSS, CSRF, SQL injection, and insecure coding practices.",
+      useCase: "Login security with OAuth.\nXSS protection in React.\nCSRF tokens in APIs.\nHTTPS for secure traffic.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "devops",
+      name: "DevOps & Deployment",
+      description: "Automating build, deployment, and scaling of apps.",
+      definition: "Includes CI/CD pipelines, Docker, Kubernetes, and deployment platforms like AWS, Azure, GCP, Vercel, and Netlify.",
+      useCase: "Dockerized microservices.\nCI/CD with GitHub Actions.\nKubernetes scaling.\nServerless deployment on Vercel.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "pwa",
+      name: "Mobile & Progressive Web Apps (PWAs)",
+      description: "Building mobile-friendly, offline-capable web apps.",
+      definition: "PWAs use responsive design, service workers, caching, and APIs to create mobile-like web apps that work offline and integrate with devices.",
+      useCase: "Responsive UIs.\nOffline-first apps.\nPush notifications.\nHybrid apps with Capacitor/Ionic.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "testing",
+      name: "Testing & Quality Assurance",
+      description: "Ensuring reliability and correctness of web applications.",
+      definition: "Covers unit testing, integration testing, and end-to-end testing using tools like Jest, Cypress, Playwright, and Selenium.",
+      useCase: "Jest for unit tests.\nCypress for E2E.\nSelenium for browser automation.\nAutomated CI/CD testing.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "system-design",
+      name: "Scalable Architecture & System Design",
+      description: "Designing web apps to handle millions of users.",
+      definition: "Covers microservices, event-driven systems, API gateways, load balancing, caching strategies, and distributed design.",
+      useCase: "Load balancing with Nginx.\nEvent-driven apps with Kafka.\nAPI Gateway for microservices.\nScaling databases with sharding.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "future-web",
+      name: "Future of Web Development",
+      description: "Next frontiers of the web ecosystem.",
+      definition: "Future includes Web3, blockchain apps, serverless computing, edge networks, AI-powered web, AR/VR, and immersive 3D web experiences.",
+      useCase: "Web3 decentralized apps.\nAI copilots for web.\nMetaverse & AR/VR apps.\nEdge computing for latency.\nQuantum-secure web protocols.",
+      code: null,
+      questions: []
     }
   ]
-};
+}
 
 export const cybersecurityData = {
   title: "Cybersecurity",
   concepts: [
     {
-      id: "encryption",
-      name: "Encryption",
-      description: "Process of converting data into a coded form to prevent unauthorized access",
-      definition: "Encryption is the process of converting plaintext data into ciphertext using an algorithm and a key, making it unreadable to unauthorized users. It's a fundamental security measure that protects data confidentiality during storage and transmission.",
-      useCase: "Encryption is used everywhere: HTTPS for secure web Browse, WhatsApp for message privacy, banking applications for transaction security, password storage, file system protection, VPNs for network security, and cryptocurrency transactions.",
-      code: `// Node.js Encryption Example using built-in crypto module
-const crypto = require('crypto');
-
-class SimpleEncryption {
-  constructor() {
-    this.algorithm = 'aes-256-gcm';
-    this.keyLength = 32; // 256 bits
-    this.ivLength = 16;  // 128 bits
-  }
-
-  // Generate a random key
-  generateKey() {
-    return crypto.randomBytes(this.keyLength);
-  }
-
-  // Encrypt data
-  encrypt(text, key) {
-    const iv = crypto.randomBytes(this.ivLength);
-    const cipher = crypto.createCipher(this.algorithm, key, iv);
-
-    let encrypted = cipher.update(text, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
-
-    const authTag = cipher.getAuthTag();
-
-    return {
-      encrypted,
-      iv: iv.toString('hex'),
-      authTag: authTag.toString('hex')
-    };
-  }
-
-  // Decrypt data
-  decrypt(encryptedData, key) {
-    const decipher = crypto.createDecipher(
-      this.algorithm,
-      key,
-      Buffer.from(encryptedData.iv, 'hex')
-    );
-
-    decipher.setAuthTag(Buffer.from(encryptedData.authTag, 'hex'));
-
-    let decrypted = decipher.update(encryptedData.encrypted, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-
-    return decrypted;
-  }
-}
-
-// Usage
-const encryption = new SimpleEncryption();
-const key = encryption.generateKey();
-const message = "Secret message";
-
-const encrypted = encryption.encrypt(message, key);
-console.log('Encrypted:', encrypted);
-
-const decrypted = encryption.decrypt(encrypted, key);
-console.log('Decrypted:', decrypted);
-
-// Hash function example
-function hashPassword(password) {
-  const salt = crypto.randomBytes(16).toString('hex');
-  const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
-  return { salt, hash };
-}`,
-      questions: [
-        {
-          question: "What's the difference between symmetric and asymmetric encryption?",
-          hint: "Think about key usage and performance",
-          answer: "Symmetric uses same key for encrypt/decrypt (faster), asymmetric uses key pairs - public/private keys (slower but enables secure key exchange)."
-        }
-      ]
+      id: "what-is-cybersecurity",
+      name: "What is Cybersecurity?",
+      description: "Foundations, history, and evolution of cybersecurity as a discipline.",
+      definition: "Cybersecurity is the practice of protecting systems, networks, and data from digital attacks, unauthorized access, and damage. It covers defensive strategies, offensive techniques (ethical hacking), and governance.",
+      useCase: "History: Early antivirus & firewalls in 1980s–1990s.\nPresent: Advanced threat intelligence, zero-trust security.\nFuture: AI-driven defense, quantum-safe cryptography.",
+      code: null,
+      questions: []
     },
     {
-      id: "sql-injection",
-      name: "SQL Injection",
-      description: "A code injection technique that exploits vulnerabilities in database queries",
-      definition: "SQL injection is a code injection technique where malicious SQL statements are inserted into application entry points, allowing attackers to interfere with database queries. It can lead to unauthorized data access, modification, or deletion.",
-      useCase: "Understanding SQL injection is crucial for web developers and security professionals. It's one of the OWASP Top 10 vulnerabilities and has been responsible for major data breaches at companies like Equifax, Yahoo, and Target. Prevention is essential in any database-driven application.",
-      code: `// Vulnerable Code (DON'T DO THIS)
-app.post('/login', (req, res) => {
-  const { username, password } = req.body;
-
-  // VULNERABLE: Direct string concatenation
-  const query = \`SELECT * FROM users WHERE username = '\${username}' AND password = '\${password}'\`;
-
-  db.query(query, (err, results) => {
-    if (results.length > 0) {
-      res.json({ success: true, user: results[0] });
-    } else {
-      res.json({ success: false });
-    }
-  });
-});
-
-// Malicious input example:
-// username: admin'--
-// This becomes: SELECT * FROM users WHERE username = 'admin'--' AND password = 'anything'
-// The -- comments out the password check!
-
-// SECURE CODE (DO THIS)
-const bcrypt = require('bcrypt');
-
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-
-  try {
-    // Use parameterized queries (prepared statements)
-    const query = 'SELECT * FROM users WHERE username = ? LIMIT 1';
-
-    db.query(query, [username], async (err, results) => {
-      if (err) {
-        return res.status(500).json({ error: 'Database error' });
-      }
-
-      if (results.length === 0) {
-        return res.json({ success: false, message: 'Invalid credentials' });
-      }
-
-      const user = results[0];
-
-      // Use proper password hashing
-      const isValidPassword = await bcrypt.compare(password, user.password_hash);
-
-      if (isValidPassword) {
-        res.json({ success: true, user: { id: user.id, username: user.username } });
-      } else {
-        res.json({ success: false, message: 'Invalid credentials' });
-      }
-    });
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// Prevention techniques:
-// 1. Use parameterized queries/prepared statements
-// 2. Input validation and sanitization
-// 3. Principle of least privilege for database users
-// 4. Use ORM/ODM libraries
-// 5. Regular security audits
-
-// Example with Sequelize ORM (safer approach)
-const User = require('./models/User');
-
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-
-  try {
-    const user = await User.findOne({
-      where: { username: username } // Sequelize handles sanitization
-    });
-
-    if (user && await bcrypt.compare(password, user.password_hash)) {
-      res.json({ success: true, user: { id: user.id, username: user.username } });
-    } else {
-      res.json({ success: false, message: 'Invalid credentials' });
-    }
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});`,
-      questions: [
-        {
-          question: "What are the main types of SQL injection attacks?",
-          hint: "Think about in-band, blind, and time-based attacks",
-          answer: "In-band (union-based, error-based), inferential/blind (boolean-based, time-based), and out-of-band SQL injection attacks."
-        }
-      ]
+      id: "industrial-applications",
+      name: "Industrial Applications & Use Cases",
+      description: "How cybersecurity protects industries and governments from digital threats.",
+      definition: "Cybersecurity is vital for protecting critical infrastructure, financial systems, healthcare records, military defense, and consumer data privacy.",
+      useCase: "Finance: Fraud detection, secure transactions.\nHealthcare: HIPAA compliance, patient data protection.\nManufacturing: ICS/SCADA protection.\nGovernment: Cyber defense, election security.\nCloud: Securing SaaS and data pipelines.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "cybersecurity-roadmap",
+      name: "Cybersecurity Learning Roadmap",
+      description: "Step-by-step roadmap from beginner to expert to researcher in cybersecurity.",
+      definition: "Covers networking fundamentals, cryptography, ethical hacking, digital forensics, penetration testing, security engineering, and advanced research like quantum security.",
+      useCase: "Beginner: Networking, Linux, system security basics.\nIntermediate: Penetration testing, incident response, secure coding.\nExpert: Red teaming, blue teaming, malware analysis.\nResearcher: AI-driven defense, quantum cryptography.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "network-security",
+      name: "Network Security",
+      description: "Protecting data and systems across computer networks.",
+      definition: "Network security includes firewalls, intrusion detection systems (IDS/IPS), VPNs, and secure communication protocols.",
+      useCase: "Firewalls for perimeter defense.\nVPNs for secure remote access.\nIDS for detecting intrusions.\nTLS/SSL for encrypted communication.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "application-security",
+      name: "Application Security",
+      description: "Securing software applications against vulnerabilities and attacks.",
+      definition: "Application security involves secure coding practices, code reviews, security testing, and frameworks to mitigate risks.",
+      useCase: "OWASP Top 10 protection.\nSecure APIs.\nCode audits.\nRuntime Application Self-Protection (RASP).",
+      code: null,
+      questions: []
+    },
+    {
+      id: "cryptography",
+      name: "Cryptography",
+      description: "Mathematical methods to secure communication and data.",
+      definition: "Cryptography ensures confidentiality, integrity, and authentication through encryption, hashing, digital signatures, and key management.",
+      useCase: "AES for encryption.\nSHA-256 for hashing.\nRSA/ECC for secure key exchange.\nDigital signatures for verification.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "ethical-hacking",
+      name: "Ethical Hacking & Penetration Testing",
+      description: "Offensive security methods to identify vulnerabilities before attackers do.",
+      definition: "Ethical hacking uses penetration testing, vulnerability scanning, and exploitation frameworks to test system defenses.",
+      useCase: "Web app pentesting.\nWireless security testing.\nSocial engineering simulations.\nRed teaming engagements.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "incident-response",
+      name: "Incident Response & Digital Forensics",
+      description: "Responding to cyberattacks and investigating breaches.",
+      definition: "Incident response involves detection, containment, eradication, and recovery, while digital forensics analyzes compromised systems for evidence.",
+      useCase: "Malware containment.\nData breach investigation.\nLog analysis.\nForensic imaging of disks.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "cloud-security",
+      name: "Cloud Security",
+      description: "Protecting applications, infrastructure, and data in the cloud.",
+      definition: "Cloud security involves shared responsibility models, cloud IAM, encryption, and securing APIs/services across AWS, Azure, and GCP.",
+      useCase: "IAM role policies.\nData encryption at rest/in transit.\nCloud monitoring.\nCompliance automation.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "identity-access",
+      name: "Identity & Access Management (IAM)",
+      description: "Managing user identities and permissions securely.",
+      definition: "IAM enforces authentication, authorization, and auditing (AAA). Includes SSO, MFA, RBAC, and Zero Trust principles.",
+      useCase: "SSO with OAuth2.\nMFA for login security.\nRBAC in enterprises.\nZero Trust network access.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "security-tools",
+      name: "Security Tools & Automation",
+      description: "Popular tools for security scanning, monitoring, and automation.",
+      definition: "Includes penetration testing tools (Metasploit, Burp Suite), monitoring tools (Splunk, SIEM), and automation frameworks.",
+      useCase: "Vulnerability scanning with Nessus.\nPacket analysis with Wireshark.\nSIEM for real-time monitoring.\nSOAR for automated responses.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "compliance",
+      name: "Compliance, Governance & Risk Management",
+      description: "Standards and policies to ensure secure and legal operations.",
+      definition: "Covers GDPR, HIPAA, ISO 27001, NIST frameworks, and risk management practices.",
+      useCase: "GDPR for data privacy.\nHIPAA for healthcare compliance.\nRisk assessments.\nISO 27001 audits.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "security-architecture",
+      name: "Scalable Security Architecture & System Design",
+      description: "Designing secure systems that scale with enterprise growth.",
+      definition: "Involves layered defense, zero-trust networks, microsegmentation, secure APIs, and threat modeling for large-scale applications.",
+      useCase: "Zero Trust enterprise model.\nLoad-balanced firewalls.\nAPI gateways with WAF.\nMicrosegmentation in cloud systems.",
+      code: null,
+      questions: []
+    },
+    {
+      id: "future-cybersecurity",
+      name: "Future of Cybersecurity",
+      description: "Emerging trends and next-generation defenses.",
+      definition: "Future cybersecurity includes AI-driven defense, quantum-safe cryptography, autonomous SOCs, and integration with blockchain for decentralized security.",
+      useCase: "AI for threat detection.\nQuantum-resistant algorithms.\nBlockchain for identity.\nAutonomous SOCs for response.",
+      code: null,
+      questions: []
     }
   ]
-};
+}
+
 
 export const interviewQuestionsData = {
   dsa: [
