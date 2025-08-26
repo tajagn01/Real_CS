@@ -13,6 +13,8 @@ import BinaryTree from './BinaryTree';
 import HashTable from './HashTable';
 import Heap from './Heap';
 import DynamicProgramming from './DynamicProgramming'
+
+import SortingAlgorithm from './SortingAlgorithm';
 import Tree from './Tree'
 
 

@@ -60,845 +60,812 @@ const binaryTreeData = {
     },
 
     code_examples: {
-      c: `// C Binary Search Tree Implementation - File System Navigator
+      c: `// C Binary Search Tree Implementation - File System Navigator
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define MAX_NAME_LENGTH 256
 
+// Represents a single node (a file) in the tree
 typedef struct TreeNode {
-    int fileSize;
-    char fileName[MAX_NAME_LENGTH];
-    struct TreeNode* left;
-    struct TreeNode* right;
+    int fileSize; // The key for the BST
+    char fileName[MAX_NAME_LENGTH];
+    struct TreeNode* left;
+    struct TreeNode* right;
 } TreeNode;
 
-typedef struct {
-    TreeNode* root;
-    int totalFiles;
-} FileSystemTree;
-
-// Create new file node
+/**
+ * @brief Creates a new TreeNode.
+ * @param size The file size (the node's key).
+ * @param name The name of the file.
+ * @return A pointer to the newly allocated TreeNode.
+ */
 TreeNode* createNode(int size, const char* name) {
-    TreeNode* node = (TreeNode*)malloc(sizeof(TreeNode));
-    node->fileSize = size;
-    strcpy(node->fileName, name);
-    node->left = node->right = NULL;
-    return node;
+    // Allocate memory for the new node
+    TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
+    newNode->fileSize = size;
+    strncpy(newNode->fileName, name, MAX_NAME_LENGTH - 1);
+    newNode->fileName[MAX_NAME_LENGTH - 1] = '\\0'; // Ensure null-termination
+    newNode->left = newNode->right = NULL;
+    return newNode;
 }
 
-// Insert file into system
+/**
+ * @brief Inserts a new file into the BST recursively.
+ * @param root The current root of the tree/subtree.
+ * @param size The file size to insert.
+ * @param name The name of the file to insert.
+ * @return The root of the modified tree.
+ */
 TreeNode* insertFile(TreeNode* root, int size, const char* name) {
-    if (root == NULL) {
-        printf("📁 Created file: %s (%d KB)\\n", name, size);
-        return createNode(size, name);
-    }
-    
-    if (size < root->fileSize) {
-        root->left = insertFile(root->left, size, name);
-    } else if (size > root->fileSize) {
-        root->right = insertFile(root->right, size, name);
-    } else {
-        printf("⚠️  File size %d already exists!\\n", size);
-    }
-    
-    return root;
+    // Base case: If the tree is empty, create a new node and return it as the new root.
+    if (root == NULL) {
+        printf("📁 Created file: %s (%d KB)\\n", name, size);
+        return createNode(size, name);
+    }
+
+    // Recursive step: Otherwise, recur down the tree
+    if (size < root->fileSize) {
+        root->left = insertFile(root->left, size, name);
+    } else if (size > root->fileSize) {
+        root->right = insertFile(root->right, size, name);
+    } else {
+        // Duplicate sizes are not allowed in this simple BST
+        printf("⚠️ File size %d already exists! Could not add '%s'.\\n", size, name);
+    }
+    return root;
 }
 
-// Search for file by size
-TreeNode* searchFile(TreeNode* root, int size) {
-    if (root == NULL || root->fileSize == size) {
-        return root;
-    }
-    
-    printf("🔍 Checking %s (%d KB)\\n", root->fileName, root->fileSize);
-    
-    if (size < root->fileSize) {
-        return searchFile(root->left, size);
-    }
-    
-    return searchFile(root->right, size);
+/**
+ * @brief Finds the node with the minimum value in a given tree.
+ * The minimum value is always the leftmost node.
+ * @param node The root of the tree to search.
+ * @return The node with the minimum value.
+ */
+TreeNode* findMin(TreeNode* node) {
+    TreeNode* current = node;
+    while (current && current->left != NULL) {
+        current = current->left;
+    }
+    return current;
 }
 
-// In-order traversal (sorted by size)
-void listFilesSorted(TreeNode* root) {
-    if (root != NULL) {
-        listFilesSorted(root->left);
-        printf("📄 %s: %d KB\\n", root->fileName, root->fileSize);
-        listFilesSorted(root->right);
-    }
-}
-
-// Find minimum file size
-TreeNode* findMin(TreeNode* root) {
-    while (root && root->left) {
-        root = root->left;
-    }
-    return root;
-}
-
-// Delete file by size
+/**
+ * @brief Deletes a file by its size from the BST.
+ * @param root The current root of the tree/subtree.
+ * @param size The file size to delete.
+ * @return The root of the modified tree.
+ */
 TreeNode* deleteFile(TreeNode* root, int size) {
-    if (root == NULL) {
-        printf("⚠️  File with size %d not found!\\n", size);
-        return root;
-    }
-    
-    if (size < root->fileSize) {
-        root->left = deleteFile(root->left, size);
-    } else if (size > root->fileSize) {
-        root->right = deleteFile(root->right, size);
-    } else {
-        printf("🗑️  Deleted file: %s (%d KB)\\n", root->fileName, root->fileSize);
-        
-        if (root->left == NULL) {
-            TreeNode* temp = root->right;
-            free(root);
-            return temp;
-        } else if (root->right == NULL) {
-            TreeNode* temp = root->left;
-            free(root);
-            return temp;
-        }
-        
-        TreeNode* temp = findMin(root->right);
-        root->fileSize = temp->fileSize;
-        strcpy(root->fileName, temp->fileName);
-        root->right = deleteFile(root->right, temp->fileSize);
-    }
-    
-    return root;
+    if (root == NULL) return root;
+
+    // Find the node to delete
+    if (size < root->fileSize) {
+        root->left = deleteFile(root->left, size);
+    } else if (size > root->fileSize) {
+        root->right = deleteFile(root->right, size);
+    } else { // Node found!
+        printf("🗑️ Deleting file: %s (%d KB)\\n", root->fileName, root->fileSize);
+        // Case 1: Node with only one child or no child
+        if (root->left == NULL) {
+            TreeNode* temp = root->right;
+            free(root); // Free the memory
+            return temp;
+        } else if (root->right == NULL) {
+            TreeNode* temp = root->left;
+            free(root); // Free the memory
+            return temp;
+        }
+        // Case 2: Node with two children
+        // Get the in-order successor (smallest in the right subtree)
+        TreeNode* temp = findMin(root->right);
+        // Copy the successor's content to this node
+        root->fileSize = temp->fileSize;
+        strcpy(root->fileName, temp->fileName);
+        // Delete the in-order successor
+        root->right = deleteFile(root->right, temp->fileSize);
+    }
+    return root;
+}
+
+// --- TRAVERSALS ---
+
+// Pre-order: Root -> Left -> Right
+void preorderTraversal(TreeNode* root) {
+    if (root != NULL) {
+        printf("%s (%d KB) -> ", root->fileName, root->fileSize);
+        preorderTraversal(root->left);
+        preorderTraversal(root->right);
+    }
+}
+
+// In-order: Left -> Root -> Right (gives sorted order)
+void inorderTraversal(TreeNode* root) {
+    if (root != NULL) {
+        inorderTraversal(root->left);
+        printf("%s (%d KB) -> ", root->fileName, root->fileSize);
+        inorderTraversal(root->right);
+    }
+}
+
+// Post-order: Left -> Right -> Root
+void postorderTraversal(TreeNode* root) {
+    if (root != NULL) {
+        postorderTraversal(root->left);
+        postorderTraversal(root->right);
+        printf("%s (%d KB) -> ", root->fileName, root->fileSize);
+    }
+}
+
+/**
+ * @brief Frees the entire tree to prevent memory leaks.
+ * Uses post-order traversal to delete children before the parent.
+ * @param root The root of the tree to free.
+ */
+void freeTree(TreeNode* root) {
+    if (root == NULL) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    free(root);
 }
 
 int main() {
-    TreeNode* fileSystem = NULL;
-    
-    fileSystem = insertFile(fileSystem, 500, "document.pdf");
-    fileSystem = insertFile(fileSystem, 250, "image.jpg");
-    fileSystem = insertFile(fileSystem, 750, "video.mp4");
-    fileSystem = insertFile(fileSystem, 100, "notes.txt");
-    
-    printf("\\n📂 Files sorted by size:\\n");
-    listFilesSorted(fileSystem);
-    
-    printf("\\n🔍 Searching for 250 KB file:\\n");
-    TreeNode* found = searchFile(fileSystem, 250);
-    if (found) {
-        printf("✅ Found: %s\\n", found->fileName);
-    }
-    
-    fileSystem = deleteFile(fileSystem, 250);
-    
-    return 0;
+    // Start with an empty tree
+    TreeNode* fileSystem = NULL;
+    
+    // Insert files
+    fileSystem = insertFile(fileSystem, 500, "document.pdf");
+    fileSystem = insertFile(fileSystem, 250, "image.jpg");
+    fileSystem = insertFile(fileSystem, 750, "video.mp4");
+    fileSystem = insertFile(fileSystem, 100, "notes.txt");
+    fileSystem = insertFile(fileSystem, 300, "archive.zip");
+    
+    // Display traversals
+    printf("\\n--- 🌿 Pre-order Traversal (Root -> Left -> Right) ---\\n");
+    preorderTraversal(fileSystem);
+    printf("END\\n");
+
+    printf("\\n--- 📊 In-order Traversal (Sorted by Size) ---\\n");
+    inorderTraversal(fileSystem);
+    printf("END\\n");
+
+    printf("\\n--- 🍃 Post-order Traversal (Left -> Right -> Root) ---\\n");
+    postorderTraversal(fileSystem);
+    printf("END\\n\\n");
+    
+    // Delete a file
+    fileSystem = deleteFile(fileSystem, 250);
+    printf("\\n--- 📊 In-order Traversal after deleting 250 KB ---\\n");
+    inorderTraversal(fileSystem);
+    printf("END\\n");
+
+    // IMPORTANT: Clean up all allocated memory before exiting
+    printf("\\n🧹 Freeing all tree nodes...\\n");
+    freeTree(fileSystem);
+    fileSystem = NULL;
+    printf("Memory freed successfully!\\n");
+    
+    return 0;
 }`,
-      cpp: `// C++ Binary Search Tree Implementation - Grade Management System
+      cpp: `// C++ Binary Search Tree Implementation - Grade Management System
 #include <iostream>
 #include <string>
-#include <queue>
+#include <queue> // For level-order traversal
+
+// Use the standard namespace for cout, string, etc.
 using namespace std;
 
+// Represents a single student node in the tree
 struct Student {
-    int grade;
-    string name;
-    Student* left;
-    Student* right;
-    
-    Student(int g, string n) : grade(g), name(n), left(nullptr), right(nullptr) {}
+    int grade; // The key for the BST
+    string name;
+    Student* left;
+    Student* right;
+    
+    // Constructor for easy creation
+    Student(int g, string n) : grade(g), name(n), left(nullptr), right(nullptr) {}
 };
 
+// The class that manages the entire tree
 class GradeTree {
 private:
-    Student* root;
-    
-    Student* insertHelper(Student* node, int grade, string name) {
-        if (node == nullptr) {
-            cout << "✅ Added student: " << name << " (Grade: " << grade << ")" << endl;
-            return new Student(grade, name);
-        }
-        
-        if (grade < node->grade) {
-            node->left = insertHelper(node->left, grade, name);
-        } else if (grade > node->grade) {
-            node->right = insertHelper(node->right, grade, name);
-        } else {
-            cout << "⚠️  Grade " << grade << " already exists!" << endl;
-        }
-        
-        return node;
-    }
-    
-    Student* findMin(Student* node) {
-        while (node && node->left) {
-            node = node->left;
-        }
-        return node;
-    }
-    
-    Student* deleteHelper(Student* node, int grade) {
-        if (node == nullptr) {
-            cout << "⚠️  Grade " << grade << " not found!" << endl;
-            return node;
-        }
-        
-        if (grade < node->grade) {
-            node->left = deleteHelper(node->left, grade);
-        } else if (grade > node->grade) {
-            node->right = deleteHelper(node->right, grade);
-        } else {
-            cout << "🗑️  Removed: " << node->name << " (Grade: " << grade << ")" << endl;
-            
-            if (node->left == nullptr) {
-                Student* temp = node->right;
-                delete node;
-                return temp;
-            } else if (node->right == nullptr) {
-                Student* temp = node->left;
-                delete node;
-                return temp;
-            }
-            
-            Student* temp = findMin(node->right);
-            node->grade = temp->grade;
-            node->name = temp->name;
-            node->right = deleteHelper(node->right, temp->grade);
-        }
-        
-        return node;
-    }
-    
-    void inorderHelper(Student* node) {
-        if (node) {
-            inorderHelper(node->left);
-            cout << "📊 " << node->name << ": " << node->grade << endl;
-            inorderHelper(node->right);
-        }
-    }
-    
+    Student* root;
+
+    // --- PRIVATE HELPER METHODS (for recursion) ---
+
+    /**
+     * @brief Recursively inserts a new student.
+     * @param node The current node in the traversal.
+     * @param grade The grade of the new student.
+     * @param name The name of the new student.
+     * @return The root of the modified subtree.
+     */
+    Student* insertHelper(Student* node, int grade, string name) {
+        if (node == nullptr) {
+            cout << "✅ Added student: " << name << " (Grade: " << grade << ")" << endl;
+            return new Student(grade, name);
+        }
+        if (grade < node->grade) {
+            node->left = insertHelper(node->left, grade, name);
+        } else if (grade > node->grade) {
+            node->right = insertHelper(node->right, grade, name);
+        } else {
+            cout << "⚠️ Grade " << grade << " already exists for " << node->name << "!" << endl;
+        }
+        return node;
+    }
+
+    Student* findMin(Student* node) {
+        while (node && node->left != nullptr) {
+            node = node->left;
+        }
+        return node;
+    }
+    
+    Student* deleteHelper(Student* node, int grade) {
+        if (node == nullptr) {
+            cout << "⚠️ Grade " << grade << " not found to delete!" << endl;
+            return node;
+        }
+
+        if (grade < node->grade) {
+            node->left = deleteHelper(node->left, grade);
+        } else if (grade > node->grade) {
+            node->right = deleteHelper(node->right, grade);
+        } else { // Node found
+            cout << "🗑️ Removing: " << node->name << " (Grade: " << grade << ")" << endl;
+            if (node->left == nullptr) {
+                Student* temp = node->right;
+                delete node;
+                return temp;
+            } else if (node->right == nullptr) {
+                Student* temp = node->left;
+                delete node;
+                return temp;
+            }
+            Student* temp = findMin(node->right);
+            node->grade = temp->grade;
+            node->name = temp->name;
+            node->right = deleteHelper(node->right, temp->grade);
+        }
+        return node;
+    }
+
+    // Recursive helpers for traversals
+    void inorderHelper(Student* node) {
+        if (node == nullptr) return;
+        inorderHelper(node->left);
+        cout << node->name << "(" << node->grade << ") -> ";
+        inorderHelper(node->right);
+    }
+
+    void preorderHelper(Student* node) {
+        if (node == nullptr) return;
+        cout << node->name << "(" << node->grade << ") -> ";
+        preorderHelper(node->left);
+        preorderHelper(node->right);
+    }
+
+    void postorderHelper(Student* node) {
+        if (node == nullptr) return;
+        postorderHelper(node->left);
+        postorderHelper(node->right);
+        cout << node->name << "(" << node->grade << ") -> ";
+    }
+    
 public:
-    GradeTree() : root(nullptr) {}
-    
-    void insert(int grade, string name) {
-        root = insertHelper(root, grade, name);
-    }
-    
-    void remove(int grade) {
-        root = deleteHelper(root, grade);
-    }
-    
-    Student* search(int grade) {
-        Student* current = root;
-        while (current && current->grade != grade) {
-            cout << "🔍 Checking: " << current->name << " (" << current->grade << ")" << endl;
-            if (grade < current->grade) {
-                current = current->left;
-            } else {
-                current = current->right;
-            }
-        }
-        return current;
-    }
-    
-    void displayGrades() {
-        cout << "\\n📈 Students by grade (ascending):" << endl;
-        inorderHelper(root);
-    }
-    
-    void levelOrderTraversal() {
-        if (!root) return;
-        
-        cout << "\\n🌳 Tree structure (level order):" << endl;
-        queue<Student*> q;
-        q.push(root);
-        
-        int level = 0;
-        while (!q.empty()) {
-            int levelSize = q.size();
-            cout << "Level " << level++ << ": ";
-            
-            for (int i = 0; i < levelSize; i++) {
-                Student* node = q.front();
-                q.pop();
-                
-                cout << node->name << "(" << node->grade << ") ";
-                
-                if (node->left) q.push(node->left);
-                if (node->right) q.push(node->right);
-            }
-            cout << endl;
-        }
-    }
+    // Constructor initializes an empty tree
+    GradeTree() : root(nullptr) {}
+    
+    // --- PUBLIC METHODS ---
+    
+    void insert(int grade, string name) {
+        root = insertHelper(root, grade, name);
+    }
+    
+    void remove(int grade) {
+        root = deleteHelper(root, grade);
+    }
+    
+    // Public-facing traversal methods
+    void displayInorder() {
+        cout << "--- 📊 In-order Traversal (Sorted) ---\\n";
+        inorderHelper(root);
+        cout << "END" << endl;
+    }
+    void displayPreorder() {
+        cout << "--- 🌿 Pre-order Traversal (Root-L-R) ---\\n";
+        preorderHelper(root);
+        cout << "END" << endl;
+    }
+    void displayPostorder() {
+        cout << "--- 🍃 Post-order Traversal (L-R-Root) ---\\n";
+        postorderHelper(root);
+        cout << "END" << endl;
+    }
 };
 
 int main() {
-    GradeTree gradebook;
-    
-    gradebook.insert(85, "Alice");
-    gradebook.insert(92, "Bob");
-    gradebook.insert(78, "Charlie");
-    gradebook.insert(88, "Diana");
-    
-    gradebook.displayGrades();
-    gradebook.levelOrderTraversal();
-    
-    cout << "\\n🔍 Searching for grade 88:" << endl;
-    Student* found = gradebook.search(88);
-    if (found) {
-        cout << "✅ Found: " << found->name << endl;
-    }
-    
-    gradebook.remove(78);
-    gradebook.displayGrades();
-    
-    return 0;
+    GradeTree gradebook;
+    
+    gradebook.insert(85, "Alice");
+    gradebook.insert(92, "Bob");
+    gradebook.insert(78, "Charlie");
+    gradebook.insert(88, "Diana");
+    gradebook.insert(75, "Eve");
+    
+    cout << endl;
+    gradebook.displayInorder();
+    gradebook.displayPreorder();
+    gradebook.displayPostorder();
+    cout << endl;
+
+    gradebook.remove(78);
+    cout << "\\n--- After removing Charlie (78) ---\n";
+    gradebook.displayInorder();
+    
+    return 0;
 }`,
-      java: `// Java Binary Search Tree Implementation - Product Inventory System
+      java: `// Java Binary Search Tree Implementation - Product Inventory System
 import java.util.*;
 
+/**
+ * The Product class represents a single node in our BST.
+ * Each product has an ID (which serves as the key), a name, and a price.
+ */
 class Product {
-    int id;
-    String name;
-    double price;
-    Product left, right;
-    
-    public Product(int id, String name, double price) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.left = this.right = null;
-    }
-    
-    @Override
-    public String toString() {
-        return String.format("%s (ID: %d, $%.2f)", name, id, price);
-    }
+    int id;
+    String name;
+    double price;
+    Product left, right;
+    
+    public Product(int id, String name, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        left = right = null;
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("%s (ID: %d, $%.2f)", name, id, price);
+    }
 }
 
+/**
+ * The ProductInventory class manages the collection of Products in a BST.
+ */
 public class ProductInventory {
-    private Product root;
-    private int totalProducts;
-    
-    public ProductInventory() {
-        root = null;
-        totalProducts = 0;
-    }
-    
-    public void addProduct(int id, String name, double price) {
-        root = insertProduct(root, id, name, price);
-    }
-    
-    private Product insertProduct(Product node, int id, String name, double price) {
-        if (node == null) {
-            totalProducts++;
-            System.out.println("✅ Added: " + name + " (ID: " + id + ")");
-            return new Product(id, name, price);
-        }
-        
-        if (id < node.id) {
-            node.left = insertProduct(node.left, id, name, price);
-        } else if (id > node.id) {
-            node.right = insertProduct(node.right, id, name, price);
-        } else {
-            System.out.println("⚠️  Product with ID " + id + " already exists!");
-        }
-        
-        return node;
-    }
-    
-    public Product searchProduct(int id) {
-        return searchHelper(root, id);
-    }
-    
-    private Product searchHelper(Product node, int id) {
-        if (node == null || node.id == id) {
-            return node;
-        }
-        
-        System.out.println("🔍 Checking: " + node.toString());
-        
-        if (id < node.id) {
-            return searchHelper(node.left, id);
-        }
-        
-        return searchHelper(node.right, id);
-    }
-    
-    public void removeProduct(int id) {
-        root = deleteHelper(root, id);
-    }
-    
-    private Product deleteHelper(Product node, int id) {
-        if (node == null) {
-            System.out.println("⚠️  Product with ID " + id + " not found!");
-            return node;
-        }
-        
-        if (id < node.id) {
-            node.left = deleteHelper(node.left, id);
-        } else if (id > node.id) {
-            node.right = deleteHelper(node.right, id);
-        } else {
-            System.out.println("🗑️  Removed: " + node.toString());
-            totalProducts--;
-            
-            if (node.left == null) return node.right;
-            if (node.right == null) return node.left;
-            
-            Product successor = findMin(node.right);
-            node.id = successor.id;
-            node.name = successor.name;
-            node.price = successor.price;
-            node.right = deleteHelper(node.right, successor.id);
-        }
-        
-        return node;
-    }
-    
-    private Product findMin(Product node) {
-        while (node.left != null) {
-            node = node.left;
-        }
-        return node;
-    }
-    
-    public void displayInventory() {
-        System.out.println("\\n📦 Product Inventory (sorted by ID):");
-        inorderTraversal(root);
-        System.out.println("Total products: " + totalProducts);
-    }
-    
-    private void inorderTraversal(Product node) {
-        if (node != null) {
-            inorderTraversal(node.left);
-            System.out.println("📦 " + node.toString());
-            inorderTraversal(node.right);
-        }
-    }
-    
-    public void preorderTraversal() {
-        System.out.println("\\n🌿 Preorder traversal:");
-        preorderHelper(root);
-    }
-    
-    private void preorderHelper(Product node) {
-        if (node != null) {
-            System.out.println("📦 " + node.toString());
-            preorderHelper(node.left);
-            preorderHelper(node.right);
-        }
-    }
-    
-    public static void main(String[] args) {
-        ProductInventory inventory = new ProductInventory();
-        
-        inventory.addProduct(500, "Laptop", 999.99);
-        inventory.addProduct(250, "Mouse", 25.50);
-        inventory.addProduct(750, "Monitor", 299.99);
-        inventory.addProduct(100, "Keyboard", 75.00);
-        
-        inventory.displayInventory();
-        
-        System.out.println("\\n🔍 Searching for product 250:");
-        Product found = inventory.searchProduct(250);
-        if (found != null) {
-            System.out.println("✅ Found: " + found.toString());
-        }
-        
-        inventory.removeProduct(250);
-        inventory.displayInventory();
-        inventory.preorderTraversal();
-    }
+    private Product root;
+    
+    public ProductInventory() {
+        root = null;
+    }
+    
+    // --- PUBLIC METHODS ---
+
+    /**
+     * Public method to add a product. It calls the private recursive helper.
+     * @param id The product ID (key).
+     * @param name The product name.
+     * @param price The product price.
+     */
+    public void addProduct(int id, String name, double price) {
+        root = insertHelper(root, id, name, price);
+    }
+    
+    /**
+     * Public method to remove a product by its ID.
+     * @param id The ID of the product to remove.
+     */
+    public void removeProduct(int id) {
+        root = deleteHelper(root, id);
+    }
+    
+    // --- TRAVERSAL METHODS ---
+    
+    public void displayInorder() {
+        System.out.println("\\n--- 📊 In-order Traversal (Sorted by ID) ---");
+        inorderHelper(root);
+        System.out.println("END");
+    }
+
+    public void displayPreorder() {
+        System.out.println("\\n--- 🌿 Pre-order Traversal (Root-L-R) ---");
+        preorderHelper(root);
+        System.out.println("END");
+    }
+
+    public void displayPostorder() {
+        System.out.println("\\n--- 🍃 Post-order Traversal (L-R-Root) ---");
+        postorderHelper(root);
+        System.out.println("END");
+    }
+    
+    // --- PRIVATE HELPER METHODS ---
+
+    private Product insertHelper(Product node, int id, String name, double price) {
+        if (node == null) {
+            System.out.println("✅ Added: " + name + " (ID: " + id + ")");
+            return new Product(id, name, price);
+        }
+        
+        if (id < node.id) {
+            node.left = insertHelper(node.left, id, name, price);
+        } else if (id > node.id) {
+            node.right = insertHelper(node.right, id, name, price);
+        } else {
+            System.out.println("⚠️ Product with ID " + id + " already exists!");
+        }
+        return node;
+    }
+    
+    private Product deleteHelper(Product node, int id) {
+        if (node == null) {
+            System.out.println("⚠️ Product with ID " + id + " not found!");
+            return node;
+        }
+        
+        if (id < node.id) {
+            node.left = deleteHelper(node.left, id);
+        } else if (id > node.id) {
+            node.right = deleteHelper(node.right, id);
+        } else {
+            System.out.println("🗑️ Removed: " + node.toString());
+            if (node.left == null) return node.right;
+            if (node.right == null) return node.left;
+            
+            Product successor = findMin(node.right);
+            node.id = successor.id;
+            node.name = successor.name;
+            node.price = successor.price;
+            node.right = deleteHelper(node.right, successor.id);
+        }
+        return node;
+    }
+    
+    private Product findMin(Product node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
+    }
+    
+    private void inorderHelper(Product node) {
+        if (node == null) return;
+        inorderHelper(node.left);
+        System.out.println("-> " + node.toString());
+        inorderHelper(node.right);
+    }
+    private void preorderHelper(Product node) {
+        if (node == null) return;
+        System.out.println("-> " + node.toString());
+        preorderHelper(node.left);
+        preorderHelper(node.right);
+    }
+    private void postorderHelper(Product node) {
+        if (node == null) return;
+        postorderHelper(node.left);
+        postorderHelper(node.right);
+        System.out.println("-> " + node.toString());
+    }
+    
+    public static void main(String[] args) {
+        ProductInventory inventory = new ProductInventory();
+        
+        inventory.addProduct(500, "Laptop", 999.99);
+        inventory.addProduct(250, "Mouse", 25.50);
+        inventory.addProduct(750, "Monitor", 299.99);
+        inventory.addProduct(100, "Keyboard", 75.00);
+        
+        inventory.displayInorder();
+        inventory.displayPreorder();
+        inventory.displayPostorder();
+        
+        inventory.removeProduct(250);
+        System.out.println("\\n--- Inventory after removing Mouse (ID: 250) ---");
+        inventory.displayInorder();
+    }
 }`,
-      python: `# Python Binary Search Tree Implementation - Library Book Management
+      python: `# Python Binary Search Tree Implementation - Library Book Management
 class BookNode:
+    """Represents a single book node in the Binary Search Tree."""
     def __init__(self, isbn, title, author):
-        self.isbn = isbn
+        self.isbn = isbn  # The key for the BST
         self.title = title
         self.author = author
         self.left = None
         self.right = None
     
     def __str__(self):
-        return f"{self.title} by {self.author} (ISBN: {self.isbn})"
+        """String representation of a BookNode."""
+        return f'"{self.title}" by {self.author} (ISBN: {self.isbn})'
 
 class LibrarySystem:
+    """Manages the entire collection of books in a BST."""
     def __init__(self):
         self.root = None
-        self.total_books = 0
-    
+
+    # --- PUBLIC METHODS ---
+
     def add_book(self, isbn, title, author):
-        """Add a new book to the library"""
-        self.root = self._insert_book(self.root, isbn, title, author)
+        """Public method to add a new book to the library."""
+        self.root = self._insert_helper(self.root, isbn, title, author)
     
-    def _insert_book(self, node, isbn, title, author):
+    def remove_book(self, isbn):
+        """Public method to remove a book from the library by its ISBN."""
+        self.root = self._delete_helper(self.root, isbn)
+        
+    def find_book(self, isbn):
+        """Public method to find a book by its ISBN."""
+        return self._search_helper(self.root, isbn)
+
+    # --- TRAVERSAL METHODS ---
+
+    def display_inorder(self):
+        """Displays the library catalog sorted by ISBN."""
+        print("\\n--- 📊 In-order Traversal (Sorted by ISBN) ---")
+        self._inorder_traversal(self.root)
+        print("END")
+
+    def display_preorder(self):
+        """Displays the library catalog in pre-order."""
+        print("\\n--- 🌿 Pre-order Traversal (Root-L-R) ---")
+        self._preorder_traversal(self.root)
+        print("END")
+
+    def display_postorder(self):
+        """Displays the library catalog in post-order."""
+        print("\\n--- 🍃 Post-order Traversal (L-R-Root) ---")
+        self._postorder_traversal(self.root)
+        print("END")
+
+    # --- PRIVATE HELPER METHODS ---
+
+    def _insert_helper(self, node, isbn, title, author):
+        """Recursively finds the correct spot and inserts the new node."""
         if node is None:
-            self.total_books += 1
-            print(f"📚 Added: {title} by {author}")
+            print(f"📚 Added: {title}")
             return BookNode(isbn, title, author)
         
         if isbn < node.isbn:
-            node.left = self._insert_book(node.left, isbn, title, author)
+            node.left = self._insert_helper(node.left, isbn, title, author)
         elif isbn > node.isbn:
-            node.right = self._insert_book(node.right, isbn, title, author)
+            node.right = self._insert_helper(node.right, isbn, title, author)
         else:
-            print(f"⚠️  Book with ISBN {isbn} already exists!")
-        
+            print(f"⚠️ Book with ISBN {isbn} already exists!")
         return node
-    
-    def search_book(self, isbn):
-        """Search for a book by ISBN"""
-        return self._search_helper(self.root, isbn)
-    
+        
     def _search_helper(self, node, isbn):
+        """Recursively searches for a node with the given ISBN."""
         if node is None or node.isbn == isbn:
             return node
         
-        print(f"🔍 Checking: {node}")
-        
+        print(f"-> Checking node: {node.isbn}")
         if isbn < node.isbn:
             return self._search_helper(node.left, isbn)
         else:
             return self._search_helper(node.right, isbn)
-    
-    def remove_book(self, isbn):
-        """Remove a book from the library"""
-        self.root = self._delete_helper(self.root, isbn)
-    
+
+    def _find_min(self, node):
+        """Finds the node with the smallest key in a subtree."""
+        current = node
+        while current.left is not None:
+            current = current.left
+        return current
+
     def _delete_helper(self, node, isbn):
+        """Recursively finds and deletes the node with the given ISBN."""
         if node is None:
-            print(f"⚠️  Book with ISBN {isbn} not found!")
+            print(f"⚠️ Book with ISBN {isbn} not found!")
             return node
         
         if isbn < node.isbn:
             node.left = self._delete_helper(node.left, isbn)
         elif isbn > node.isbn:
             node.right = self._delete_helper(node.right, isbn)
-        else:
-            print(f"🗑️  Removed: {node}")
-            self.total_books -= 1
-            
-            # Case 1: No children
-            if node.left is None and node.right is None:
-                return None
-            
-            # Case 2: One child
+        else: # Node to be deleted is found
+            print(f"🗑️ Removing: {node}")
+            # Case 1: Node has 0 or 1 child
             if node.left is None:
                 return node.right
             elif node.right is None:
                 return node.left
             
-            # Case 3: Two children
+            # Case 2: Node has two children
+            # Find the in-order successor (smallest node in the right subtree)
             successor = self._find_min(node.right)
-            node.isbn = successor.isbn
-            node.title = successor.title
-            node.author = successor.author
+            # Copy the successor's data to this node
+            node.isbn, node.title, node.author = successor.isbn, successor.title, successor.author
+            # Delete the successor from the right subtree
             node.right = self._delete_helper(node.right, successor.isbn)
-        
         return node
-    
-    def _find_min(self, node):
-        while node.left:
-            node = node.left
-        return node
-    
-    def display_library(self):
-        """Display all books sorted by ISBN"""
-        print("\\n📖 Library Catalog (sorted by ISBN):")
-        self._inorder_traversal(self.root)
-        print(f"Total books: {self.total_books}")
-    
+
     def _inorder_traversal(self, node):
         if node:
             self._inorder_traversal(node.left)
-            print(f"📖 {node}")
+            print(f"-> {node}")
             self._inorder_traversal(node.right)
-    
-    def preorder_traversal(self):
-        """Display books in preorder (root, left, right)"""
-        print("\\n🌿 Preorder traversal:")
-        self._preorder_helper(self.root)
-    
-    def _preorder_helper(self, node):
+            
+    def _preorder_traversal(self, node):
         if node:
-            print(f"📖 {node}")
-            self._preorder_helper(node.left)
-            self._preorder_helper(node.right)
-    
-    def postorder_traversal(self):
-        """Display books in postorder (left, right, root)"""
-        print("\\n🍃 Postorder traversal:")
-        self._postorder_helper(self.root)
-    
-    def _postorder_helper(self, node):
+            print(f"-> {node}")
+            self._preorder_traversal(node.left)
+            self._preorder_traversal(node.right)
+
+    def _postorder_traversal(self, node):
         if node:
-            self._postorder_helper(node.left)
-            self._postorder_helper(node.right)
-            print(f"📖 {node}")
+            self._postorder_traversal(node.left)
+            self._postorder_traversal(node.right)
+            print(f"-> {node}")
+
+# --- Example Usage ---
+if __name__ == "__main__":
+    library = LibrarySystem()
+    library.add_book(500, "Data Structures 101", "John Doe")
+    library.add_book(250, "The Python Path", "Jane Smith")
+    library.add_book(750, "Learning AI", "Bob Wilson")
     
-    def find_books_in_range(self, min_isbn, max_isbn):
-        """Find all books with ISBN in given range"""
-        print(f"\\n🔍 Books with ISBN between {min_isbn} and {max_isbn}:")
-        self._range_search(self.root, min_isbn, max_isbn)
-    
-    def _range_search(self, node, min_isbn, max_isbn):
-        if node is None:
-            return
+    library.display_inorder()
+    library.display_preorder()
+    library.display_postorder()
+
+    print("\\n🔍 Searching for book with ISBN 750...")
+    found_book = library.find_book(750)
+    if found_book:
+        print(f"✅ Found: {found_book}")
+    else:
+        print("❌ Book not found.")
         
-        if min_isbn < node.isbn:
-            self._range_search(node.left, min_isbn, max_isbn)
-        
-        if min_isbn <= node.isbn <= max_isbn:
-            print(f"📚 {node}")
-        
-        if node.isbn < max_isbn:
-            self._range_search(node.right, min_isbn, max_isbn)
-    
-    def get_height(self):
-        """Calculate height of the tree"""
-        return self._height_helper(self.root)
-    
-    def _height_helper(self, node):
-        if node is None:
-            return 0
-        
-        left_height = self._height_helper(node.left)
-        right_height = self._height_helper(node.right)
-        
-        return max(left_height, right_height) + 1
+    library.remove_book(250)
+    print("\\n--- Library after removing ISBN 250 ---")
+    library.display_inorder()
+`,
+      javascript: `// JavaScript Binary Search Tree Implementation - Task Priority Manager
 
-# Example usage
-library = LibrarySystem()
-
-library.add_book(500, "Data Structures", "John Doe")
-library.add_book(250, "Python Programming", "Jane Smith")
-library.add_book(750, "Machine Learning", "Bob Wilson")
-library.add_book(100, "Web Development", "Alice Brown")
-library.add_book(300, "Database Systems", "Charlie Davis")
-
-library.display_library()
-
-print("\\n🔍 Searching for book with ISBN 250:")
-found_book = library.search_book(250)
-if found_book:
-    print(f"✅ Found: {found_book}")
-
-library.find_books_in_range(200, 600)
-print(f"\\n📏 Tree height: {library.get_height()}")
-
-library.preorder_traversal()
-library.postorder_traversal()
-
-library.remove_book(250)
-library.display_library()`,
-      javascript: `// JavaScript Binary Search Tree Implementation - Task Priority Manager
+/**
+ * Represents a single node in the tree.
+ * Each task has a priority which acts as the key.
+ */
 class TaskNode {
-    constructor(priority, description, category) {
-        this.priority = priority;
-        this.description = description;
-        this.category = category;
-        this.left = null;
-        this.right = null;
-        this.timestamp = new Date().toLocaleTimeString();
-    }
-    
-    toString() {
-        return \`[\${this.priority}] \${this.description} (\${this.category})\`;
-    }
+    constructor(priority, description) {
+        this.priority = priority;
+        this.description = description;
+        this.left = null;
+        this.right = null;
+    }
 }
 
+/**
+ * Manages the entire tree of tasks.
+ */
 class TaskManager {
-    constructor() {
-        this.root = null;
-        this.totalTasks = 0;
-    }
-    
-    addTask(priority, description, category = 'General') {
-        this.root = this.insertTask(this.root, priority, description, category);
-        this.totalTasks++;
-    }
-    
-    insertTask(node, priority, description, category) {
-        if (node === null) {
-            console.log(\`✅ Added task: [\${priority}] \${description}\`);
-            return new TaskNode(priority, description, category);
-        }
-        
-        if (priority < node.priority) {
-            node.left = this.insertTask(node.left, priority, description, category);
-        } else if (priority > node.priority) {
-            node.right = this.insertTask(node.right, priority, description, category);
-        } else {
-            console.log(\`⚠️  Task with priority \${priority} already exists!\`);
-        }
-        
-        return node;
-    }
-    
-    searchTask(priority) {
-        return this.searchHelper(this.root, priority);
-    }
-    
-    searchHelper(node, priority) {
-        if (node === null || node.priority === priority) {
-            return node;
-        }
-        
-        console.log(\`🔍 Checking: \${node.toString()}\`);
-        
-        if (priority < node.priority) {
-            return this.searchHelper(node.left, priority);
-        }
-        
-        return this.searchHelper(node.right, priority);
-    }
-    
-    completeTask(priority) {
-        const initialCount = this.totalTasks;
-        this.root = this.deleteTask(this.root, priority);
-        if (this.totalTasks < initialCount) {
-            console.log(\`🎉 Task completed!\`);
-        }
-    }
-    
-    deleteTask(node, priority) {
-        if (node === null) {
-            console.log(\`⚠️  Task with priority \${priority} not found!\`);
-            return node;
-        }
-        
-        if (priority < node.priority) {
-            node.left = this.deleteTask(node.left, priority);
-        } else if (priority > node.priority) {
-            node.right = this.deleteTask(node.right, priority);
-        } else {
-            console.log(\`✅ Completed: \${node.toString()}\`);
-            this.totalTasks--;
-            
-            if (node.left === null) return node.right;
-            if (node.right === null) return node.left;
-            
-            const successor = this.findMin(node.right);
-            node.priority = successor.priority;
-            node.description = successor.description;
-            node.category = successor.category;
-            node.timestamp = successor.timestamp;
-            node.right = this.deleteTask(node.right, successor.priority);
-        }
-        
-        return node;
-    }
-    
-    findMin(node) {
-        while (node.left !== null) {
-            node = node.left;
-        }
-        return node;
-    }
-    
-    findMax(node) {
-        while (node.right !== null) {
-            node = node.right;
-        }
-        return node;
-    }
-    
-    displayTasks() {
-        console.log('\\n📋 Task List (by priority):');
-        this.inorderTraversal(this.root);
-        console.log(\`Total tasks: \${this.totalTasks}\`);
-    }
-    
-    inorderTraversal(node) {
-        if (node !== null) {
-            this.inorderTraversal(node.left);
-            console.log(\`📋 \${node.toString()} - Added: \${node.timestamp}\`);
-            this.inorderTraversal(node.right);
-        }
-    }
-    
-    getHighestPriorityTask() {
-        if (this.root === null) {
-            console.log('📭 No tasks available');
-            return null;
-        }
-        
-        const highestPriorityNode = this.findMax(this.root);
-        console.log(\`🔥 Highest priority: \${highestPriorityNode.toString()}\`);
-        return highestPriorityNode;
-    }
-    
-    getLowestPriorityTask() {
-        if (this.root === null) {
-            console.log('📭 No tasks available');
-            return null;
-        }
-        
-        const lowestPriorityNode = this.findMin(this.root);
-        console.log(\`📌 Lowest priority: \${lowestPriorityNode.toString()}\`);
-        return lowestPriorityNode;
-    }
-    
-    getTasksByCategory(category) {
-        console.log(\`\\n🏷️  Tasks in category: \${category}\`);
-        this.categorySearch(this.root, category);
-    }
-    
-    categorySearch(node, category) {
-        if (node !== null) {
-            this.categorySearch(node.left, category);
-            if (node.category.toLowerCase() === category.toLowerCase()) {
-                console.log(\`📋 \${node.toString()}\`);
-            }
-            this.categorySearch(node.right, category);
-        }
-    }
-    
-    levelOrderTraversal() {
-        if (this.root === null) return;
-        
-        console.log('\\n🌳 Task tree structure:');
-        const queue = [this.root];
-        let level = 0;
-        
-        while (queue.length > 0) {
-            const levelSize = queue.length;
-            console.log(\`Level \${level++}:\`);
-            
-            for (let i = 0; i < levelSize; i++) {
-                const node = queue.shift();
-                console.log(\`  📋 \${node.toString()}\`);
-                
-                if (node.left) queue.push(node.left);
-                if (node.right) queue.push(node.right);
-            }
-        }
-    }
+    constructor() {
+        this.root = null;
+    }
+
+    // --- PUBLIC METHODS ---
+
+    /**
+     * Adds a new task to the manager.
+     * @param {number} priority - The priority of the task (the key).
+     * @param {string} description - The description of the task.
+     */
+    addTask(priority, description) {
+        this.root = this._insertHelper(this.root, priority, description);
+    }
+
+    /**
+     * Removes a task from the manager by its priority.
+     * @param {number} priority - The priority of the task to remove.
+     */
+    removeTask(priority) {
+        this.root = this._deleteHelper(this.root, priority);
+    }
+    
+    // --- TRAVERSAL METHODS ---
+
+    displayInorder() {
+        console.log('\\n--- 📊 In-order Traversal (Sorted by Priority) ---');
+        this._inorderHelper(this.root);
+    }
+    displayPreorder() {
+        console.log('\\n--- 🌿 Pre-order Traversal (Root-L-R) ---');
+        this._preorderHelper(this.root);
+    }
+    displayPostorder() {
+        console.log('\\n--- 🍃 Post-order Traversal (L-R-Root) ---');
+        this._postorderHelper(this.root);
+    }
+
+    // --- PRIVATE HELPER METHODS ---
+
+    _insertHelper(node, priority, description) {
+        if (node === null) {
+            console.log(\`✅ Added task: [\${priority}] \${description}\`);
+            return new TaskNode(priority, description);
+        }
+
+        if (priority < node.priority) {
+            node.left = this._insertHelper(node.left, priority, description);
+        } else if (priority > node.priority) {
+            node.right = this._insertHelper(node.right, priority, description);
+        } else {
+            console.log(\`⚠️ Task with priority \${priority} already exists!\`);
+        }
+        return node;
+    }
+
+    _findMin(node) {
+        while (node.left !== null) {
+            node = node.left;
+        }
+        return node;
+    }
+
+    _deleteHelper(node, priority) {
+        if (node === null) {
+            console.log(\`⚠️ Task with priority \${priority} not found!\`);
+            return null;
+        }
+
+        if (priority < node.priority) {
+            node.left = this._deleteHelper(node.left, priority);
+        } else if (priority > node.priority) {
+            node.right = this._deleteHelper(node.right, priority);
+        } else { // Node to delete is found
+            console.log(\`🗑️ Removing task: [\${node.priority}] \${node.description}\`);
+            if (node.left === null) return node.right;
+            if (node.right === null) return node.left;
+            
+            const successor = this._findMin(node.right);
+            node.priority = successor.priority;
+            node.description = successor.description;
+            node.right = this._deleteHelper(node.right, successor.priority);
+        }
+        return node;
+    }
+
+    _inorderHelper(node) {
+        if (node !== null) {
+            this._inorderHelper(node.left);
+            console.log(\`-> [\${node.priority}] \${node.description}\`);
+            this._inorderHelper(node.right);
+        }
+    }
+    _preorderHelper(node) {
+        if (node !== null) {
+            console.log(\`-> [\${node.priority}] \${node.description}\`);
+            this._preorderHelper(node.left);
+            this._preorderHelper(node.right);
+        }
+    }
+    _postorderHelper(node) {
+        if (node !== null) {
+            this._postorderHelper(node.left);
+            this._postorderHelper(node.right);
+            console.log(\`-> [\${node.priority}] \${node.description}\`);
+        }
+    }
 }
 
-// Example usage
+// --- Example Usage ---
 const taskManager = new TaskManager();
 
-taskManager.addTask(85, "Complete project proposal", "Work");
-taskManager.addTask(92, "Submit tax documents", "Personal");
-taskManager.addTask(78, "Buy groceries", "Shopping");
-taskManager.addTask(88, "Schedule dentist appointment", "Health");
+taskManager.addTask(85, "Complete project proposal");
+taskManager.addTask(92, "Submit tax documents");
+taskManager.addTask(78, "Buy groceries");
+taskManager.addTask(88, "Schedule dentist appointment");
 
-taskManager.displayTasks();
-taskManager.levelOrderTraversal();
+taskManager.displayInorder();
+taskManager.displayPreorder();
+taskManager.displayPostorder();
 
-console.log("\\n🔍 Searching for task with priority 88:");
-const foundTask = taskManager.searchTask(88);
-if (foundTask) {
-    console.log(\`✅ Found: \${foundTask.toString()}\`);
-}
-
-taskManager.getHighestPriorityTask();
-taskManager.getLowestPriorityTask();
-taskManager.getTasksByCategory("Work");
-
-taskManager.completeTask(78);
-taskManager.displayTasks();`
-    },
+console.log("\\n--- Removing task [78] ---");
+taskManager.removeTask(78);
+taskManager.displayInorder();`
+},
 
     interview_questions: [
       {
