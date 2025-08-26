@@ -15,6 +15,11 @@ import Heap from './Heap';
 import DynamicProgramming from './DynamicProgramming'
 import WhatIsAIML from './WhatisAIML';
 import AimlUseInIndustry from './AimlUseInIndustry';
+import WebFoundations from './WebFoundations';
+import FrontendDev from './FrontendDev';
+import BackendDev from './BackendDev';
+import DatabasesWeb from './DatabasesWeb';
+import FutureWeb from './FutureWeb';
 import AIMLRoadmap from './AIMLRoadmap';
 import MathFoundations from './MathFoundations';
 import CoreMLAlgorithms from './CoreMLAlgorithms';
@@ -155,6 +160,23 @@ if (domain === 'aiml') return <AimlUseInIndustry />;
       break;
     case 'future-research':
       if (domain === 'aiml') return <FutureResearch />;
+      break;
+
+    // Web Development custom pages
+    case 'foundations':
+      if (domain === 'webdev') return <WebFoundations />;
+      break;
+    case 'frontend-development':
+      if (domain === 'webdev') return <FrontendDev />;
+      break;
+    case 'backend-development':
+      if (domain === 'webdev') return <BackendDev />;
+      break;
+    case 'databases':
+      if (domain === 'webdev') return <DatabasesWeb />;
+      break;
+    case 'future-web':
+      if (domain === 'webdev') return <FutureWeb />;
       break;
 
 
