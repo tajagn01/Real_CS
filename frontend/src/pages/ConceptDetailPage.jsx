@@ -15,6 +15,18 @@ import Heap from './Heap';
 import DynamicProgramming from './DynamicProgramming'
 import WhatIsAIML from './WhatisAIML';
 import AimlUseInIndustry from './AimlUseInIndustry';
+import AIMLRoadmap from './AIMLRoadmap';
+import MathFoundations from './MathFoundations';
+import CoreMLAlgorithms from './CoreMLAlgorithms';
+import DeepLearning from './DeepLearning';
+import NLP from './NLP';
+import ComputerVision from './ComputerVision';
+import ReinforcementLearning from './ReinforcementLearning';
+import MLOps from './MLOps';
+import AIForDataScience from './AIForDataScience';
+import ResponsibleAI from './ResponsibleAI';
+import AIForBusiness from './AIForBusiness';
+import FutureResearch from './FutureResearch';
 
 
 import SortingAlgorithm from './SortingAlgorithm';
@@ -107,6 +119,43 @@ case 'aimluseinindustry':
 if (domain === 'aiml') return <AimlUseInIndustry />;
 
   break;
+
+    case 'ai-ml-roadmap':
+      if (domain === 'aiml') return <AIMLRoadmap />;
+      break;
+    case 'math-foundations':
+      if (domain === 'aiml') return <MathFoundations />;
+      break;
+    case 'core-ml-algorithms':
+      if (domain === 'aiml') return <CoreMLAlgorithms />;
+      break;
+    case 'deep-learning':
+      if (domain === 'aiml') return <DeepLearning />;
+      break;
+    case 'nlp':
+      if (domain === 'aiml') return <NLP />;
+      break;
+    case 'computer-vision':
+      if (domain === 'aiml') return <ComputerVision />;
+      break;
+    case 'reinforcement-learning':
+      if (domain === 'aiml') return <ReinforcementLearning />;
+      break;
+    case 'mlops':
+      if (domain === 'aiml') return <MLOps />;
+      break;
+    case 'ai-for-data-science':
+      if (domain === 'aiml') return <AIForDataScience />;
+      break;
+    case 'responsible-ai':
+      if (domain === 'aiml') return <ResponsibleAI />;
+      break;
+    case 'ai-for-business':
+      if (domain === 'aiml') return <AIForBusiness />;
+      break;
+    case 'future-research':
+      if (domain === 'aiml') return <FutureResearch />;
+      break;
 
 
 
