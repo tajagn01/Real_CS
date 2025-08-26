@@ -13,6 +13,9 @@ import BinaryTree from './BinaryTree';
 import HashTable from './HashTable';
 import Heap from './Heap';
 import DynamicProgramming from './DynamicProgramming'
+import WhatIsAIML from './WhatisAIML';
+import AimlUseInIndustry from './AimlUseInIndustry';
+
 
 import SortingAlgorithm from './SortingAlgorithm';
 import Tree from './Tree'
@@ -97,6 +100,15 @@ case 'hashTable':
     case 'graph':
       if (domain === 'dsa') return <Graph />;
       break;
+    case 'what-is-ai-ml':
+      if (domain === 'aiml') return <WhatIsAIML />
+      break;
+case 'aimluseinindustry': 
+if (domain === 'aiml') return <AimlUseInIndustry />;
+
+  break;
+
+
 
   
 

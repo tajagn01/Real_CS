@@ -1,6 +1,6 @@
 import React from "react";
 
-const aimlData = {
+const aimlData01 = {
   concept: {
     name: "AI and Machine Learning (AI/ML) in Industry",
     description:
@@ -51,9 +51,9 @@ const aimlData = {
   }
 };
 
-const industryExamples = aimlData.concept.useCase.split("\n").filter(Boolean);
+const industryExamples = aimlData01.concept.useCase.split("\n").filter(Boolean);
 
-const UsesInIndustry = () => {
+const UsesInIndustry01 = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
       {/* Definition Section */}
@@ -63,7 +63,7 @@ const UsesInIndustry = () => {
             What Does AI/ML Enable in Industry?
           </h2>
           <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed text-center max-w-4xl mx-auto">
-            {aimlData.concept.definition}
+            {aimlData01.concept.definition}
           </p>
         </div>
       </div>
@@ -110,7 +110,7 @@ const UsesInIndustry = () => {
             Why AI/ML Matters for Modern Tech
           </h2>
           <p className="text-gray-700 dark:text-gray-300 mb-6 text-center text-lg">
-            {aimlData.domainData.importance}
+            {aimlData01.domainData.importance}
           </p>
           <div className="flex flex-col md:flex-row md:justify-center md:space-x-12">
             <div className="mb-6 md:mb-0">
@@ -118,7 +118,7 @@ const UsesInIndustry = () => {
                 Related Technologies
               </h3>
               <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
-                {aimlData.domainData.relatedTechnologies.map((tech, idx) => (
+                {aimlData01.domainData.relatedTechnologies.map((tech, idx) => (
                   <li key={idx}>{tech}</li>
                 ))}
               </ul>
@@ -128,7 +128,7 @@ const UsesInIndustry = () => {
                 Growth Trend
               </h3>
               <p className="text-gray-700 dark:text-gray-300 max-w-xs">
-                {aimlData.domainData.growthTrend}
+                {aimlData01.domainData.growthTrend}
               </p>
             </div>
           </div>
@@ -138,4 +138,4 @@ const UsesInIndustry = () => {
   );
 };
 
-export default UsesInIndustry;
+export default UsesInIndustry01;
