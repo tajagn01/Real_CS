@@ -422,7 +422,37 @@ export default function EnhancedStackPage() {
   };
 
 
-  const BracketValidator = () => (
+  const BracketValidator = () => {
+  const [expression, setExpression] = React.useState("");
+  const [validationResult, setValidationResult] = React.useState(null);
+  const [bracketStack, setBracketStack] = React.useState([]);
+
+  const validateBrackets = () => {
+    const stack = [];
+    const pairs = {
+      ")": "(",
+      "}": "{",
+      "]": "[",
+    };
+
+    for (let char of expression) {
+      if (["(", "{", "["].includes(char)) {
+        stack.push(char);
+      } else if ([")", "}", "]"].includes(char)) {
+        if (stack.pop() !== pairs[char]) {
+          setValidationResult(false);
+          setBracketStack(stack);
+          return;
+        }
+      }
+    }
+
+    const isValid = stack.length === 0;
+    setValidationResult(isValid);
+    setBracketStack(stack);
+  };
+
+  return (
     <div className="p-6 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border-2 border-amber-200 dark:border-amber-800">
       <h3 className="text-2xl font-bold mb-6 text-center text-amber-800 dark:text-amber-200">
         🔍 Bracket Validation Demo
@@ -449,16 +479,31 @@ export default function EnhancedStackPage() {
         </div>
 
         {validationResult !== null && (
-          <div className={`p-4 rounded-lg border-l-4 ${validationResult
-              ? "bg-green-50 dark:bg-green-900/20 border-green-500"
-              : "bg-red-50 dark:bg-red-900/20 border-red-500"
-            }`}>
+          <div
+            className={`p-4 rounded-lg border-l-4 ${
+              validationResult
+                ? "bg-green-50 dark:bg-green-900/20 border-green-500"
+                : "bg-red-50 dark:bg-red-900/20 border-red-500"
+            }`}
+          >
             <div className="flex items-center gap-2">
-              <span className={`text-2xl ${validationResult ? "text-green-600" : "text-red-600"}`}>
+              <span
+                className={`text-2xl ${
+                  validationResult ? "text-green-600" : "text-red-600"
+                }`}
+              >
                 {validationResult ? "✅" : "❌"}
               </span>
-              <span className={`font-bold ${validationResult ? "text-green-800 dark:text-green-300" : "text-red-800 dark:text-red-300"}`}>
-                {validationResult ? "Valid Expression!" : "Invalid Expression!"}
+              <span
+                className={`font-bold ${
+                  validationResult
+                    ? "text-green-800 dark:text-green-300"
+                    : "text-red-800 dark:text-red-300"
+                }`}
+              >
+                {validationResult
+                  ? "Valid Expression!"
+                  : "Invalid Expression!"}
               </span>
             </div>
             {bracketStack.length > 0 && !validationResult && (
@@ -483,6 +528,8 @@ export default function EnhancedStackPage() {
       </div>
     </div>
   );
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-indigo-900/20 text-gray-900 dark:text-white">

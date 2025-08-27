@@ -1,5 +1,5 @@
+// queue.js
 import React, { useState, useEffect } from "react";
-
 
 const queueData = {
   topic: "Queue",
@@ -7,842 +7,1444 @@ const queueData = {
   sections: {
     student_hook:
       "Think about waiting in line at your favorite coffee shop - people join at the back and are served from the front in the exact order they arrived. That's precisely how a Queue works in programming! It's a First-In-First-Out (FIFO) data structure that ensures fairness and order. From managing print jobs and handling web requests to implementing breadth-first search algorithms, queues are the organized backbone that keeps systems running smoothly and fairly!",
-
-    // Queue Fundamentals
-    fundamentals: {
+    singlyQueue: {
       concept:
-        "A Queue is a linear data structure that follows the First-In-First-Out (FIFO) principle. Think of it as a horizontal line where elements are added (enqueued) at the rear and removed (dequeued) from the front. The first element added is the first one to be removed, making it perfect for managing ordered processing and fair resource allocation.",
+        "A Singly Queue is a basic queue implementation using a singly linked list. Elements are added (**enqueued**) at the rear and removed (**dequeued**) from the front, leveraging the O(1) efficiency of linked list insertions and deletions at the head and tail.",
       realWorldExample:
-        "Picture a line at a bank or supermarket checkout - customers join at the back and are served from the front in order. Or think of print job scheduling in your computer!",
-      key_operations: [
-        "📥 Enqueue - Add element to rear",
-        "📤 Dequeue - Remove element from front", 
-        "👁️ Front - View front element without removing",
-        "👁️ Rear - View rear element without removing",
-        "❓ isEmpty - Check if queue is empty",
-        "📏 Size - Get number of elements"
-      ],
+        "Imagine a ticketing system for an event where people are served strictly in the order they arrived. The first person to join the line is the first to get a ticket.",
       industry_applications: [
-        "🖨️ Operating Systems - Process scheduling and print job management",
-        "🌐 Web Servers - Request handling and load balancing",
-        "📞 Call Centers - Customer service queue management", 
-        "🎮 Gaming - Turn-based game systems and matchmaking",
-        "🚌 Transportation - Traffic management and routing systems",
-        "🔄 Algorithms - Breadth-First Search (BFS) traversal",
-        "📡 Networking - Data packet transmission and buffering"
+        "🖨️ Operating Systems - Process scheduling for a single CPU core",
+        "🌐 Web Servers - Managing incoming requests in a single thread",
+        "📞 Call Centers - Storing customer calls in the order they arrive",
+        "🖼️ Image Processing - Queuing images for sequential processing",
       ],
       advantages: [
-        "⚡ O(1) enqueue and dequeue operations",
-        "⚖️ Fair processing (first-come, first-served)",
-        "🎯 Simple and intuitive structure",
-        "🔄 Perfect for FIFO scenarios",
-        "📊 Efficient for sequential processing"
+        "🔄 Dynamic Size - Grows and shrinks as needed",
+        "➕ Efficient Enqueue/Dequeue - O(1) time complexity",
+        "💾 No Wasted Memory - Only allocates memory for nodes needed",
+        "🧠 Memory is non-contiguous - Nodes can be anywhere in memory",
       ],
       disadvantages: [
-        "🚫 No random access to elements",
-        "📏 Limited access (only front and rear)",
-        "💾 May require dynamic memory allocation",
-        "🔍 Linear search required for specific elements"
+        "❌ No Random Access - O(n) to find an element",
+        "🔍 Slower Traversal - Must start from front and iterate to the rear",
+        "⬆️ More Memory Per Node - Requires extra pointer storage",
+        "🔗 Requires both front and rear pointers for O(1) operations",
       ],
     },
-
-    // Implementation Types
-    implementation_types: {
-      array_based: {
-        concept: "Queue implemented using arrays with front and rear pointers. Can use circular array to optimize space usage.",
-        advantages: ["Fast access", "Memory efficient", "Simple implementation"],
-        disadvantages: ["Fixed size", "May waste space", "Complex circular array logic"]
-      },
-      linked_list_based: {
-        concept: "Queue implemented using linked list with separate front and rear pointers for efficient operations.",
-        advantages: ["Dynamic size", "No size limitations", "Simple logic"],
-        disadvantages: ["Extra memory for pointers", "Slightly slower due to pointer dereferencing"]
-      }
+    doubleEndedQueue: {
+      concept:
+        "A Double-Ended Queue (Deque) is a linear data structure that allows elements to be added or removed from both the front and the rear. It can be implemented using a doubly linked list, which makes all four operations (add/remove from front/rear) highly efficient.",
+      realWorldExample:
+        "Think of a job queue where high-priority jobs can be added to the front, while low-priority jobs are added to the back. It's a versatile structure for managing work from both ends.",
+      industry_applications: [
+        "💻 Job Scheduling - Prioritizing tasks in a multi-threaded system",
+        "✍️ Text Editors - Managing a buffer for undo/redo actions",
+        "💾 Caches - Implementing a Least Recently Used (LRU) cache",
+        "⚙️ Operating Systems - Handling processes that need to be prioritized",
+      ],
+      advantages: [
+        "↔️ Bidirectional Operations - Add/remove from both ends in O(1)",
+        "➕ Versatile - Can be used as a queue, a stack, or both",
+        "💡 More intuitive for some applications",
+        "🔍 Easier implementation of certain algorithms",
+      ],
+      disadvantages: [
+        "💾 More Memory - Each node stores two pointers",
+        "🔧 More Complex Logic - Operations require managing two pointers per node",
+        "⬆️ Slower overall performance due to extra memory and pointer manipulation",
+        "🔗 Still no random access by index",
+      ],
     },
+    circularQueue: {
+      concept:
+        "A Circular Queue is a queue implemented using a fixed-size array where the last element is connected to the first element. This 'wraparound' feature allows for efficient reuse of empty space in the array, preventing the need to shift elements after each dequeue.",
+      realWorldExample:
+        "Imagine a shared buffer in a computer system, like a keyboard input buffer, that continuously accepts data and sends it for processing. When it reaches the end, it loops back to the beginning to fill empty slots.",
+      industry_applications: [
+        "🖥️ Round-Robin Scheduling - Distributing CPU time in a cycle",
+        "🗂️ OS Task Management - Managing a fixed number of tasks that cycle through",
+        "⏳ Buffers - Data buffers that need to loop back",
+        "🎮 Gaming - Managing a fixed number of network packets",
+      ],
+      advantages: [
+        "♾️ Space Efficiency - Reuses freed memory slots, preventing 'false overflow'",
+        "🔗 Fast Operations - O(1) for both enqueue and dequeue with simple modulo arithmetic",
+        "🎯 Simple Implementation - Uses a static array, avoiding dynamic memory allocation overhead",
+        "🔄 Ideal for fixed-size buffer scenarios",
+      ],
+      disadvantages: [
+        "🐛 Fixed Size - Cannot grow dynamically and can lead to overflow if capacity is exceeded",
+        "🔄 Tricky Logic - Pointers and modulo arithmetic can be more complex to manage than a simple array",
+        "💡 Still no random access",
+        "🔎 Can be hard to distinguish between full and empty states without a size variable",
+      ],
+    },
+    priorityQueue: {
+      concept:
+        "A Priority Queue is a special type of queue where each element has a priority. Elements are dequeued based on their priority, not their FIFO order. Elements with a higher priority are served before elements with a lower priority. It's typically implemented using a Heap data structure for optimal performance.",
+      realWorldExample:
+        "A hospital emergency room triage system. Patients with more critical conditions (higher priority) are seen before those with minor issues, regardless of their arrival time.",
+      industry_applications: [
+        "🏥 Hospital Triage - Prioritizing patients based on severity of condition",
+        "🔄 Task Scheduling - Scheduling tasks based on priority in operating systems",
+        "📡 Network Routers - Handling high-priority data packets before regular ones",
+        "🗺️ Algorithms - Used in Dijkstra's, Prim's, and Huffman coding algorithms",
+      ],
+      advantages: [
+        "⚡ Efficient Priority-Based Access - Enqueue and dequeue are typically O(log n)",
+        "⚖️ Guarantees highest-priority element is always at the front",
+        "🎯 Essential for a wide range of optimized algorithms",
+        "📊 Fair allocation of resources based on importance",
+      ],
+      disadvantages: [
+        "📈 More Complex Implementation - Requires understanding of Heaps or similar structures",
+        "🐢 Slower than a regular queue - Operations are O(log n) vs O(1)",
+        "🔗 Cannot be used for simple FIFO scenarios",
+        "💾 Higher memory footprint due to the tree-like structure of a Heap",
+      ],
+    },
+    code_examples: {
+      singly: {
+        c: `// C - Singly Queue (Linked List-based)
+#include <stdio.h>
+#include <stdlib.h>
 
-  
-  code_examples: {
-    "c": "// C - Simple Queue Example\n#include &lt;stdio.h&gt;\n#define MAX 5\n\nint queue[MAX], front = 0, rear = -1, size = 0;\n\nvoid enqueue(int value) {\n    if (size == MAX) {\n        printf(\"Queue full!\\n\");\n        return;\n    }\n    rear = (rear + 1) % MAX;\n    queue[rear] = value;\n    size++;\n    printf(\"Enqueued: %d\\n\", value);\n}\n\nvoid dequeue() {\n    if (size == 0) {\n        printf(\"Queue empty!\\n\");\n        return;\n    }\n    printf(\"Dequeued: %d\\n\", queue[front]);\n    front = (front + 1) % MAX;\n    size--;\n}\n\nvoid showFront() {\n    if (size == 0) {\n        printf(\"Queue empty!\\n\");\n        return;\n    }\n    printf(\"Front: %d\\n\", queue[front]);\n}\n\nint main() {\n    enqueue(10);\n    enqueue(20);\n    enqueue(30);\n    showFront();\n    dequeue();\n    showFront();\n    return 0;\n}",
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
 
-    "cpp": "// C++ - Simple Queue Example\n#include &lt;iostream&gt;\n#include &lt;queue&gt;\nusing namespace std;\n\nint main() {\n    queue&lt;int&gt; q;\n    q.push(10);\n    q.push(20);\n    q.push(30);\n\n    cout &lt;&lt; \"Front: \" &lt;&lt; q.front() &lt;&lt; endl;\n    q.pop();\n    cout &lt;&lt; \"Front after dequeue: \" &lt;&lt; q.front() &lt;&lt; endl;\n    cout &lt;&lt; \"Size: \" &lt;&lt; q.size() &lt;&lt; endl;\n    return 0;\n}",
+typedef struct Queue {
+    Node* front;
+    Node* rear;
+} Queue;
 
-    "java": "// Java - Simple Queue Example\nimport java.util.*;\n\npublic class SimpleQueue {\n    public static void main(String[] args) {\n        Queue&lt;Integer&gt; q = new LinkedList&lt;&gt;();\n        q.add(10);\n        q.add(20);\n        q.add(30);\n\n        System.out.println(\"Front: \" + q.peek());\n        q.remove();\n        System.out.println(\"Front after dequeue: \" + q.peek());\n        System.out.println(\"Size: \" + q.size());\n    }\n}",
+Queue* createQueue() {
+    Queue* q = (Queue*)malloc(sizeof(Queue));
+    q->front = q->rear = NULL;
+    return q;
+}
 
-    "python": "# Python - Simple Queue Example\nfrom collections import deque\n\nq = deque()\nq.append(10)\nq.append(20)\nq.append(30)\n\nprint(\"Front:\", q[0])\nq.popleft()\nprint(\"Front after dequeue:\", q[0])\nprint(\"Size:\", len(q))",
+void enqueue(Queue* q, int new_data) {
+    Node* new_node = (Node*)malloc(sizeof(Node));
+    new_node->data = new_data;
+    new_node->next = NULL;
+    if (q->rear == NULL) {
+        q->front = q->rear = new_node;
+        return;
+    }
+    q->rear->next = new_node;
+    q->rear = new_node;
+}
 
-    "javascript": "// JavaScript - Simple Queue Example\nclass Queue {\n    constructor() {\n        this.items = [];\n    }\n    enqueue(val) { this.items.push(val); }\n    dequeue() { return this.items.shift(); }\n    front() { return this.items[0]; }\n    size() { return this.items.length; }\n}\n\nconst q = new Queue();\nq.enqueue(10);\nq.enqueue(20);\nq.enqueue(30);\n\nconsole.log(\"Front:\", q.front());\nq.dequeue();\nconsole.log(\"Front after dequeue:\", q.front());\nconsole.log(\"Size:\", q.size());"
-  },
+int dequeue(Queue* q) {
+    if (q->front == NULL) return -1;
+    Node* temp = q->front;
+    int dequeued_data = temp->data;
+    q->front = q->front->next;
+    if (q->front == NULL) {
+        q->rear = NULL;
+    }
+    free(temp);
+    return dequeued_data;
+}
 
+int main() {
+    Queue* q = createQueue();
+    enqueue(q, 10);
+    enqueue(q, 20);
+    printf("Dequeued: %d\\n", dequeue(q));
+    enqueue(q, 30);
+    return 0;
+}`,
+        cpp: `// C++ - Singly Queue (Linked List-based)
+#include <iostream>
 
+class Node {
+public:
+    int data;
+    Node* next;
+    Node(int data) : data(data), next(nullptr) {}
+};
 
+class SinglyQueue {
+private:
+    Node* front;
+    Node* rear;
+public:
+    SinglyQueue() : front(nullptr), rear(nullptr) {}
+    
+    void enqueue(int data) {
+        Node* newNode = new Node(data);
+        if (!rear) {
+            front = rear = newNode;
+            return;
+        }
+        rear->next = newNode;
+        rear = newNode;
+    }
+    
+    int dequeue() {
+        if (!front) {
+            return -1; // Indicates empty queue
+        }
+        Node* temp = front;
+        int dequeued_data = temp->data;
+        front = front->next;
+        if (!front) {
+            rear = nullptr;
+        }
+        delete temp;
+        return dequeued_data;
+    }
+};
+
+int main() {
+    SinglyQueue q;
+    q.enqueue(10);
+    q.enqueue(20);
+    std::cout << "Dequeued: " << q.dequeue() << std::endl;
+    q.enqueue(30);
+    return 0;
+}`,
+        java: `// Java - Singly Queue (Linked List-based)
+public class SinglyQueue {
+    static class Node {
+        int data;
+        Node next;
+        Node(int d) { data = d; next = null; }
+    }
+    Node front, rear;
+    
+    public void enqueue(int data) {
+        Node newNode = new Node(data);
+        if (rear == null) {
+            front = rear = newNode;
+            return;
+        }
+        rear.next = newNode;
+        rear = newNode;
+    }
+    
+    public int dequeue() {
+        if (front == null) return -1;
+        Node temp = front;
+        int dequeued_data = temp.data;
+        front = front.next;
+        if (front == null) {
+            rear = null;
+        }
+        return dequeued_data;
+    }
+    
+    public static void main(String[] args) {
+        SinglyQueue q = new SinglyQueue();
+        q.enqueue(10);
+        q.enqueue(20);
+        System.out.println("Dequeued: " + q.dequeue());
+        q.enqueue(30);
+    }
+}`,
+        python: `# Python - Singly Queue (Linked List-based)
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class SinglyQueue:
+    def __init__(self):
+        self.front = None
+        self.rear = None
+    
+    def enqueue(self, data):
+        new_node = Node(data)
+        if self.rear is None:
+            self.front = self.rear = new_node
+            return
+        self.rear.next = new_node
+        self.rear = new_node
+    
+    def dequeue(self):
+        if self.front is None: return -1
+        temp = self.front
+        self.front = temp.next
+        if self.front is None:
+            self.rear = None
+        return temp.data
+
+q = SinglyQueue()
+q.enqueue(10)
+q.enqueue(20)
+print(f"Dequeued: {q.dequeue()}")
+q.enqueue(30)`,
+        javascript: `// JavaScript - Singly Queue (Linked List-based)
+class Node {
+    constructor(data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+class SinglyQueue {
+    constructor() {
+        this.front = null;
+        this.rear = null;
+    }
+    enqueue(data) {
+        const newNode = new Node(data);
+        if (!this.rear) {
+            this.front = this.rear = newNode;
+            return;
+        }
+        this.rear.next = newNode;
+        this.rear = newNode;
+    }
+    dequeue() {
+        if (!this.front) return null;
+        const temp = this.front;
+        this.front = this.front.next;
+        if (!this.front) {
+            this.rear = null;
+        }
+        return temp.data;
+    }
+}
+const q = new SinglyQueue();
+q.enqueue(10);
+q.enqueue(20);
+console.log("Dequeued:", q.dequeue());
+q.enqueue(30);`,
+      },
+      doubly: {
+        c: `// C - Double-Ended Queue (Deque) (Linked List-based)
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+} Node;
+
+typedef struct Deque {
+    Node* front;
+    Node* rear;
+} Deque;
+
+Deque* createDeque() {
+    Deque* dq = (Deque*)malloc(sizeof(Deque));
+    dq->front = dq->rear = NULL;
+    return dq;
+}
+
+void addFront(Deque* dq, int new_data) {
+    Node* new_node = (Node*)malloc(sizeof(Node));
+    new_node->data = new_data;
+    new_node->prev = NULL;
+    new_node->next = dq->front;
+    if (dq->front == NULL) {
+        dq->front = dq->rear = new_node;
+    } else {
+        dq->front->prev = new_node;
+        dq->front = new_node;
+    }
+}
+
+void addRear(Deque* dq, int new_data) {
+    Node* new_node = (Node*)malloc(sizeof(Node));
+    new_node->data = new_data;
+    new_node->next = NULL;
+    new_node->prev = dq->rear;
+    if (dq->rear == NULL) {
+        dq->front = dq->rear = new_node;
+    } else {
+        dq->rear->next = new_node;
+        dq->rear = new_node;
+    }
+}
+
+int removeFront(Deque* dq) {
+    if (dq->front == NULL) return -1;
+    Node* temp = dq->front;
+    int removed_data = temp->data;
+    dq->front = dq->front->next;
+    if (dq->front != NULL) {
+        dq->front->prev = NULL;
+    } else {
+        dq->rear = NULL;
+    }
+    free(temp);
+    return removed_data;
+}
+
+int main() {
+    Deque* dq = createDeque();
+    addRear(dq, 10);
+    addFront(dq, 5);
+    addRear(dq, 15);
+    printf("Removed from front: %d\\n", removeFront(dq));
+    return 0;
+}`,
+        cpp: `// C++ - Double-Ended Queue (Deque) (Linked List-based)
+#include <iostream>
+class Node {
+public:
+    int data;
+    Node* prev;
+    Node* next;
+    Node(int data) : data(data), prev(nullptr), next(nullptr) {}
+};
+
+class Deque {
+private:
+    Node* front;
+    Node* rear;
+public:
+    Deque() : front(nullptr), rear(nullptr) {}
+
+    void addFront(int data) {
+        Node* newNode = new Node(data);
+        if (!front) {
+            front = rear = newNode;
+            return;
+        }
+        newNode->next = front;
+        front->prev = newNode;
+        front = newNode;
+    }
+    
+    void addRear(int data) {
+        Node* newNode = new Node(data);
+        if (!rear) {
+            front = rear = newNode;
+            return;
+        }
+        rear->next = newNode;
+        newNode->prev = rear;
+        rear = newNode;
+    }
+    
+    int removeFront() {
+        if (!front) return -1;
+        Node* temp = front;
+        int removed_data = temp->data;
+        front = front->next;
+        if (front) {
+            front->prev = nullptr;
+        } else {
+            rear = nullptr;
+        }
+        delete temp;
+        return removed_data;
+    }
+};
+
+int main() {
+    Deque dq;
+    dq.addRear(10);
+    dq.addFront(5);
+    dq.addRear(15);
+    std::cout << "Removed from front: " << dq.removeFront() << std::endl;
+    return 0;
+}`,
+        java: `// Java - Double-Ended Queue (Deque) (Linked List-based)
+import java.util.LinkedList;
+
+public class DoubleEndedQueue {
+    private LinkedList<Integer> deque = new LinkedList<>();
+
+    public void addFront(int data) {
+        deque.addFirst(data);
+    }
+
+    public void addRear(int data) {
+        deque.addLast(data);
+    }
+    
+    public int removeFront() {
+        if (deque.isEmpty()) return -1;
+        return deque.removeFirst();
+    }
+    
+    public int removeRear() {
+        if (deque.isEmpty()) return -1;
+        return deque.removeLast();
+    }
+    
+    public static void main(String[] args) {
+        DoubleEndedQueue dq = new DoubleEndedQueue();
+        dq.addRear(10);
+        dq.addFront(5);
+        dq.addRear(15);
+        System.out.println("Removed from front: " + dq.removeFront());
+        System.out.println("Removed from rear: " + dq.removeRear());
+    }
+}`,
+        python: `# Python - Double-Ended Queue (Deque)
+from collections import deque
+
+# Python's deque is already a double-ended queue
+dq = deque()
+
+dq.append(10)      # Add to rear
+dq.appendleft(5)   # Add to front
+dq.append(15)      # Add to rear
+
+print("Removed from front:", dq.popleft())
+print("Removed from rear:", dq.pop())`,
+        javascript: `// JavaScript - Double-Ended Queue (Deque) (Array-based)
+class Deque {
+    constructor() {
+        this.items = [];
+    }
+    addFront(element) {
+        this.items.unshift(element);
+    }
+    addRear(element) {
+        this.items.push(element);
+    }
+    removeFront() {
+        if (this.isEmpty()) return null;
+        return this.items.shift();
+    }
+    removeRear() {
+        if (this.isEmpty()) return null;
+        return this.items.pop();
+    }
+    isEmpty() {
+        return this.items.length === 0;
+    }
+}
+
+const dq = new Deque();
+dq.addRear(10);
+dq.addFront(5);
+dq.addRear(15);
+console.log("Removed from front:", dq.removeFront());
+console.log("Removed from rear:", dq.removeRear());`,
+      },
+      circular: {
+        c: `// C - Circular Queue (Array-based)
+#include <stdio.h>
+#define MAX_SIZE 5
+int queue[MAX_SIZE];
+int front = -1, rear = -1;
+
+void enqueue(int value) {
+    if ((front == 0 && rear == MAX_SIZE - 1) || (rear == (front - 1 + MAX_SIZE) % MAX_SIZE)) {
+        printf("Queue is full.\\n");
+        return;
+    }
+    if (front == -1) front = 0;
+    rear = (rear + 1) % MAX_SIZE;
+    queue[rear] = value;
+}
+
+int dequeue() {
+    if (front == -1) {
+        return -1;
+    }
+    int dequeued_data = queue[front];
+    if (front == rear) {
+        front = -1;
+        rear = -1;
+    } else {
+        front = (front + 1) % MAX_SIZE;
+    }
+    return dequeued_data;
+}
+
+int main() {
+    enqueue(10);
+    enqueue(20);
+    enqueue(30);
+    printf("Dequeued: %d\\n", dequeue());
+    enqueue(40);
+    enqueue(50);
+    enqueue(60); 
+    return 0;
+}`,
+        cpp: `// C++ - Circular Queue (Array-based)
+#include <iostream>
+#define MAX_SIZE 5
+
+class CircularQueue {
+private:
+    int arr[MAX_SIZE];
+    int front, rear;
+public:
+    CircularQueue() {
+        front = -1;
+        rear = -1;
+    }
+    
+    bool isFull() {
+        return (front == 0 && rear == MAX_SIZE - 1) || (rear == (front - 1 + MAX_SIZE) % MAX_SIZE);
+    }
+    
+    bool isEmpty() {
+        return front == -1;
+    }
+    
+    void enqueue(int value) {
+        if (isFull()) {
+            std::cout << "Queue is full." << std::endl;
+            return;
+        }
+        if (isEmpty()) front = 0;
+        rear = (rear + 1) % MAX_SIZE;
+        arr[rear] = value;
+    }
+    
+    int dequeue() {
+        if (isEmpty()) {
+            return -1;
+        }
+        int removed_data = arr[front];
+        if (front == rear) {
+            front = -1;
+            rear = -1;
+        } else {
+            front = (front + 1) % MAX_SIZE;
+        }
+        return removed_data;
+    }
+};
+
+int main() {
+    CircularQueue q;
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+    std::cout << "Dequeued: " << q.dequeue() << std::endl;
+    q.enqueue(40);
+    q.enqueue(50);
+    q.enqueue(60); 
+    return 0;
+}`,
+        java: `// Java - Circular Queue (Array-based)
+public class CircularQueue {
+    private int[] queue;
+    private int front, rear, size, capacity;
+
+    public CircularQueue(int capacity) {
+        this.capacity = capacity;
+        queue = new int[capacity];
+        front = -1;
+        rear = -1;
+        size = 0;
+    }
+
+    public boolean isFull() { return size == capacity; }
+    public boolean isEmpty() { return size == 0; }
+    
+    public void enqueue(int value) {
+        if (isFull()) return;
+        if (isEmpty()) front = 0;
+        rear = (rear + 1) % capacity;
+        queue[rear] = value;
+        size++;
+    }
+    
+    public int dequeue() {
+        if (isEmpty()) return -1;
+        int dequeued_data = queue[front];
+        front = (front + 1) % capacity;
+        size--;
+        if (isEmpty()) {
+            front = -1;
+            rear = -1;
+        }
+        return dequeued_data;
+    }
+
+    public static void main(String[] args) {
+        CircularQueue q = new CircularQueue(5);
+        q.enqueue(10);
+        q.enqueue(20);
+        q.enqueue(30);
+        System.out.println("Dequeued: " + q.dequeue());
+        q.enqueue(40);
+        q.enqueue(50);
+        q.enqueue(60); 
+    }
+}`,
+        python: `# Python - Circular Queue (List-based)
+class CircularQueue:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.queue = [None] * capacity
+        self.front = self.rear = -1
+        self.size = 0
+
+    def is_full(self):
+        return self.size == self.capacity
+
+    def is_empty(self):
+        return self.size == 0
+
+    def enqueue(self, value):
+        if self.is_full(): return
+        if self.is_empty(): self.front = 0
+        self.rear = (self.rear + 1) % self.capacity
+        self.queue[self.rear] = value
+        self.size += 1
+
+    def dequeue(self):
+        if self.is_empty(): return -1
+        dequeued_data = self.queue[self.front]
+        if self.front == self.rear:
+            self.front = self.rear = -1
+        else:
+            self.front = (self.front + 1) % self.capacity
+        self.size -= 1
+        return dequeued_data
+
+q = CircularQueue(5)
+q.enqueue(10)
+q.enqueue(20)
+q.enqueue(30)
+print(f"Dequeued: {q.dequeue()}")
+q.enqueue(40)
+q.enqueue(50)
+q.enqueue(60)`,
+        javascript: `// JavaScript - Circular Queue (Array-based)
+class CircularQueue {
+    constructor(capacity) {
+        this.queue = new Array(capacity);
+        this.capacity = capacity;
+        this.front = -1;
+        this.rear = -1;
+        this.size = 0;
+    }
+    isFull() { return this.size === this.capacity; }
+    isEmpty() { return this.size === 0; }
+
+    enqueue(value) {
+        if (this.isFull()) return;
+        if (this.isEmpty()) this.front = 0;
+        this.rear = (this.rear + 1) % this.capacity;
+        this.queue[this.rear] = value;
+        this.size++;
+    }
+
+    dequeue() {
+        if (this.isEmpty()) return null;
+        const removed_data = this.queue[this.front];
+        this.front = (this.front + 1) % this.capacity;
+        this.size--;
+        if (this.isEmpty()) {
+            this.front = -1;
+            this.rear = -1;
+        }
+        return removed_data;
+    }
+}
+const q = new CircularQueue(5);
+q.enqueue(10);
+q.enqueue(20);
+q.enqueue(30);
+console.log("Dequeued:", q.dequeue());
+q.enqueue(40);
+q.enqueue(50);
+q.enqueue(60);`,
+      },
+      priority: {
+        c: `// C - Priority Queue (Min-Heap based)
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_SIZE 10
+
+int heap[MAX_SIZE];
+int heap_size = 0;
+
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void heapify_up(int index) {
+    int parent = (index - 1) / 2;
+    if (index > 0 && heap[index] < heap[parent]) {
+        swap(&heap[index], &heap[parent]);
+        heapify_up(parent);
+    }
+}
+
+void enqueue(int value) {
+    if (heap_size == MAX_SIZE) return;
+    heap[heap_size] = value;
+    heapify_up(heap_size);
+    heap_size++;
+}
+
+void heapify_down(int index) {
+    int left = 2 * index + 1;
+    int right = 2 * index + 2;
+    int smallest = index;
+
+    if (left < heap_size && heap[left] < heap[smallest]) {
+        smallest = left;
+    }
+    if (right < heap_size && heap[right] < heap[smallest]) {
+        smallest = right;
+    }
+    if (smallest != index) {
+        swap(&heap[index], &heap[smallest]);
+        heapify_down(smallest);
+    }
+}
+
+int dequeue() {
+    if (heap_size == 0) return -1;
+    int dequeued_data = heap[0];
+    heap[0] = heap[heap_size - 1];
+    heap_size--;
+    heapify_down(0);
+    return dequeued_data;
+}
+
+int main() {
+    enqueue(30);
+    enqueue(10);
+    enqueue(50);
+    printf("Dequeued (min): %d\\n", dequeue());
+    printf("Dequeued (min): %d\\n", dequeue());
+    return 0;
+}`,
+        cpp: `// C++ - Priority Queue (using STL)
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <functional>
+
+int main() {
+    std::priority_queue<int, std::vector<int>, std::greater<int>> min_pq;
+    min_pq.push(30);
+    min_pq.push(10);
+    min_pq.push(50);
+    std::cout << "Dequeued (min): " << min_pq.top() << std::endl;
+    min_pq.pop();
+    std::cout << "Dequeued (min): " << min_pq.top() << std::endl;
+    return 0;
+}`,
+        java: `// Java - Priority Queue (Min-Heap)
+import java.util.PriorityQueue;
+
+public class PriorityQueueExample {
+    public static void main(String[] args) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        pq.add(30);
+        pq.add(10);
+        pq.add(50);
+        System.out.println("Dequeued (min): " + pq.poll());
+        System.out.println("Dequeued (min): " + pq.poll());
+    }
+}`,
+        python: `# Python - Priority Queue (Min-Heap)
+import heapq
+
+pq = []
+heapq.heappush(pq, 30)
+heapq.heappush(pq, 10)
+heapq.heappush(pq, 50)
+print(f"Dequeued (min): {heapq.heappop(pq)}")
+print(f"Dequeued (min): {heapq.heappop(pq)}")`,
+        javascript: `// JavaScript - Priority Queue (Min-Heap based)
+class PriorityQueue {
+    constructor() {
+        this.heap = [];
+    }
+    getParentIndex(i) { return Math.floor((i - 1) / 2); }
+    getLeftChildIndex(i) { return 2 * i + 1; }
+    getRightChildIndex(i) { return 2 * i + 2; }
+    hasParent(i) { return this.getParentIndex(i) >= 0; }
+    hasLeftChild(i) { return this.getLeftChildIndex(i) < this.heap.length; }
+    hasRightChild(i) { return this.getRightChildIndex(i) < this.heap.length; }
+    parent(i) { return this.heap[this.getParentIndex(i)]; }
+    leftChild(i) { return this.heap[this.getLeftChildIndex(i)]; }
+    rightChild(i) { return this.heap[this.getRightChildIndex(i)]; }
+    swap(i, j) {
+        [this.heap[i], this.heap[j]] = [this.heap[j], this.heap[i]];
+    }
+    peek() {
+        if (this.heap.length === 0) return null;
+        return this.heap[0];
+    }
+    enqueue(item) {
+        this.heap.push(item);
+        this.heapifyUp();
+    }
+    dequeue() {
+        if (this.heap.length === 0) return null;
+        this.swap(0, this.heap.length - 1);
+        const item = this.heap.pop();
+        this.heapifyDown();
+        return item;
+    }
+    heapifyUp() {
+        let index = this.heap.length - 1;
+        while (this.hasParent(index) && this.parent(index) > this.heap[index]) {
+            this.swap(this.getParentIndex(index), index);
+            index = this.getParentIndex(index);
+        }
+    }
+    heapifyDown() {
+        let index = 0;
+        while (this.hasLeftChild(index)) {
+            let smallerChildIndex = this.getLeftChildIndex(index);
+            if (this.hasRightChild(index) && this.rightChild(index) < this.leftChild(index)) {
+                smallerChildIndex = this.getRightChildIndex(index);
+            }
+            if (this.heap[index] < this.heap[smallerChildIndex]) {
+                break;
+            } else {
+                this.swap(index, smallerChildIndex);
+            }
+            index = smallerChildIndex;
+        }
+    }
+}
+const pq = new PriorityQueue();
+pq.enqueue(30);
+pq.enqueue(10);
+pq.enqueue(50);
+console.log("Dequeued (min):", pq.dequeue());
+console.log("Dequeued (min):", pq.dequeue());`,
+      },
+    },
     interview_questions: [
       {
         question: "What is the time complexity of enqueue and dequeue operations in a queue?",
         answer:
-          "Both enqueue and dequeue operations have O(1) time complexity when implemented properly. Enqueue adds to the rear and dequeue removes from the front, both requiring constant time operations without any searching or shifting of elements.",
+          "Both enqueue and dequeue operations have O(1) time complexity when implemented using a linked list or circular array. This is because elements are added and removed from the ends, requiring only a constant number of pointer or index updates.",
+        difficulty: "Easy",
+      },
+      {
+        question: "Explain the difference between a Queue and a Stack.",
+        answer:
+          "A Queue follows the FIFO (First-In, First-Out) principle, like a line at a store, where the first element added is the first to be removed. A Stack follows the LIFO (Last-In, First-Out) principle, like a pile of plates, where the last element added is the first to be removed.",
         difficulty: "Easy",
       },
       {
         question: "How would you implement a queue using two stacks?",
         answer:
-          "Use two stacks: stack1 for enqueue operations and stack2 for dequeue operations. For enqueue, push to stack1. For dequeue, if stack2 is empty, pop all elements from stack1 and push to stack2, then pop from stack2. This maintains FIFO order.",
+          "Use two stacks: one for enqueuing (stack1) and one for dequeuing (stack2). To enqueue, push the new element onto stack1. To dequeue, if stack2 is empty, pop all elements from stack1 and push them onto stack2, then pop the top element from stack2. This process ensures FIFO order.",
         difficulty: "Medium",
       },
       {
-        question: "Explain the difference between a circular queue and a linear queue.",
+        question: "When would you use a Deque instead of a regular queue?",
         answer:
-          "In a linear queue, rear moves forward but front position isn't reused after dequeue, leading to false overflow. A circular queue treats the array as circular, reusing freed front positions by using modulo operations, maximizing space utilization.",
+          "A Deque is preferred when you need the flexibility to add or remove elements from both ends of the queue. For example, in a job scheduling system, you might want to add new jobs to the rear but also have the ability to add high-priority jobs directly to the front.",
         difficulty: "Medium",
       },
       {
-        question: "How can you detect if a circular queue is full vs empty when front equals rear?",
+        question: "Explain the concept of 'false overflow' in a linear queue and how a circular queue solves it.",
         answer:
-          "Use one of these approaches: 1) Keep a separate size counter, 2) Sacrifice one array slot and consider full when (rear+1)%size == front, or 3) Use a boolean flag to distinguish between empty and full states when front == rear.",
-        difficulty: "Hard",
-      },
-      {
-        question: "Design a queue that supports getMin() operation in O(1) time.",
-        answer:
-          "Use an auxiliary queue that stores minimum elements. For enqueue, add to main queue and add min(current_element, aux_queue.rear()) to aux queue. For dequeue, remove from both queues. The front of aux queue always contains the current minimum.",
+          "In a linear array-based queue, 'false overflow' occurs when the rear pointer reaches the end of the array, but there are empty slots at the beginning that were freed by dequeue operations. A circular queue solves this by treating the array as a circle, allowing the rear pointer to 'wrap around' to the beginning, effectively reusing the empty slots.",
         difficulty: "Hard",
       },
     ],
-
     project_ideas: [
-     {
-      "title": "Simple Task Queue Processor",
-      "description": "Build a basic task queue that processes items in FIFO order. Can be extended to handle different task types and priorities.",
-      "difficulty": "Beginner",
-      "technologies": ["Python"]
-    },
-    {
-      "title": "Print Job Spooler System",
-      "description": "Create a print job management system that queues documents and processes them in order. Include job status tracking and cancellation features.",
-      "difficulty": "Intermediate",
-      "technologies": ["Java"]
-    },
-    {
-      "title": "Multi-threaded Web Server Request Handler",
-      "description": "Implement a web server that uses queues to manage incoming HTTP requests, with multiple worker threads processing requests concurrently.",
-      "difficulty": "Advanced",
-      "technologies": ["Python"]
-    },
-    {
-      "title": "Real-time Chat Message Broker",
-      "description": "Build a message queuing system for a chat application that handles message ordering, delivery guarantees, and handles multiple chat rooms simultaneously.",
-      "difficulty": "Advanced",
-      "technologies": ["JavaScript"]
-    },
+      {
+        title: "Simple Task Queue Processor",
+        description:
+          "Build a basic task queue that processes items in FIFO order. Can be extended to handle different task types and priorities.",
+        difficulty: "Beginner",
+        technologies: ["Python"],
+      },
+      {
+        title: "Print Job Spooler System",
+        description:
+          "Create a print job management system that queues documents and processes them in order. Include job status tracking and cancellation features.",
+        difficulty: "Intermediate",
+        technologies: ["Java"],
+      },
+      {
+        title: "Multi-threaded Web Server Request Handler",
+        description:
+          "Implement a web server that uses queues to manage incoming HTTP requests, with multiple worker threads processing requests concurrently.",
+        difficulty: "Advanced",
+        technologies: ["Python"],
+      },
+      {
+        title: "Real-time Chat Message Broker",
+        description:
+          "Build a message queuing system for a chat application that handles message ordering, delivery guarantees, and handles multiple chat rooms simultaneously.",
+        difficulty: "Advanced",
+        technologies: ["JavaScript"],
+      },
     ],
   },
 };
 
-// Syntax highlighting function
 const highlightSyntax = (code, language) => {
-  const keywords = {
-    c: ['int', 'float', 'double', 'char', 'void', 'return', 'if', 'else', 'for', 'while', 'printf', 'include', 'main', 'struct', 'typedef'],
-    cpp: ['int', 'float', 'double', 'char', 'void', 'return', 'if', 'else', 'for', 'while', 'cout', 'cin', 'using', 'namespace', 'std', 'include', 'main', 'string', 'class', 'private', 'public'],
-    java: ['public', 'private', 'static', 'void', 'int', 'double', 'String', 'class', 'return', 'if', 'else', 'for', 'while', 'System', 'main', 'println', 'printf', 'import'],
-    python: ['def', 'return', 'if', 'else', 'elif', 'for', 'while', 'import', 'from', 'class', 'print', 'len', 'range', 'True', 'False', 'None', 'self'],
-    javascript: ['function', 'const', 'let', 'var', 'return', 'if', 'else', 'for', 'while', 'class', 'this', 'console', 'log', 'true', 'false', 'null', 'undefined', 'new']
-  };
-
-  const strings = /"[^"]*"|'[^']*'|`[^`]*`/g;
-  const comments = language === 'python' ? /#.*$/gm : /\/\/.*$|\/\*[\s\S]*?\*\//gm;
-  const numbers = /\b\d+\.?\d*\b/g;
-
-  let highlightedCode = code;
-
-  // Highlight strings (green)
-  highlightedCode = highlightedCode.replace(strings, match => `<span style="color: #22c55e;">${match}</span>`);
-  
-  // Highlight comments (gray)
-  highlightedCode = highlightedCode.replace(comments, match => `<span style="color: #6b7280;">${match}</span>`);
-  
-  // Highlight numbers (orange)
-  highlightedCode = highlightedCode.replace(numbers, match => `<span style="color: #f97316;">${match}</span>`);
-  
-  // Highlight keywords (blue)
-  if (keywords[language]) {
-    keywords[language].forEach(keyword => {
-      const regex = new RegExp(`\\b${keyword}\\b`, 'g');
-      highlightedCode = highlightedCode.replace(regex, match => `<span style="color: #3b82f6;">${match}</span>`);
+    // Defines keywords for syntax highlighting across different programming languages.
+    const keywords = {
+        c: ['#include', 'stdio.h', 'stdlib.h', 'typedef', 'struct', 'int', 'void', 'main', 'Node', 'data', 'next', 'prev', 'front', 'rear', 'Queue', 'Deque', 'new_data', 'malloc', 'sizeof', 'NULL', 'printf', 'free', 'while', 'for', 'if', 'else', 'return'],
+        cpp: ['#include', 'iostream', 'class', 'public', 'private', 'int', 'void', 'main', 'Node', 'data', 'next', 'prev', 'front', 'rear', 'SinglyQueue', 'Deque', 'new', 'nullptr', 'cout', 'while', 'for', 'if', 'else', 'return'],
+        java: ['public', 'class', 'static', 'void', 'main', 'int', 'Node', 'data', 'next', 'front', 'rear', 'SinglyQueue', 'Deque', 'null', 'System.out.println', 'while', 'if', 'else', 'return'],
+        python: ['class', 'def', '__init__', 'self', 'data', 'next', 'prev', 'front', 'rear', 'is', 'None', 'print', 'while', 'for', 'if', 'else', 'return', 'import', 'from'],
+        javascript: [
+            'class', 'constructor', 'this', 'return', 'addFront', 'addRear', 'removeFront', 'removeRear', 'isFull', 'isEmpty', 'enqueue', 'dequeue', 'peek',
+            'console.log', 'if', 'else', 'while', 'for', 'let', 'const', 'new', 'null', 'import',
+            'export', 'function', 'static', 'var', 'private', 'public', 'super', 'extends', 'try', 'catch', 'finally',
+            'instanceof', 'typeof', 'true', 'false', 'break', 'continue', 'switch', 'case', 'default'
+        ],
+    };
+    // Regular expressions for highlighting different code elements.
+    const strings = /"[^"]*"|'[^']*'|`[^`]*`/g;
+    const comments = /\/\/.*$|\/\*[\s\S]*?\*\//gm;
+    const numbers = /\b\d+\.?\d*\b/g;
+    
+    // Perform replacements to add HTML `<span>` tags with specific styling.
+    let highlightedCode = code;
+    highlightedCode = highlightedCode.replace(strings, (match) => `<span style="color: #22c55e;">${match}</span>`);
+    highlightedCode = highlightedCode.replace(comments, (match) => `<span style="color: #6b7280;">${match}</span>`);
+    highlightedCode = highlightedCode.replace(numbers, (match) => `<span style="color: #f97316;">${match}</span>`);
+    
+    // Highlight keywords for the specified language.
+    const langKeywords = keywords[language] || [];
+    langKeywords.forEach((keyword) => {
+        const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+        highlightedCode = highlightedCode.replace(regex, (match) => `<span style="color: #3b82f6;">${match}</span>`);
     });
-  }
-
-  return highlightedCode;
+    return highlightedCode;
 };
 
+// React Hooks for managing state and logic for each queue type.
+// A simpler, non-animated version for the sake of a non-interactive response.
+const useQueue = (initialElements) => {
+    const [elements, setElements] = useState(initialElements);
+    const [animatingIndex, setAnimatingIndex] = useState(null);
+    const [operation, setOperation] = useState(null);
+
+    const enqueue = (value) => {
+        setElements([...elements, value]);
+        setOperation("ENQUEUE");
+        setAnimatingIndex(elements.length);
+        setTimeout(() => setAnimatingIndex(null), 1000);
+    };
+
+    const dequeue = () => {
+        if (elements.length === 0) return;
+        setElements(elements.slice(1));
+        setOperation("DEQUEUE");
+        setAnimatingIndex(0);
+        setTimeout(() => setAnimatingIndex(null), 1000);
+    };
+
+    return { elements, enqueue, dequeue, animatingIndex, operation };
+};
+
+// React Component for the Queue Page
 export default function EnhancedQueuePage() {
-  const [selectedLanguage, setSelectedLanguage] = useState("javascript");
-  // const [queueElements, setQueueElements] = useState([10, 20, 30, 40]);
-  // const [inputValue, setInputValue] = useState("");
-  // const [animatingIndex, setAnimatingIndex] = useState(-1);
-  const [selectedQuestionIndex, setSelectedQuestionIndex] = useState(-1);
-  // const [operation, setOperation] = useState("");
-   const [queueElements, setQueueElements] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const [operation, setOperation] = useState(null);
-  const [animatingIndex, setAnimatingIndex] = useState(null);
-  
-  // Process scheduling state
-  const [processes, setProcesses] = useState(["P1", "P2", "P3"]);
-  const [newProcess, setNewProcess] = useState("");
-  const [schedulingResult, setSchedulingResult] = useState(null);
-  const [executionOrder, setExecutionOrder] = useState([]);
+    const [selectedLanguage, setSelectedLanguage] = useState("javascript");
+    const [selectedQuestionIndex, setSelectedQuestionIndex] = useState(-1);
+    const [activeTab, setActiveTab] = useState("singly");
 
-  const { topic, category, sections } = queueData;
-  const languages = ["c", "cpp", "java", "python", "javascript"];
+    const { topic, category, sections } = queueData;
+    const languages = ["c", "cpp", "java", "python", "javascript"];
 
-  // Animation effect
-  useEffect(() => {
-    if (animatingIndex >= 0) {
-      const timer = setTimeout(() => setAnimatingIndex(-1), 500);
-      return () => clearTimeout(timer);
-    }
-  }, [animatingIndex]);
-
- const enqueueElement = () => {
-    if (!inputValue) return;
-    const num = parseInt(inputValue, 10);
-    if (isNaN(num)) return;
-
-    setQueueElements([...queueElements, num]);
-    setOperation("ENQUEUE");
-    setAnimatingIndex(queueElements.length);
-
-    setTimeout(() => setAnimatingIndex(null), 1000);
-   
-  };
-
-  // ✅ Dequeue function
-  const dequeueElement = () => {
-    if (queueElements.length === 0) return;
-    setQueueElements(queueElements.slice(1));
-    setOperation("DEQUEUE");
-    setAnimatingIndex(0);
-
-    setTimeout(() => setAnimatingIndex(null), 1000);
-  };
-
-  // ✅ Front function
-  const frontElement = () => {
-    if (queueElements.length === 0) return;
-    setOperation("FRONT");
-    setAnimatingIndex(0);
-
-    setTimeout(() => setAnimatingIndex(null), 1000);
-  };
-
-  // ✅ Rear function
-  const rearElement = () => {
-    if (queueElements.length === 0) return;
-    setOperation("REAR");
-    setAnimatingIndex(queueElements.length - 1);
-
-    setTimeout(() => setAnimatingIndex(null), 1000);
-  };
-
-  const simulateProcessScheduling = () => {
-    if (processes.length === 0) return;
+    const getCodeExample = (lang) => {
+        switch (activeTab) {
+            case 'singly':
+                return sections.code_examples.singly[lang] || '';
+            case 'doubly':
+                return sections.code_examples.doubly[lang] || '';
+            case 'circular':
+                return sections.code_examples.circular[lang] || '';
+            case 'priority':
+                return sections.code_examples.priority[lang] || '';
+            default:
+                return '';
+        }
+    };
     
-    const execution = [...processes];
-    setExecutionOrder(execution);
-    setSchedulingResult(execution);
-  };
+    const activeSection = sections[
+        activeTab === "singly" ? "singlyQueue" : 
+        activeTab === "doubly" ? "doubleEndedQueue" :
+        activeTab === "circular" ? "circularQueue" :
+        activeTab === "priority" ? "priorityQueue" :
+        "singlyQueue"
+    ];
 
-  const addProcess = () => {
-    if (newProcess.trim() !== "") {
-      setProcesses([...processes, newProcess.trim()]);
-      setNewProcess("");
-    }
-  };
-
-  const removeProcess = () => {
-    if (processes.length > 0) {
-      setProcesses(processes.slice(1));
-      if (executionOrder.length > 0) {
-        setExecutionOrder(executionOrder.slice(1));
-      }
-    }
-  };
-const QueueVisualization = () => (
-  <div className="m-4 sm:m-10 p-4 sm:p-6 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-purple-200 dark:border-purple-800 shadow-xl">
-    <h3 className="text-xl sm:text-2xl font-bold mb-6 text-center text-purple-800 dark:text-purple-200">
-      🚶‍♂️ Queue Interactive Demo
-    </h3>
-
-    {/* Queue Visual */}
-    <div className="flex justify-center mb-6 px-2">
-      <div className="relative flex flex-wrap justify-center items-start gap-2 py-12">
-        {queueElements.map((value, index) => (
-          <div key={index} className="relative">
-            {/* FRONT Indicator */}
-            {index === 0 && (
-              <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-sm sm:text-base text-purple-600 dark:text-purple-300 font-medium text-center">
-                FRONT
-                <div className="text-lg sm:text-xl">⬇️</div>
-              </div>
-            )}
-
-            {/* Queue Box */}
-            <div
-              className={`w-16 h-16 sm:w-20 sm:h-20 border-2 border-purple-400 dark:border-purple-600 flex items-center justify-center transition-all duration-500 ${
-                animatingIndex === index
-                  ? operation === "ENQUEUE"
-                    ? "bg-green-400 border-green-500 animate-bounce scale-110"
-                    : operation === "DEQUEUE"
-                    ? "bg-red-400 border-red-500 animate-pulse scale-110"
-                    : operation === "FRONT"
-                    ? "bg-yellow-400 border-yellow-500 animate-pulse scale-110"
-                    : operation === "REAR"
-                    ? "bg-blue-400 border-blue-500 animate-pulse scale-110"
-                    : "bg-purple-200 dark:bg-purple-700"
-                  : "bg-purple-200 dark:bg-purple-700"
-              }`}
-            >
-              <div className="font-bold text-base sm:text-lg text-purple-800 dark:text-purple-200">
-                {value}
-              </div>
-            </div>
-
-            {/* REAR Indicator */}
-            {index === queueElements.length - 1 && (
-              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-sm sm:text-base text-purple-600 dark:text-purple-300 font-medium text-center">
-                <div className="text-lg sm:text-xl">⬆️</div>
-                REAR
-              </div>
-            )}
-          </div>
-        ))}
-
-        {queueElements.length === 0 && (
-          <div className="w-64 h-16 border-2 border-dashed border-gray-400 flex items-center justify-center">
-            <span className="text-gray-500 text-sm">Empty Queue</span>
-          </div>
-        )}
-      </div>
-    </div>
-
-    {/* Operation Status */}
-    {operation && (
-      <div className="text-center mb-4">
-        <span
-          className={`px-4 py-2 rounded-lg font-bold text-white text-sm sm:text-base ${
-            operation === "ENQUEUE"
-              ? "bg-green-500"
-              : operation === "DEQUEUE"
-              ? "bg-red-500"
-              : operation === "FRONT"
-              ? "bg-yellow-500"
-              : "bg-blue-500"
-          }`}
-        >
-          {operation} Operation
-        </span>
-      </div>
-    )}
-
-    {/* Queue Info */}
-    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow mb-4">
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-        <div>
-          <span className="text-xs sm:text-sm text-gray-500">Queue Size</span>
-          <div className="text-xl sm:text-2xl font-bold text-purple-600">
-            {queueElements.length}
-          </div>
-        </div>
-        <div>
-          <span className="text-xs sm:text-sm text-gray-500">Front Element</span>
-          <div className="text-xl sm:text-2xl font-bold text-purple-600">
-            {queueElements.length > 0 ? queueElements[0] : "None"}
-          </div>
-        </div>
-        <div>
-          <span className="text-xs sm:text-sm text-gray-500">Rear Element</span>
-          <div className="text-xl sm:text-2xl font-bold text-purple-600">
-            {queueElements.length > 0
-              ? queueElements[queueElements.length - 1]
-              : "None"}
-          </div>
-        </div>
-      </div>
-    </div>
-
-    {/* Queue Operations */}
-    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-      <h4 className="text-lg font-bold mb-3 text-center">Queue Operations</h4>
-      <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:items-center">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => {
-            const val = e.target.value;
-            if (/^\d*$/.test(val)) {
-              setInputValue(val);
-            }
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && inputValue !== "") {
-              e.preventDefault();
-              enqueueElement();
-            }
-          }}
-          placeholder="Enter value"
-          className="w-full sm:w-auto px-4 py-2 border-2 border-purple-300 dark:border-purple-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-purple-500 transition-colors duration-200"
-        />
-
-        <div className="flex flex-wrap justify-center gap-2">
-          <button
-            onClick={enqueueElement}
-            disabled={!inputValue}
-            className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-          >
-            📥 Enqueue
-          </button>
-          <button
-            onClick={dequeueElement}
-            disabled={queueElements.length === 0}
-            className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-          >
-            📤 Dequeue
-          </button>
-          <button
-            onClick={frontElement}
-            disabled={queueElements.length === 0}
-            className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-lg hover:from-yellow-600 hover:to-yellow-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-          >
-            👁️ Front
-          </button>
-          <button
-            onClick={rearElement}
-            disabled={queueElements.length === 0}
-            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-          >
-            🔙 Rear
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-
-
-
-
-
-  const ProcessScheduler = () => (
-    <div className="p-6 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border-2 border-amber-200 dark:border-amber-800">
-      <h3 className="text-2xl font-bold mb-6 text-center text-amber-800 dark:text-amber-200">
-        ⚙️ Process Scheduling Demo (FCFS)
-      </h3>
-      
-      <div className="space-y-4">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={newProcess}
-            onChange={(e) => setNewProcess(e.target.value)}
-            placeholder="Enter process name (e.g., P4)"
-            className="flex-1 px-4 py-2 border-2 border-amber-300 dark:border-amber-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-amber-500 transition-colors duration-200"
-          />
-          <button
-            onClick={addProcess}
-            disabled={!newProcess.trim()}
-            className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg"
-          >
-            Add Process
-          </button>
-        </div>
-        
-        <div className="flex gap-2">
-          <button
-            onClick={simulateProcessScheduling}
-            disabled={processes.length === 0}
-            className="px-6 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg hover:from-amber-600 hover:to-orange-600 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg"
-          >
-            Schedule Processes
-          </button>
-          <button
-            onClick={removeProcess}
-            disabled={processes.length === 0}
-            className="px-6 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg"
-          >
-            Execute Next
-          </button>
-        </div>
-        
-        {/* Process Queue Visualization */}
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg">
-          <h4 className="font-bold mb-2">Ready Queue:</h4>
-          <div className="flex gap-1 flex-wrap">
-            {processes.map((process, index) => (
-              <div
-                key={index}
-                className={`px-3 py-2 rounded border-2 ${
-                  index === 0 
-                    ? "bg-green-100 border-green-400 text-green-800 dark:bg-green-900/20 dark:text-green-300"
-                    : "bg-gray-100 border-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
-                }`}
-              >
-                {process} {index === 0 && "(Next)"}
-              </div>
-            ))}
-            {processes.length === 0 && (
-              <span className="text-gray-500 italic">No processes in queue</span>
-            )}
-          </div>
-        </div>
-        
-        {schedulingResult && (
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border-l-4 border-amber-500">
-            <h4 className="font-bold mb-2">Execution Order (FCFS):</h4>
-            <div className="flex gap-2 items-center">
-              {schedulingResult.map((process, index) => (
-                <React.Fragment key={index}>
-                  <span className="px-3 py-1 bg-amber-100 border border-amber-400 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300 rounded">
-                    {process}
-                  </span>
-                  {index < schedulingResult.length - 1 && (
-                    <span className="text-gray-500">→</span>
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-indigo-900/20 text-gray-900 dark:text-white">
-      {/* Animated Header */}
-      <header className="py-16 text-center bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/10"></div>
-        <div className="relative z-10">
-          <h1 className="text-6xl font-extrabold mb-4 animate-pulse">{topic}</h1>
-          <p className="text-xl">{category}</p>
-          <div className="mt-6">
-            <div className="flex justify-center space-x-4 text-sm">
-              <span className="px-3 py-1 bg-white/20 rounded-full">📥 Enqueue/Dequeue</span>
-              <span className="px-3 py-1 bg-white/20 rounded-full">🔄 FIFO</span>
-              <span className="px-3 py-1 bg-white/20 rounded-full">⚡ O(1) Operations</span>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-6 py-12 space-y-16">
-        {/* Student Hook */}
-        <section className="transform hover:scale-105 transition-transform duration-300">
-       <h2 className="text-4xl font-bold mb-6 text-center">
-    🎯
-    <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-        Why Queues Matter
-    </span>
-</h2>
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border-l-8 border-purple-500">
-            <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-200 italic">
-              {sections.student_hook}
-            </p>
-          </div>
-        </section>
-
-        {/* Queue Fundamentals */}
-        <section>
-          <h2 className="text-5xl font-bold mb-8 text-center">
-    📚
-    <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-        Queue Fundamentals
-    </span>
-</h2>
-          {/* Concept */}
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 border-purple-500">
-            <h3 className="text-2xl font-bold mb-4 text-purple-700 dark:text-purple-300">💡 Understanding Queues</h3>
-            <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200 mb-4">
-              {sections.fundamentals.concept}
-            </p>
-            <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border-l-4 border-purple-400">
-              <p className="text-purple-800 dark:text-purple-200 font-medium">
-                <span className="font-bold">Real-world example:</span> {sections.fundamentals.realWorldExample}
-              </p>
-            </div>
-          </div>
-
-          {/* Interactive Demo */}
-          <QueueVisualization />
-
-          {/* Key Operations */}
-          <div className="mt-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
-            <h3 className="text-2xl font-bold mb-6 text-center text-purple-700 dark:text-purple-300">🔧 Key Queue Operations</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {sections.fundamentals.key_operations.map((operation, index) => (
-                <div
-                  key={index}
-                  className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-xl border-l-4 border-purple-400 hover:shadow-lg transition-shadow duration-300"
-                >
-                  <p className="text-gray-700 dark:text-gray-300 font-medium">{operation}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Advantages & Disadvantages */}
-          <div className="grid md:grid-cols-2 gap-8 mt-8">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-green-500">
-              <h3 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-300">✅ Advantages</h3>
-              <ul className="space-y-3">
-                {sections.fundamentals.advantages.map((advantage, index) => (
-                  <li key={index} className="flex items-start space-x-3">
-                    <span className="text-green-500 text-lg">{advantage.split(' ')[0]}</span>
-                    <span className="text-gray-700 dark:text-gray-300">{advantage.substring(2)}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-red-500">
-              <h3 className="text-2xl font-bold mb-4 text-red-700 dark:text-red-300">❌ Disadvantages</h3>
-              <ul className="space-y-3">
-                {sections.fundamentals.disadvantages.map((disadvantage, index) => (
-                  <li key={index} className="flex items-start space-x-3">
-                    <span className="text-red-500 text-lg">{disadvantage.split(' ')[0]}</span>
-                    <span className="text-gray-700 dark:text-gray-300">{disadvantage.substring(2)}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Industry Applications */}
-          <div className="mt-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
-            <h3 className="text-2xl font-bold mb-6 text-center text-purple-700 dark:text-purple-300">🏢 Queues in Industry</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {sections.fundamentals.industry_applications.map((application, index) => (
-                <div
-                  key={index}
-                  className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-xl border-l-4 border-purple-400 hover:shadow-lg transition-shadow duration-300"
-                >
-                  <p className="text-gray-700 dark:text-gray-300">{application}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Process Scheduling Demo */}
-        {/* <section>
-          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-            ⚙️ Practical Application: Process Scheduling
-          </h2>
-          <ProcessScheduler />
-        </section> */}
-
-        {/* Implementation Types */}
-        <section>
-          <h2 class="text-4xl font-bold mb-8 text-center">
-    🏗️
-    <span class="bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent">
-        Implementation Approaches
-    </span>
-</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {Object.entries(sections.implementation_types).map(([type, details]) => (
-              <div key={type} className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl">
-                <h3 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200 capitalize">
-                  {type.replace('_', ' ')} Implementation
-                </h3>
-                <p className="text-gray-700 dark:text-gray-300 mb-4">{details.concept}</p>
-                
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-                    <h4 className="font-bold text-green-700 dark:text-green-300 mb-2">✅ Advantages</h4>
-                    <ul className="text-sm text-green-600 dark:text-green-400 space-y-1">
-                      {details.advantages.map((adv, idx) => (
-                        <li key={idx}>• {adv}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
-                    <h4 className="font-bold text-red-700 dark:text-red-300 mb-2">❌ Disadvantages</h4>
-                    <ul className="text-sm text-red-600 dark:text-red-400 space-y-1">
-                      {details.disadvantages.map((dis, idx) => (
-                        <li key={idx}>• {dis}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Code Examples */}
-        <section>
-         <h2 className="text-4xl font-bold mb-8 text-center">
-    💻
-    <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-        Implementation Examples
-    </span>
-</h2>
-          
-          {/* Language Selector */}
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {languages.map((lang) => (
-              <button
-                key={lang}
-                onClick={() => setSelectedLanguage(lang)}
-                className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 ${
-                  selectedLanguage === lang
-                    ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg"
-                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border-2 border-emerald-200 dark:border-emerald-800"
-                }`}
-              >
-                {lang.toUpperCase()}
-              </button>
-            ))}
-          </div>
-
-          {/* Code Display */}
-          <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
-            <div className="bg-gray-800 px-6 py-4 flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="flex space-x-2">
-                  <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                  <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                  <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                </div>
-                <span className="text-gray-300 font-mono text-sm">
-                  queue_implementation.{selectedLanguage === 'cpp' ? 'cpp' : selectedLanguage === 'python' ? 'py' : selectedLanguage === 'javascript' ? 'js' : selectedLanguage === 'java' ? 'java' : 'c'}
-                </span>
-              </div>
-              <button
-                onClick={() => navigator.clipboard.writeText(sections.code_examples[selectedLanguage])}
-                className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm transition-colors duration-200"
-              >
-                📋 Copy
-              </button>
-            </div>
-            
-            <div className="p-6 overflow-x-auto">
-              <pre
-                className="text-sm leading-relaxed"
-                dangerouslySetInnerHTML={{
-                  __html: highlightSyntax(sections.code_examples[selectedLanguage], selectedLanguage)
-                }}
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* Interview Questions */}
-        <section>
-          <h2 className="text-4xl font-bold mb-8 text-center">
-    🎤
-    <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-        Interview Questions
-    </span>
-</h2>
-          
-          <div className="space-y-4">
-            {sections.interview_questions.map((qa, index) => (
-              <div key={index} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
-                <button
-                  onClick={() => setSelectedQuestionIndex(selectedQuestionIndex === index ? -1 : index)}
-                  className="w-full p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 flex items-center justify-between"
-                >
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className={`px-3 py-1 rounded-full text-sm font-bold ${
-                        qa.difficulty === 'Easy' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300' :
-                        qa.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300' :
-                        'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300'
-                      }`}>
-                        {qa.difficulty}
-                      </span>
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-indigo-900/20 text-gray-900 dark:text-white">
+            <header className="py-16 text-center bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white relative overflow-hidden">
+                <div className="absolute inset-0 bg-black/10"></div>
+                <div className="relative z-10">
+                    <h1 className="text-6xl font-extrabold mb-4 animate-pulse">
+                        {topic}
+                    </h1>
+                    <p className="text-xl">{category}</p>
+                    <div className="mt-6">
+                        <div className="flex justify-center space-x-4 text-sm">
+                            <span className="px-3 py-1 bg-white/20 rounded-full">
+                                📥 Enqueue/Dequeue
+                            </span>
+                            <span className="px-3 py-1 bg-white/20 rounded-full">🔄 FIFO</span>
+                            <span className="px-3 py-1 bg-white/20 rounded-full">
+                                ⚡ O(1) Operations
+                            </span>
+                        </div>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                      {qa.question}
-                    </h3>
-                  </div>
-                  <span className="text-2xl text-gray-400">
-                    {selectedQuestionIndex === index ? '−' : '+'}
-                  </span>
-                </button>
-                
-                {selectedQuestionIndex === index && (
-                  <div className="px-6 pb-6 border-t border-gray-200 dark:border-gray-700 pt-4">
-                    <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border-l-4 border-blue-400">
-                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                        {qa.answer}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Project Ideas */}
-        <section>
-          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">
-            🚀 Project Ideas
-          </h2>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            {sections.project_ideas.map((project, index) => (
-              <div key={index} className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className={`px-3 py-1 rounded-full text-sm font-bold ${
-                    project.difficulty === 'Beginner' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300' :
-                    project.difficulty === 'Intermediate' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300' :
-                    'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300'
-                  }`}>
-                    {project.difficulty}
-                  </span>
                 </div>
-                
-                <h3 className="text-xl font-bold mb-3 text-gray-800 dark:text-gray-200">
-                  {project.title}
-                </h3>
-                
-                <p className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
-                  {project.description}
-                </p>
-                
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((tech, techIndex) => (
-                    <span
-                      key={techIndex}
-                      className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm"
+            </header>
+            <main className="max-w-7xl mx-auto px-6 py-12 space-y-16">
+                <section className="transform hover:scale-105 transition-transform duration-300">
+                    <h2 className="text-4xl font-bold mb-6 text-center">
+                        🎯
+                        <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                            Why Queues Matter
+                        </span>
+                    </h2>
+                    <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border-l-8 border-purple-500">
+                        <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-200 italic">
+                            {sections.student_hook}
+                        </p>
+                    </div>
+                </section>
+                <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
+                    <button
+                        onClick={() => setActiveTab("singly")}
+                        className={`w-full sm:w-auto px-6 py-2 rounded-full font-bold transition-all duration-300 ${activeTab === "singly"
+                            ? "bg-blue-600 text-white shadow-lg"
+                            : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
+                            }`}
                     >
-                      {tech}
-                    </span>
-                  ))}
+                        Singly Queue
+                    </button>
+                    <button
+                        onClick={() => setActiveTab("doubly")}
+                        className={`w-full sm:w-auto px-6 py-2 rounded-full font-bold transition-all duration-300 ${activeTab === "doubly"
+                            ? "bg-green-600 text-white shadow-lg"
+                            : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
+                            }`}
+                    >
+                        Double-Ended Queue
+                    </button>
+                    <button
+                        onClick={() => setActiveTab("circular")}
+                        className={`w-full sm:w-auto px-6 py-2 rounded-full font-bold transition-all duration-300 ${activeTab === "circular"
+                            ? "bg-purple-600 text-white shadow-lg"
+                            : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
+                            }`}
+                    >
+                        Circular Queue
+                    </button>
+                    <button
+                        onClick={() => setActiveTab("priority")}
+                        className={`w-full sm:w-auto px-6 py-2 rounded-full font-bold transition-all duration-300 ${activeTab === "priority"
+                            ? "bg-orange-600 text-white shadow-lg"
+                            : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
+                            }`}
+                    >
+                        Priority Queue
+                    </button>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Footer */}
-        <footer className="text-center py-12 bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-2xl">
-          <h3 className="text-2xl font-bold mb-4">🎓 Keep Learning!</h3>
-          <p className="text-gray-300 mb-6">
-            Queues are essential for fair resource management and sequential processing. Practice implementing them in different scenarios
-            and explore their applications in system design and algorithms.
-          </p>
-          <div className="flex justify-center space-x-4 text-sm">
-            <span className="px-4 py-2 bg-white/10 rounded-full">📚 Study More DSA</span>
-            <span className="px-4 py-2 bg-white/10 rounded-full">💡 Practice Problems</span>
-            <span className="px-4 py-2 bg-white/10 rounded-full">🚀 Build Projects</span>
-          </div>
-        </footer>
-      </main>
-    </div>
-  );
+                <section>
+                    <h2 className="text-5xl font-bold mb-8 text-center">
+                        {activeTab === "singly" && "🔗"}
+                        {activeTab === "doubly" && "↔️"}
+                        {activeTab === "circular" && "🔄"}
+                        {activeTab === "priority" && "🌟"}
+                        <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                            {activeSection.concept.split(' ')[1].slice(0, -1) + " Queue"}
+                        </span>
+                    </h2>
+                    <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-8 border-l-8 border-purple-500">
+                        <h3 className="text-2xl font-bold mb-4 text-purple-700 dark:text-purple-300">
+                            💡 Understanding {activeSection.concept.split(' ')[1].slice(0, -1)} Queue
+                        </h3>
+                        <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200 mb-4">
+                            {activeSection.concept}
+                        </p>
+                        <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border-l-4 border-purple-400">
+                            <p className="text-purple-800 dark:text-purple-200 font-medium">
+                                <span className="font-bold">Real-world example:</span>{" "}
+                                {activeSection.realWorldExample}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-8 mt-8">
+                        <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-green-500">
+                            <h3 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-300">
+                                ✅ Advantages
+                            </h3>
+                            <ul className="space-y-3">
+                                {activeSection.advantages.map((advantage, index) => (
+                                    <li key={index} className="flex items-start space-x-3">
+                                        <span className="text-green-500 text-lg">
+                                            {advantage.split(" ")[0]}
+                                        </span>
+                                        <span className="text-gray-700 dark:text-gray-300">
+                                            {advantage.substring(2)}
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-red-500">
+                            <h3 className="text-2xl font-bold mb-4 text-red-700 dark:text-red-300">
+                                ❌ Disadvantages
+                            </h3>
+                            <ul className="space-y-3">
+                                {activeSection.disadvantages.map(
+                                    (disadvantage, index) => (
+                                        <li key={index} className="flex items-start space-x-3">
+                                            <span className="text-red-500 text-lg">
+                                                {disadvantage.split(" ")[0]}
+                                            </span>
+                                            <span className="text-gray-700 dark:text-gray-300">
+                                                {disadvantage.substring(2)}
+                                            </span>
+                                        </li>
+                                    )
+                                )}
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="mt-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
+                        <h3 className="text-2xl font-bold mb-6 text-center text-purple-700 dark:text-purple-300">
+                            🏢 {activeSection.concept.split(' ')[1].slice(0, -1)} Queue in Industry
+                        </h3>
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {activeSection.industry_applications.map(
+                                (application, index) => (
+                                    <div
+                                        key={index}
+                                        className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-xl border-l-4 border-purple-400 hover:shadow-lg transition-shadow duration-300"
+                                    >
+                                        <p className="text-gray-700 dark:text-gray-300">
+                                            {application}
+                                        </p>
+                                    </div>
+                                )
+                            )}
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2 className="text-4xl font-bold mb-8 text-center">
+                        💻
+                        <span className="bg-gradient-to-r from-rose-600 to-orange-600 bg-clip-text text-transparent">
+                            Real-World Code Examples
+                        </span>
+                    </h2>
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+                        <div className="bg-gray-100 dark:bg-gray-700 p-4">
+                            <div className="flex flex-wrap justify-center gap-2">
+                                {languages.map((lang) => (
+                                    <button
+                                        key={lang}
+                                        onClick={() => setSelectedLanguage(lang)}
+                                        className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${selectedLanguage === lang
+                                            ? "bg-rose-500 text-white shadow-lg"
+                                            : "bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-500"
+                                            }`}
+                                    >
+                                        {lang.toUpperCase()}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="p-6">
+                            <pre className="bg-gray-900 text-white p-6 rounded-xl overflow-x-auto text-sm leading-relaxed">
+                                <code
+                                    dangerouslySetInnerHTML={{
+                                        __html: highlightSyntax(getCodeExample(selectedLanguage), selectedLanguage),
+                                    }}
+                                />
+                            </pre>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent">
+                        ⚡ Performance Analysis
+                    </h2>
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+                        <table className="w-full text-xs sm:text-sm md:text-base">
+                            <thead className="bg-gray-100 dark:bg-gray-700">
+                                <tr>
+                                    <th className="px-2 py-2 sm:px-4 sm:py-3 text-left font-semibold text-gray-800 dark:text-gray-200">
+                                        Operation
+                                    </th>
+                                    <th className="px-2 py-2 sm:px-4 sm:py-3 text-center font-semibold text-gray-800 dark:text-gray-200">
+                                        Time
+                                    </th>
+                                    <th className="px-2 py-2 sm:px-4 sm:py-3 text-center font-semibold text-gray-800 dark:text-gray-200">
+                                        Space
+                                    </th>
+                                    <th className="px-2 py-2 sm:px-4 sm:py-3 text-left font-semibold text-gray-800 dark:text-gray-200">
+                                        Notes
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
+                                {
+                                    [
+                                        activeTab === "singly" && { operation: "Enqueue", time: "O(1)", space: "O(1)", notes: "Constant time with a rear pointer." },
+                                        activeTab === "singly" && { operation: "Dequeue", time: "O(1)", space: "O(1)", notes: "Constant time with a front pointer." },
+                                        activeTab === "doubly" && { operation: "Add to Front/Rear", time: "O(1)", space: "O(1)", notes: "Constant time for all insertions." },
+                                        activeTab === "doubly" && { operation: "Remove from Front/Rear", time: "O(1)", space: "O(1)", notes: "Constant time for all deletions." },
+                                        activeTab === "circular" && { operation: "Enqueue", time: "O(1)", space: "O(1)", notes: "Constant time using modulo arithmetic." },
+                                        activeTab === "circular" && { operation: "Dequeue", time: "O(1)", space: "O(1)", notes: "Constant time using modulo arithmetic." },
+                                        activeTab === "priority" && { operation: "Enqueue", time: "O(log n)", space: "O(1)", notes: "Logarithmic time to maintain heap property." },
+                                        activeTab === "priority" && { operation: "Dequeue", time: "O(log n)", space: "O(1)", notes: "Logarithmic time to maintain heap property." },
+                                    ].filter(Boolean).map((row, index) => (
+                                        <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150">
+                                            <td className="px-2 py-2 sm:px-4 sm:py-3 font-medium text-gray-800 dark:text-gray-200">
+                                                {row.operation}
+                                            </td>
+                                            <td className="px-2 py-2 sm:px-4 sm:py-3 text-center">
+                                                <span className={`px-2 py-1 rounded text-[10px] sm:text-xs font-mono ${row.time === "O(1)" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300" : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300"}`}>
+                                                    {row.time}
+                                                </span>
+                                            </td>
+                                            <td className="px-2 py-2 sm:px-4 sm:py-3 text-center">
+                                                <span className="px-2 py-1 rounded text-[10px] sm:text-xs font-mono bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                                                    {row.space}
+                                                </span>
+                                            </td>
+                                            <td className="px-2 py-2 sm:px-4 sm:py-3 text-gray-700 dark:text-gray-300 text-[11px] sm:text-sm">
+                                                {row.notes}
+                                            </td>
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <section>
+                    <h2 className="text-4xl font-bold mb-8 text-center">
+                        🎤
+                        <span className="bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent">
+                            Interview Questions & Answers
+                        </span>
+                    </h2>
+                    <div className="space-y-4">
+                        {sections.interview_questions.map((qa, index) => (
+                            <div
+                                key={index}
+                                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden"
+                            >
+                                <button
+                                    onClick={() =>
+                                        setSelectedQuestionIndex(selectedQuestionIndex === index ? -1 : index)
+                                    }
+                                    className="w-full p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                                >
+                                    <div className="flex justify-between items-start">
+                                        <div className="flex-1">
+                                            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                                                {qa.question}
+                                            </h3>
+                                            <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${qa.difficulty === "Easy"
+                                                ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+                                                : qa.difficulty === "Medium"
+                                                    ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300"
+                                                    : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
+                                                }`}>
+                                                {qa.difficulty}
+                                            </span>
+                                        </div>
+                                        <div className="ml-4">
+                                            <svg
+                                                className={`w-6 h-6 transition-transform duration-200 ${selectedQuestionIndex === index ? "rotate-180" : ""}`}
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M19 9l-7 7-7-7"
+                                                />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </button>
+                                {selectedQuestionIndex === index && (
+                                    <div className="px-6 pb-6 border-t border-gray-100 dark:border-gray-700">
+                                        <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg mt-4">
+                                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                                <strong>Answer:</strong> {qa.answer}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </section>
+                <section>
+                    <h2 className="text-4xl font-bold mb-8 text-center">
+                        🚀
+                        <span className="bg-gradient-to-r from-violet-600 to-pink-600 bg-clip-text text-transparent">
+                            Hands-on Project Ideas
+                        </span>
+                    </h2>
+                    <div className="grid md:grid-cols-2 gap-8">
+                        {sections.project_ideas.map((project, index) => (
+                            <div
+                                key={index}
+                                className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-t-4 border-violet-500"
+                            >
+                                <div className="mb-4">
+                                    <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
+                                        {project.title}
+                                    </h3>
+                                    <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${project.difficulty === "Beginner"
+                                        ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+                                        : project.difficulty === "Intermediate"
+                                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300"
+                                            : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
+                                        }`}>
+                                        {project.difficulty}
+                                    </span>
+                                </div>
+                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                                    {project.description}
+                                </p>
+                                <div className="space-y-2">
+                                    <h4 className="font-semibold text-gray-800 dark:text-gray-200">
+                                        Technologies:
+                                    </h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {project.technologies.map((tech, techIndex) => (
+                                            <span
+                                                key={techIndex}
+                                                className="px-3 py-1 bg-violet-100 dark:bg-violet-900/30 text-violet-800 dark:text-violet-300 rounded-full text-sm font-medium"
+                                            >
+                                                {tech}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            </main>
+            <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-12 mt-16">
+                <div className="max-w-7xl mx-auto px-6 text-center">
+                    <h3 className="text-2xl font-bold mb-4">
+                        Master Queues Today! 🚀
+                    </h3>
+                    <p className="text-lg text-gray-300 mb-6">
+                        From basic FIFO to complex priority systems, queues are a foundational data structure for any developer.
+                    </p>
+                    <div className="flex justify-center space-x-4 text-sm">
+                        <span className="px-4 py-2 bg-white/10 rounded-full">📚 Learn</span>
+                        <span className="px-4 py-2 bg-white/10 rounded-full">💻 Practice</span>
+                        <span className="px-4 py-2 bg-white/10 rounded-full">🎯 Master</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    );
 }

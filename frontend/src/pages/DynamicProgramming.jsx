@@ -101,486 +101,63 @@ const dynamicProgrammingData = {
       "🏪 E-commerce - Recommendation systems and pricing strategies",
       "📡 Telecommunications - Network routing and bandwidth allocation",
     ],
-    code_examples: {
-      c: `// C Dynamic Programming - Fibonacci with Memoization
-#include <stdio.h>
-#include <string.h>
+  code_examples : {
+  c: `#include &lt;stdio.h&gt;
 
-#define MAX_N 100
-
-// Memoization approach
-long long memo[MAX_N];
-
-long long fibonacci_memo(int n) {
-    // Base cases
-    if (n <= 1) return n;
-    
-    // Check if already computed
-    if (memo[n] != -1) return memo[n];
-    
-    // Compute and store result
-    memo[n] = fibonacci_memo(n-1) + fibonacci_memo(n-2);
-    return memo[n];
+int fib(int n){
+    int f[n+2];
+    f[0]=0; f[1]=1;
+    for(int i=2;i&lt;=n;i++) f[i]=f[i-1]+f[i-2];
+    return f[n];
 }
 
-// Tabulation approach
-long long fibonacci_tabulation(int n) {
-    if (n <= 1) return n;
-    
-    long long dp[n+1];
-    dp[0] = 0;
-    dp[1] = 1;
-    
-    for (int i = 2; i <= n; i++) {
-        dp[i] = dp[i-1] + dp[i-2];
-    }
-    
-    return dp[n];
-}
-
-// Space-optimized tabulation
-long long fibonacci_optimized(int n) {
-    if (n <= 1) return n;
-    
-    long long prev2 = 0, prev1 = 1, current;
-    
-    for (int i = 2; i <= n; i++) {
-        current = prev1 + prev2;
-        prev2 = prev1;
-        prev1 = current;
-    }
-    
-    return current;
-}
-
-int main() {
-    int n = 40;
-    
-    // Initialize memoization array
-    memset(memo, -1, sizeof(memo));
-    
-    printf("=== Fibonacci Computation Comparison ===\\n");
-    printf("Computing F(%d):\\n", n);
-    
-    printf("Memoization: %lld\\n", fibonacci_memo(n));
-    printf("Tabulation: %lld\\n", fibonacci_tabulation(n));
-    printf("Space-Optimized: %lld\\n", fibonacci_optimized(n));
-    
-    // Demonstrate the power of DP
-    printf("\\n=== Performance Analysis ===\\n");
-    printf("Without DP: O(2^n) = %lld operations\\n", (1LL << n));
-    printf("With DP: O(n) = %d operations\\n", n);
-    printf("Speedup: %.2fx faster!\\n", (double)(1LL << n) / n);
-    
+int main(){
+    int n=10;
+    printf("%d\n",fib(n));
     return 0;
 }`,
-      cpp: `// C++ Dynamic Programming - Longest Common Subsequence
-#include <iostream>
-#include <vector>
-#include <string>
-#include <algorithm>
+
+  cpp: `#include &lt;iostream&gt;
+#include &lt;vector&gt;
 using namespace std;
 
-class LongestCommonSubsequence {
-private:
-    string text1, text2;
-    vector<vector<int>> memo;
-    
-    // Memoization approach
-    int lcs_memo(int i, int j) {
-        if (i >= text1.length() || j >= text2.length()) {
-            return 0;
-        }
-        
-        if (memo[i][j] != -1) {
-            return memo[i][j];
-        }
-        
-        if (text1[i] == text2[j]) {
-            memo[i][j] = 1 + lcs_memo(i + 1, j + 1);
-        } else {
-            memo[i][j] = max(lcs_memo(i + 1, j), lcs_memo(i, j + 1));
-        }
-        
-        return memo[i][j];
-    }
-    
-public:
-    LongestCommonSubsequence(string s1, string s2) : text1(s1), text2(s2) {
-        memo.resize(s1.length(), vector<int>(s2.length(), -1));
-    }
-    
-    // Tabulation approach with path reconstruction
-    pair<int, string> lcs_tabulation() {
-        int m = text1.length(), n = text2.length();
-        vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
-        
-        // Fill DP table
-        for (int i = 1; i <= m; i++) {
-            for (int j = 1; j <= n; j++) {
-                if (text1[i-1] == text2[j-1]) {
-                    dp[i][j] = dp[i-1][j-1] + 1;
-                } else {
-                    dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
-                }
-            }
-        }
-        
-        // Reconstruct LCS
-        string lcs = "";
-        int i = m, j = n;
-        while (i > 0 && j > 0) {
-            if (text1[i-1] == text2[j-1]) {
-                lcs = text1[i-1] + lcs;
-                i--; j--;
-            } else if (dp[i-1][j] > dp[i][j-1]) {
-                i--;
-            } else {
-                j--;
-            }
-        }
-        
-        return {dp[m][n], lcs};
-    }
-    
-    int lcs_memoization() {
-        return lcs_memo(0, 0);
-    }
-    
-    void printAnalysis() {
-        cout << "=== Longest Common Subsequence Analysis ===\\n";
-        cout << "Text 1: \\"" << text1 << "\\"\\n";
-        cout << "Text 2: \\"" << text2 << "\\"\\n";
-        
-        auto result = lcs_tabulation();
-        cout << "LCS Length: " << result.first << "\\n";
-        cout << "LCS String: \\"" << result.second << "\\"\\n";
-        
-        cout << "\\n=== Applications ===\\n";
-        cout << "📝 Text diff tools (Git, editors)\\n";
-        cout << "🧬 DNA sequence analysis\\n";
-        cout << "🔍 Plagiarism detection\\n";
-        cout << "📱 Auto-complete features\\n";
-    }
-};
+int fib(int n){
+    vector&lt;int&gt; f(n+2,0); f[1]=1;
+    for(int i=2;i&lt;=n;i++) f[i]=f[i-1]+f[i-2];
+    return f[n];
+}
 
-int main() {
-    // Example: Compare two DNA sequences
-    LongestCommonSubsequence lcs("AGGTAB", "GXTXAYB");
-    lcs.printAnalysis();
-    
-    // Example: Text similarity
-    cout << "\\n" << string(50, '=') << "\\n";
-    LongestCommonSubsequence textSim("programming", "algorithm");
-    textSim.printAnalysis();
-    
+int main(){
+    cout &lt;&lt; fib(10) &lt;&lt; endl;
     return 0;
 }`,
-      java: `// Java Dynamic Programming - Knapsack Problem
-import java.util.*;
 
-public class KnapsackProblem {
-    static class Item {
-        int weight, value;
-        String name;
-        
-        Item(String name, int weight, int value) {
-            this.name = name;
-            this.weight = weight;
-            this.value = value;
-        }
-        
-        @Override
-        public String toString() {
-            return String.format("%s (W:%d, V:%d)", name, weight, value);
-        }
+  java: `public class FibonacciDP {
+    public static int fib(int n){
+        int[] f=new int[n+2]; f[1]=1;
+        for(int i=2;i&lt;=n;i++) f[i]=f[i-1]+f[i-2];
+        return f[n];
     }
-    
-    // Memoization approach
-    public static int knapsackMemo(Item[] items, int capacity, int index, 
-                                   Map<String, Integer> memo) {
-        // Base case
-        if (index >= items.length || capacity <= 0) {
-            return 0;
-        }
-        
-        String key = index + "," + capacity;
-        if (memo.containsKey(key)) {
-            return memo.get(key);
-        }
-        
-        // Don't include current item
-        int exclude = knapsackMemo(items, capacity, index + 1, memo);
-        
-        // Include current item (if it fits)
-        int include = 0;
-        if (items[index].weight <= capacity) {
-            include = items[index].value + 
-                      knapsackMemo(items, capacity - items[index].weight, index + 1, memo);
-        }
-        
-        int result = Math.max(include, exclude);
-        memo.put(key, result);
-        return result;
-    }
-    
-    // Tabulation approach with item tracking
-    public static Result knapsackTabulation(Item[] items, int capacity) {
-        int n = items.length;
-        int[][] dp = new int[n + 1][capacity + 1];
-        
-        // Fill DP table
-        for (int i = 1; i <= n; i++) {
-            for (int w = 1; w <= capacity; w++) {
-                // Don't include current item
-                dp[i][w] = dp[i-1][w];
-                
-                // Include current item if it fits and gives better value
-                if (items[i-1].weight <= w) {
-                    int includeValue = items[i-1].value + dp[i-1][w - items[i-1].weight];
-                    if (includeValue > dp[i][w]) {
-                        dp[i][w] = includeValue;
-                    }
-                }
-            }
-        }
-        
-        // Backtrack to find selected items
-        List<Item> selectedItems = new ArrayList<>();
-        int w = capacity;
-        for (int i = n; i > 0 && dp[i][w] > 0; i--) {
-            if (dp[i][w] != dp[i-1][w]) {
-                selectedItems.add(items[i-1]);
-                w -= items[i-1].weight;
-            }
-        }
-        
-        return new Result(dp[n][capacity], selectedItems);
-    }
-    
-    static class Result {
-        int maxValue;
-        List<Item> selectedItems;
-        
-        Result(int maxValue, List<Item> selectedItems) {
-            this.maxValue = maxValue;
-            this.selectedItems = selectedItems;
-        }
-    }
-    
-    public static void main(String[] args) {
-        // Real-world example: Resource allocation for a project
-        Item[] items = {
-            new Item("Machine Learning Engineer", 5, 80),
-            new Item("Frontend Developer", 3, 50),
-            new Item("Backend Developer", 4, 60),
-            new Item("DevOps Engineer", 2, 40),
-            new Item("UI/UX Designer", 3, 45),
-            new Item("Product Manager", 2, 35),
-            new Item("Data Scientist", 4, 70)
-        };
-        
-        int budgetCapacity = 15; // Budget units available
-        
-        System.out.println("=== Project Team Optimization (Knapsack) ===");
-        System.out.println("Available Budget: " + budgetCapacity + " units");
-        System.out.println("\\nAvailable Team Members:");
-        for (Item item : items) {
-            System.out.println("  " + item);
-        }
-        
-        // Memoization solution
-        Map<String, Integer> memo = new HashMap<>();
-        int memoResult = knapsackMemo(items, budgetCapacity, 0, memo);
-        
-        // Tabulation solution
-        Result tabulationResult = knapsackTabulation(items, budgetCapacity);
-        
-        System.out.println("\\n=== Optimal Team Selection ===");
-        System.out.println("Maximum Team Value: " + tabulationResult.maxValue);
-        System.out.println("Selected Team Members:");
-        
-        int totalWeight = 0;
-        for (Item item : tabulationResult.selectedItems) {
-            System.out.println("  ✓ " + item);
-            totalWeight += item.weight;
-        }
-        
-        System.out.println("\\nTotal Budget Used: " + totalWeight + "/" + budgetCapacity);
-        System.out.println("Budget Efficiency: " + 
-                           String.format("%.2f", (double)tabulationResult.maxValue / totalWeight) + 
-                           " value per unit");
-        
-        System.out.println("\\n=== Algorithm Comparison ===");
-        System.out.println("Memoization Result: " + memoResult);
-        System.out.println("Tabulation Result: " + tabulationResult.maxValue);
-        System.out.println("✓ Both approaches give same optimal result!");
+    public static void main(String[] args){
+        System.out.println(fib(10));
     }
 }`,
-      python: `# Python Dynamic Programming - Edit Distance (Levenshtein Distance)
-import time
-from functools import lru_cache
 
-class EditDistanceAnalyzer:
-    def __init__(self, str1, str2):
-        self.str1 = str1
-        self.str2 = str2
-        self.memo = {}
-    
-    # Memoization approach
-    @lru_cache(maxsize=None)
-    def edit_distance_memo(self, i, j):
-        """Top-down DP with memoization"""
-        if i == 0:
-            return j
-        if j == 0:
-            return i
-        
-        if self.str1[i-1] == self.str2[j-1]:
-            return self.edit_distance_memo(i-1, j-1)
-        
-        return 1 + min(
-            self.edit_distance_memo(i, j-1),     # Insert
-            self.edit_distance_memo(i-1, j),     # Remove
-            self.edit_distance_memo(i-1, j-1)    # Replace
-        )
-    
-    # Tabulation approach
-    def edit_distance_tabulation(self):
-        """Bottom-up DP with tabulation"""
-        m, n = len(self.str1), len(self.str2)
-        dp = [[0] * (n + 1) for _ in range(m + 1)]
-        
-        # Initialize base cases
-        for i in range(m + 1):
-            dp[i][0] = i
-        for j in range(n + 1):
-            dp[0][j] = j
-        
-        # Fill DP table
-        for i in range(1, m + 1):
-            for j in range(1, n + 1):
-                if self.str1[i-1] == self.str2[j-1]:
-                    dp[i][j] = dp[i-1][j-1]
-                else:
-                    dp[i][j] = 1 + min(
-                        dp[i-1][j],      # Remove
-                        dp[i][j-1],      # Insert
-                        dp[i-1][j-1]     # Replace
-                    )
-        
-        return dp[m][n]
+  python: `def fib(n):
+    f=[0]*(n+2); f[1]=1
+    for i in range(2,n+1): f[i]=f[i-1]+f[i-2]
+    return f[n]
 
-def analyze_performance():
-    """Compare different approaches and their performance"""
-    test_cases = [
-        ("kitten", "sitting"),
-        ("saturday", "sunday"),
-        ("intention", "execution")
-    ]
-    
-    print("=== Edit Distance Analysis & Performance Comparison ===\\n")
-    
-    for str1, str2 in test_cases:
-        analyzer = EditDistanceAnalyzer(str1, str2)
-        
-        print(f"Comparing: '{str1}' → '{str2}'")
-        print("-" * 50)
-        
-        # Tabulation
-        start_time = time.time()
-        distance = analyzer.edit_distance_tabulation()
-        tabulation_time = time.time() - start_time
-        
-        # Memoization
-        start_time = time.time()
-        memo_distance = analyzer.edit_distance_memo(len(str1), len(str2))
-        memo_time = time.time() - start_time
-        
-        print(f"Edit Distance: {distance}")
-        print(f"Tabulation Time: {tabulation_time:.6f}s")
-        print(f"Memoization Time: {memo_time:.6f}s")
-        print("\\n" + "="*60 + "\\n")
+print(fib(10))`,
 
-if __name__ == "__main__":
-    analyze_performance()`,
-      javascript: `// JavaScript Dynamic Programming - Coin Change Problem
-class CoinChangeAnalyzer {
-    constructor(coins) {
-        this.coins = coins.sort((a, b) => a - b);
-        this.memoCache = new Map();
-    }
-    
-    // Tabulation approach - Bottom Up
-    coinChangeTabulation(amount) {
-        const dp = new Array(amount + 1).fill(Infinity);
-        dp[0] = 0;
-        
-        // Build solution for all amounts from 1 to target
-        for (let i = 1; i <= amount; i++) {
-            for (const coin of this.coins) {
-                if (coin <= i) {
-                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
-                }
-            }
-        }
-        
-        return dp[amount] === Infinity ? -1 : dp[amount];
-    }
-    
-    // Get the actual coins used (with backtracking)
-    getCoinCombination(amount) {
-        const dp = new Array(amount + 1).fill(Infinity);
-        const parent = new Array(amount + 1).fill(-1);
-        dp[0] = 0;
-        
-        for (let i = 1; i <= amount; i++) {
-            for (const coin of this.coins) {
-                if (coin <= i && dp[i - coin] + 1 < dp[i]) {
-                    dp[i] = dp[i - coin] + 1;
-                    parent[i] = coin;
-                }
-            }
-        }
-        
-        if (dp[amount] === Infinity) return { minCoins: -1, combination: [] };
-        
-        // Reconstruct the combination
-        const combination = [];
-        let current = amount;
-        while (current > 0) {
-            const coin = parent[current];
-            combination.push(coin);
-            current -= coin;
-        }
-        
-        return { minCoins: dp[amount], combination: combination.sort((a, b) => b - a) };
-    }
-}
+  javascript: `let n=10;
+let f=Array(n+2).fill(0); f[1]=1;
+for(let i=2;i&lt;=n;i++) f[i]=f[i-1]+f[i-2];
+console.log(f[n]);`
+},
 
-function runDemo() {
-    console.log("=== Coin Change Demo ===\\n");
-    
-    const scenarios = [
-        { coins: [1, 5, 10, 25], amount: 67, name: "US Coins" },
-        { coins: [1, 4, 5], amount: 8, name: "Greedy Fails Case" }
-    ];
-    
-    scenarios.forEach(({ coins, amount, name }) => {
-        console.log(\`\\n📊 Test Case: \${name}\`);
-        console.log(\`Coins: [\${coins.join(', ')}], Target: \${amount}\`);
-        console.log("-".repeat(50));
-        
-        const analyzer = new CoinChangeAnalyzer(coins);
-        const { minCoins, combination } = analyzer.getCoinCombination(amount);
-        
-        console.log(\`Minimum coins needed: \${minCoins}\`);
-        console.log(\`Optimal combination: [\${combination.join(', ')}]\`);
-    });
-}
 
-runDemo();`,
-    },
+
     project_ideas: [
       {
         title: "Stock Trading Profit Optimizer",
@@ -849,7 +426,43 @@ export default function DynamicProgrammingPage() {
   // MOVED VISUALIZATION COMPONENTS HERE, INSIDE THE MAIN COMPONENT
   
   // Fibonacci Visualization Component
-  const FibonacciVisualization = () => (
+
+
+const FibonacciVisualization = () => {
+  const [fibN, setFibN] = React.useState(0);
+  const [fibResult, setFibResult] = React.useState(null);
+  const [fibComputations, setFibComputations] = React.useState([]);
+  const [animatingFib, setAnimatingFib] = React.useState(false);
+
+  const memo = React.useRef({ 0: 0, 1: 1 });
+
+  const calculateFibonacci = () => {
+    if (animatingFib) return;
+    setAnimatingFib(true);
+
+    const n = fibN;
+
+    const fib = (num) => {
+      if (memo.current[num] !== undefined) return memo.current[num];
+      const result = fib(num - 1) + fib(num - 2);
+      memo.current[num] = result;
+      return result;
+    };
+
+    const result = fib(n);
+
+    setFibResult(result);
+
+    // Save recent computations
+    setFibComputations((prev) => [
+      ...prev,
+      { n, result, fromCache: memo.current[n] !== undefined && n !== 0 && n !== 1 },
+    ]);
+
+    setTimeout(() => setAnimatingFib(false), 300); // small delay for animation effect
+  };
+
+  return (
     <div className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-blue-200 dark:border-blue-800">
       <h3 className="text-2xl font-bold mb-6 text-center text-blue-800 dark:text-blue-200">
         📈 Fibonacci Sequence with Memoization
@@ -863,7 +476,9 @@ export default function DynamicProgrammingPage() {
           <input
             type="number"
             value={fibN}
-            onChange={(e) => setFibN(Math.max(0, parseInt(e.target.value) || 0))}
+            onChange={(e) =>
+              setFibN(Math.max(0, parseInt(e.target.value, 10) || 0))
+            }
             min="0"
             max="50"
             className="w-16 px-2 py-1 border-2 border-blue-300 dark:border-blue-600 rounded-lg bg-white dark:bg-gray-700 text-center"
@@ -921,9 +536,51 @@ export default function DynamicProgrammingPage() {
       )}
     </div>
   );
+};
+
+
+
 
   // Coin Change Visualization Component
-  const CoinChangeVisualization = () => (
+
+
+const CoinChangeVisualization = () => {
+  const [coins, setCoins] = React.useState([1, 5, 10, 25]);
+  const [targetAmount, setTargetAmount] = React.useState(0);
+  const [coinResult, setCoinResult] = React.useState(null);
+  const [animatingCoin, setAnimatingCoin] = React.useState(false);
+
+  // Coin change calculation using DP
+  const calculateCoinChange = () => {
+    if (coins.length === 0 || targetAmount <= 0) return;
+
+    setAnimatingCoin(true);
+
+    const dp = Array(targetAmount + 1).fill(Infinity);
+    const combination = Array(targetAmount + 1).fill(null);
+
+    dp[0] = 0;
+    combination[0] = [];
+
+    for (let amt = 1; amt <= targetAmount; amt++) {
+      for (let coin of coins) {
+        if (amt - coin >= 0 && dp[amt - coin] + 1 < dp[amt]) {
+          dp[amt] = dp[amt - coin] + 1;
+          combination[amt] = [...combination[amt - coin], coin];
+        }
+      }
+    }
+
+    setCoinResult(
+      dp[targetAmount] === Infinity
+        ? { minCoins: -1, combination: [] }
+        : { minCoins: dp[targetAmount], combination: combination[targetAmount] }
+    );
+
+    setTimeout(() => setAnimatingCoin(false), 300); // animation effect
+  };
+
+  return (
     <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border-2 border-green-200 dark:border-green-800">
       <h3 className="text-2xl font-bold mb-6 text-center text-green-800 dark:text-green-200">
         💰 Coin Change Problem Solver
@@ -957,13 +614,21 @@ export default function DynamicProgrammingPage() {
             type="number"
             value={targetAmount}
             onChange={(e) =>
-              setTargetAmount(Math.max(1, parseInt(e.target.value) || 1))
+              setTargetAmount(Math.max(0, parseInt(e.target.value, 10) || 0))
             }
-            min="1"
-            max="1000"
+            min="0"
             className="w-full px-3 py-2 border-2 border-green-300 dark:border-green-600 rounded-lg bg-white dark:bg-gray-700"
           />
         </div>
+      </div>
+
+      <div className="flex justify-center mb-6">
+        <button
+          onClick={calculateCoinChange}
+          className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transform hover:scale-105 shadow-lg text-sm"
+        >
+          Solve
+        </button>
       </div>
 
       {coinResult && (
@@ -1013,6 +678,10 @@ export default function DynamicProgrammingPage() {
       )}
     </div>
   );
+};
+
+
+
 
   // Knapsack Visualization Component
   const KnapsackVisualization = () => (

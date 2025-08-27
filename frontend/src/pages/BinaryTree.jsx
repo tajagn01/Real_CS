@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 
 const binaryTreeData = {
   topic: "Binary Tree",
@@ -59,813 +59,254 @@ const binaryTreeData = {
       }
     },
 
-    code_examples: {
-      c: `// C Binary Search Tree Implementation - File System Navigator
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-#define MAX_NAME_LENGTH 256
+code_examples : {
+  c: `#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
 
-// Represents a single node (a file) in the tree
 typedef struct TreeNode {
-    int fileSize; // The key for the BST
-    char fileName[MAX_NAME_LENGTH];
-    struct TreeNode* left;
-    struct TreeNode* right;
+    int fileSize;
+    char fileName[256];
+    struct TreeNode* left;
+    struct TreeNode* right;
 } TreeNode;
 
-/**
- * @brief Creates a new TreeNode.
- * @param size The file size (the node's key).
- * @param name The name of the file.
- * @return A pointer to the newly allocated TreeNode.
- */
 TreeNode* createNode(int size, const char* name) {
-    // Allocate memory for the new node
-    TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
-    newNode->fileSize = size;
-    strncpy(newNode->fileName, name, MAX_NAME_LENGTH - 1);
-    newNode->fileName[MAX_NAME_LENGTH - 1] = '\\0'; // Ensure null-termination
-    newNode->left = newNode->right = NULL;
-    return newNode;
+    TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
+    newNode-&gt;fileSize = size;
+    strncpy(newNode-&gt;fileName, name, 255);
+    newNode-&gt;fileName[255] = '\0';
+    newNode-&gt;left = newNode-&gt;right = NULL;
+    return newNode;
 }
 
-/**
- * @brief Inserts a new file into the BST recursively.
- * @param root The current root of the tree/subtree.
- * @param size The file size to insert.
- * @param name The name of the file to insert.
- * @return The root of the modified tree.
- */
 TreeNode* insertFile(TreeNode* root, int size, const char* name) {
-    // Base case: If the tree is empty, create a new node and return it as the new root.
-    if (root == NULL) {
-        printf("📁 Created file: %s (%d KB)\\n", name, size);
-        return createNode(size, name);
-    }
-
-    // Recursive step: Otherwise, recur down the tree
-    if (size < root->fileSize) {
-        root->left = insertFile(root->left, size, name);
-    } else if (size > root->fileSize) {
-        root->right = insertFile(root->right, size, name);
-    } else {
-        // Duplicate sizes are not allowed in this simple BST
-        printf("⚠️ File size %d already exists! Could not add '%s'.\\n", size, name);
-    }
-    return root;
+    if (root == NULL) return createNode(size, name);
+    if (size &lt; root-&gt;fileSize) root-&gt;left = insertFile(root-&gt;left, size, name);
+    else if (size &gt; root-&gt;fileSize) root-&gt;right = insertFile(root-&gt;right, size, name);
+    return root;
 }
 
-/**
- * @brief Finds the node with the minimum value in a given tree.
- * The minimum value is always the leftmost node.
- * @param node The root of the tree to search.
- * @return The node with the minimum value.
- */
 TreeNode* findMin(TreeNode* node) {
-    TreeNode* current = node;
-    while (current && current->left != NULL) {
-        current = current->left;
-    }
-    return current;
+    while (node &amp;&amp; node-&gt;left != NULL) node = node-&gt;left;
+    return node;
 }
 
-/**
- * @brief Deletes a file by its size from the BST.
- * @param root The current root of the tree/subtree.
- * @param size The file size to delete.
- * @return The root of the modified tree.
- */
 TreeNode* deleteFile(TreeNode* root, int size) {
-    if (root == NULL) return root;
-
-    // Find the node to delete
-    if (size < root->fileSize) {
-        root->left = deleteFile(root->left, size);
-    } else if (size > root->fileSize) {
-        root->right = deleteFile(root->right, size);
-    } else { // Node found!
-        printf("🗑️ Deleting file: %s (%d KB)\\n", root->fileName, root->fileSize);
-        // Case 1: Node with only one child or no child
-        if (root->left == NULL) {
-            TreeNode* temp = root->right;
-            free(root); // Free the memory
-            return temp;
-        } else if (root->right == NULL) {
-            TreeNode* temp = root->left;
-            free(root); // Free the memory
-            return temp;
-        }
-        // Case 2: Node with two children
-        // Get the in-order successor (smallest in the right subtree)
-        TreeNode* temp = findMin(root->right);
-        // Copy the successor's content to this node
-        root->fileSize = temp->fileSize;
-        strcpy(root->fileName, temp->fileName);
-        // Delete the in-order successor
-        root->right = deleteFile(root->right, temp->fileSize);
-    }
-    return root;
+    if (root == NULL) return root;
+    if (size &lt; root-&gt;fileSize) root-&gt;left = deleteFile(root-&gt;left, size);
+    else if (size &gt; root-&gt;fileSize) root-&gt;right = deleteFile(root-&gt;right, size);
+    else {
+        if (root-&gt;left == NULL) {
+            TreeNode* temp = root-&gt;right; free(root); return temp;
+        } else if (root-&gt;right == NULL) {
+            TreeNode* temp = root-&gt;left; free(root); return temp;
+        }
+        TreeNode* temp = findMin(root-&gt;right);
+        root-&gt;fileSize = temp-&gt;fileSize;
+        strcpy(root-&gt;fileName, temp-&gt;fileName);
+        root-&gt;right = deleteFile(root-&gt;right, temp-&gt;fileSize);
+    }
+    return root;
 }
 
-// --- TRAVERSALS ---
-
-// Pre-order: Root -> Left -> Right
-void preorderTraversal(TreeNode* root) {
-    if (root != NULL) {
-        printf("%s (%d KB) -> ", root->fileName, root->fileSize);
-        preorderTraversal(root->left);
-        preorderTraversal(root->right);
-    }
-}
-
-// In-order: Left -> Root -> Right (gives sorted order)
 void inorderTraversal(TreeNode* root) {
-    if (root != NULL) {
-        inorderTraversal(root->left);
-        printf("%s (%d KB) -> ", root->fileName, root->fileSize);
-        inorderTraversal(root->right);
-    }
-}
-
-// Post-order: Left -> Right -> Root
-void postorderTraversal(TreeNode* root) {
-    if (root != NULL) {
-        postorderTraversal(root->left);
-        postorderTraversal(root->right);
-        printf("%s (%d KB) -> ", root->fileName, root->fileSize);
-    }
-}
-
-/**
- * @brief Frees the entire tree to prevent memory leaks.
- * Uses post-order traversal to delete children before the parent.
- * @param root The root of the tree to free.
- */
-void freeTree(TreeNode* root) {
-    if (root == NULL) return;
-    freeTree(root->left);
-    freeTree(root->right);
-    free(root);
+    if (root != NULL) {
+        inorderTraversal(root-&gt;left);
+        printf("%s (%d KB) -&gt; ", root-&gt;fileName, root-&gt;fileSize);
+        inorderTraversal(root-&gt;right);
+    }
 }
 
 int main() {
-    // Start with an empty tree
-    TreeNode* fileSystem = NULL;
-    
-    // Insert files
-    fileSystem = insertFile(fileSystem, 500, "document.pdf");
-    fileSystem = insertFile(fileSystem, 250, "image.jpg");
-    fileSystem = insertFile(fileSystem, 750, "video.mp4");
-    fileSystem = insertFile(fileSystem, 100, "notes.txt");
-    fileSystem = insertFile(fileSystem, 300, "archive.zip");
-    
-    // Display traversals
-    printf("\\n--- 🌿 Pre-order Traversal (Root -> Left -> Right) ---\\n");
-    preorderTraversal(fileSystem);
-    printf("END\\n");
-
-    printf("\\n--- 📊 In-order Traversal (Sorted by Size) ---\\n");
-    inorderTraversal(fileSystem);
-    printf("END\\n");
-
-    printf("\\n--- 🍃 Post-order Traversal (Left -> Right -> Root) ---\\n");
-    postorderTraversal(fileSystem);
-    printf("END\\n\\n");
-    
-    // Delete a file
-    fileSystem = deleteFile(fileSystem, 250);
-    printf("\\n--- 📊 In-order Traversal after deleting 250 KB ---\\n");
-    inorderTraversal(fileSystem);
-    printf("END\\n");
-
-    // IMPORTANT: Clean up all allocated memory before exiting
-    printf("\\n🧹 Freeing all tree nodes...\\n");
-    freeTree(fileSystem);
-    fileSystem = NULL;
-    printf("Memory freed successfully!\\n");
-    
-    return 0;
+    TreeNode* fs = NULL;
+    fs = insertFile(fs, 500, "document.pdf");
+    fs = insertFile(fs, 250, "image.jpg");
+    fs = insertFile(fs, 750, "video.mp4");
+    inorderTraversal(fs);
+    fs = deleteFile(fs, 250);
+    inorderTraversal(fs);
+    return 0;
 }`,
-      cpp: `// C++ Binary Search Tree Implementation - Grade Management System
-#include <iostream>
-#include <string>
-#include <queue> // For level-order traversal
 
-// Use the standard namespace for cout, string, etc.
-using namespace std;
+  cpp: `#include &lt;iostream&gt;
+#include &lt;string&gt;
 
-// Represents a single student node in the tree
-struct Student {
-    int grade; // The key for the BST
-    string name;
-    Student* left;
-    Student* right;
-    
-    // Constructor for easy creation
-    Student(int g, string n) : grade(g), name(n), left(nullptr), right(nullptr) {}
-};
-
-// The class that manages the entire tree
 class GradeTree {
-private:
-    Student* root;
+    struct Student {
+        int grade;
+        std::string name;
+        Student* left;
+        Student* right;
+        Student(int g, std::string n): grade(g), name(n), left(nullptr), right(nullptr) {}
+    };
+    Student* root;
 
-    // --- PRIVATE HELPER METHODS (for recursion) ---
+    Student* insertHelper(Student* node, int grade, std::string name) {
+        if (!node) return new Student(grade, name);
+        if (grade &lt; node-&gt;grade) node-&gt;left = insertHelper(node-&gt;left, grade, name);
+        else if (grade &gt; node-&gt;grade) node-&gt;right = insertHelper(node-&gt;right, grade, name);
+        return node;
+    }
 
-    /**
-     * @brief Recursively inserts a new student.
-     * @param node The current node in the traversal.
-     * @param grade The grade of the new student.
-     * @param name The name of the new student.
-     * @return The root of the modified subtree.
-     */
-    Student* insertHelper(Student* node, int grade, string name) {
-        if (node == nullptr) {
-            cout << "✅ Added student: " << name << " (Grade: " << grade << ")" << endl;
-            return new Student(grade, name);
-        }
-        if (grade < node->grade) {
-            node->left = insertHelper(node->left, grade, name);
-        } else if (grade > node->grade) {
-            node->right = insertHelper(node->right, grade, name);
-        } else {
-            cout << "⚠️ Grade " << grade << " already exists for " << node->name << "!" << endl;
-        }
-        return node;
-    }
+    Student* findMin(Student* node) {
+        while (node &amp;&amp; node-&gt;left) node = node-&gt;left;
+        return node;
+    }
 
-    Student* findMin(Student* node) {
-        while (node && node->left != nullptr) {
-            node = node->left;
-        }
-        return node;
-    }
-    
-    Student* deleteHelper(Student* node, int grade) {
-        if (node == nullptr) {
-            cout << "⚠️ Grade " << grade << " not found to delete!" << endl;
-            return node;
-        }
+    Student* deleteHelper(Student* node, int grade) {
+        if (!node) return node;
+        if (grade &lt; node-&gt;grade) node-&gt;left = deleteHelper(node-&gt;left, grade);
+        else if (grade &gt; node-&gt;grade) node-&gt;right = deleteHelper(node-&gt;right, grade);
+        else {
+            if (!node-&gt;left) { Student* t = node-&gt;right; delete node; return t; }
+            else if (!node-&gt;right) { Student* t = node-&gt;left; delete node; return t; }
+            Student* t = findMin(node-&gt;right);
+            node-&gt;grade = t-&gt;grade; node-&gt;name = t-&gt;name;
+            node-&gt;right = deleteHelper(node-&gt;right, t-&gt;grade);
+        }
+        return node;
+    }
 
-        if (grade < node->grade) {
-            node->left = deleteHelper(node->left, grade);
-        } else if (grade > node->grade) {
-            node->right = deleteHelper(node->right, grade);
-        } else { // Node found
-            cout << "🗑️ Removing: " << node->name << " (Grade: " << grade << ")" << endl;
-            if (node->left == nullptr) {
-                Student* temp = node->right;
-                delete node;
-                return temp;
-            } else if (node->right == nullptr) {
-                Student* temp = node->left;
-                delete node;
-                return temp;
-            }
-            Student* temp = findMin(node->right);
-            node->grade = temp->grade;
-            node->name = temp->name;
-            node->right = deleteHelper(node->right, temp->grade);
-        }
-        return node;
-    }
+    void inorderHelper(Student* node) {
+        if (!node) return;
+        inorderHelper(node-&gt;left);
+        std::cout &lt;&lt; node-&gt;name &lt;&lt; "(" &lt;&lt; node-&gt;grade &lt;&lt; ") -&gt; ";
+        inorderHelper(node-&gt;right);
+    }
 
-    // Recursive helpers for traversals
-    void inorderHelper(Student* node) {
-        if (node == nullptr) return;
-        inorderHelper(node->left);
-        cout << node->name << "(" << node->grade << ") -> ";
-        inorderHelper(node->right);
-    }
-
-    void preorderHelper(Student* node) {
-        if (node == nullptr) return;
-        cout << node->name << "(" << node->grade << ") -> ";
-        preorderHelper(node->left);
-        preorderHelper(node->right);
-    }
-
-    void postorderHelper(Student* node) {
-        if (node == nullptr) return;
-        postorderHelper(node->left);
-        postorderHelper(node->right);
-        cout << node->name << "(" << node->grade << ") -> ";
-    }
-    
 public:
-    // Constructor initializes an empty tree
-    GradeTree() : root(nullptr) {}
-    
-    // --- PUBLIC METHODS ---
-    
-    void insert(int grade, string name) {
-        root = insertHelper(root, grade, name);
-    }
-    
-    void remove(int grade) {
-        root = deleteHelper(root, grade);
-    }
-    
-    // Public-facing traversal methods
-    void displayInorder() {
-        cout << "--- 📊 In-order Traversal (Sorted) ---\\n";
-        inorderHelper(root);
-        cout << "END" << endl;
-    }
-    void displayPreorder() {
-        cout << "--- 🌿 Pre-order Traversal (Root-L-R) ---\\n";
-        preorderHelper(root);
-        cout << "END" << endl;
-    }
-    void displayPostorder() {
-        cout << "--- 🍃 Post-order Traversal (L-R-Root) ---\\n";
-        postorderHelper(root);
-        cout << "END" << endl;
-    }
+    GradeTree(): root(nullptr) {}
+    void insert(int g, std::string n) { root = insertHelper(root, g, n); }
+    void remove(int g) { root = deleteHelper(root, g); }
+    void display() { inorderHelper(root); std::cout &lt;&lt; "END\n"; }
 };
 
 int main() {
-    GradeTree gradebook;
-    
-    gradebook.insert(85, "Alice");
-    gradebook.insert(92, "Bob");
-    gradebook.insert(78, "Charlie");
-    gradebook.insert(88, "Diana");
-    gradebook.insert(75, "Eve");
-    
-    cout << endl;
-    gradebook.displayInorder();
-    gradebook.displayPreorder();
-    gradebook.displayPostorder();
-    cout << endl;
-
-    gradebook.remove(78);
-    cout << "\\n--- After removing Charlie (78) ---\n";
-    gradebook.displayInorder();
-    
-    return 0;
+    GradeTree gt; gt.insert(85, "Alice"); gt.insert(92, "Bob"); gt.insert(78, "Charlie");
+    gt.display();
+    gt.remove(78);
+    gt.display();
+    return 0;
 }`,
-      java: `// Java Binary Search Tree Implementation - Product Inventory System
-import java.util.*;
 
-/**
- * The Product class represents a single node in our BST.
- * Each product has an ID (which serves as the key), a name, and a price.
- */
+  java: `import java.util.*;
+
 class Product {
-    int id;
-    String name;
-    double price;
-    Product left, right;
-    
-    public Product(int id, String name, double price) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        left = right = null;
-    }
-    
-    @Override
-    public String toString() {
-        return String.format("%s (ID: %d, $%.2f)", name, id, price);
-    }
+    int id; String name; double price;
+    Product left, right;
+    Product(int id, String n, double p){ this.id=id; name=n; price=p; }
 }
 
-/**
- * The ProductInventory class manages the collection of Products in a BST.
- */
 public class ProductInventory {
-    private Product root;
-    
-    public ProductInventory() {
-        root = null;
-    }
-    
-    // --- PUBLIC METHODS ---
+    private Product root;
 
-    /**
-     * Public method to add a product. It calls the private recursive helper.
-     * @param id The product ID (key).
-     * @param name The product name.
-     * @param price The product price.
-     */
-    public void addProduct(int id, String name, double price) {
-        root = insertHelper(root, id, name, price);
-    }
-    
-    /**
-     * Public method to remove a product by its ID.
-     * @param id The ID of the product to remove.
-     */
-    public void removeProduct(int id) {
-        root = deleteHelper(root, id);
-    }
-    
-    // --- TRAVERSAL METHODS ---
-    
-    public void displayInorder() {
-        System.out.println("\\n--- 📊 In-order Traversal (Sorted by ID) ---");
-        inorderHelper(root);
-        System.out.println("END");
-    }
+    public void addProduct(int id, String n, double p) { root = insert(root,id,n,p); }
+    public void removeProduct(int id) { root = delete(root,id); }
+    public void display() { inorder(root); System.out.println("END"); }
 
-    public void displayPreorder() {
-        System.out.println("\\n--- 🌿 Pre-order Traversal (Root-L-R) ---");
-        preorderHelper(root);
-        System.out.println("END");
-    }
+    private Product insert(Product node,int id,String n,double p){
+        if(node==null) return new Product(id,n,p);
+        if(id &lt; node.id) node.left=insert(node.left,id,n,p);
+        else if(id &gt; node.id) node.right=insert(node.right,id,n,p);
+        return node;
+    }
 
-    public void displayPostorder() {
-        System.out.println("\\n--- 🍃 Post-order Traversal (L-R-Root) ---");
-        postorderHelper(root);
-        System.out.println("END");
-    }
-    
-    // --- PRIVATE HELPER METHODS ---
+    private Product delete(Product node,int id){
+        if(node==null) return node;
+        if(id &lt; node.id) node.left=delete(node.left,id);
+        else if(id &gt; node.id) node.right=delete(node.right,id);
+        else {
+            if(node.left==null) return node.right;
+            if(node.right==null) return node.left;
+            Product s=findMin(node.right);
+            node.id=s.id; node.name=s.name; node.price=s.price;
+            node.right=delete(node.right,s.id);
+        }
+        return node;
+    }
 
-    private Product insertHelper(Product node, int id, String name, double price) {
-        if (node == null) {
-            System.out.println("✅ Added: " + name + " (ID: " + id + ")");
-            return new Product(id, name, price);
-        }
-        
-        if (id < node.id) {
-            node.left = insertHelper(node.left, id, name, price);
-        } else if (id > node.id) {
-            node.right = insertHelper(node.right, id, name, price);
-        } else {
-            System.out.println("⚠️ Product with ID " + id + " already exists!");
-        }
-        return node;
-    }
-    
-    private Product deleteHelper(Product node, int id) {
-        if (node == null) {
-            System.out.println("⚠️ Product with ID " + id + " not found!");
-            return node;
-        }
-        
-        if (id < node.id) {
-            node.left = deleteHelper(node.left, id);
-        } else if (id > node.id) {
-            node.right = deleteHelper(node.right, id);
-        } else {
-            System.out.println("🗑️ Removed: " + node.toString());
-            if (node.left == null) return node.right;
-            if (node.right == null) return node.left;
-            
-            Product successor = findMin(node.right);
-            node.id = successor.id;
-            node.name = successor.name;
-            node.price = successor.price;
-            node.right = deleteHelper(node.right, successor.id);
-        }
-        return node;
-    }
-    
-    private Product findMin(Product node) {
-        while (node.left != null) {
-            node = node.left;
-        }
-        return node;
-    }
-    
-    private void inorderHelper(Product node) {
-        if (node == null) return;
-        inorderHelper(node.left);
-        System.out.println("-> " + node.toString());
-        inorderHelper(node.right);
-    }
-    private void preorderHelper(Product node) {
-        if (node == null) return;
-        System.out.println("-> " + node.toString());
-        preorderHelper(node.left);
-        preorderHelper(node.right);
-    }
-    private void postorderHelper(Product node) {
-        if (node == null) return;
-        postorderHelper(node.left);
-        postorderHelper(node.right);
-        System.out.println("-> " + node.toString());
-    }
-    
-    public static void main(String[] args) {
-        ProductInventory inventory = new ProductInventory();
-        
-        inventory.addProduct(500, "Laptop", 999.99);
-        inventory.addProduct(250, "Mouse", 25.50);
-        inventory.addProduct(750, "Monitor", 299.99);
-        inventory.addProduct(100, "Keyboard", 75.00);
-        
-        inventory.displayInorder();
-        inventory.displayPreorder();
-        inventory.displayPostorder();
-        
-        inventory.removeProduct(250);
-        System.out.println("\\n--- Inventory after removing Mouse (ID: 250) ---");
-        inventory.displayInorder();
-    }
+    private Product findMin(Product node){ while(node.left!=null) node=node.left; return node; }
+    private void inorder(Product n){ if(n!=null){ inorder(n.left); System.out.println("-&gt; "+n.name); inorder(n.right);} }
+
+    public static void main(String[] a){
+        ProductInventory inv=new ProductInventory();
+        inv.addProduct(500,"Laptop",999.99);
+        inv.addProduct(250,"Mouse",25.5);
+        inv.addProduct(750,"Monitor",299.99);
+        inv.display();
+        inv.removeProduct(250);
+        inv.display();
+    }
 }`,
-      python: `# Python Binary Search Tree Implementation - Library Book Management
-class BookNode:
-    """Represents a single book node in the Binary Search Tree."""
-    def __init__(self, isbn, title, author):
-        self.isbn = isbn  # The key for the BST
-        self.title = title
-        self.author = author
-        self.left = None
-        self.right = None
-    
-    def __str__(self):
-        """String representation of a BookNode."""
-        return f'"{self.title}" by {self.author} (ISBN: {self.isbn})'
 
-class LibrarySystem:
-    """Manages the entire collection of books in a BST."""
-    def __init__(self):
-        self.root = None
+  python: `class BookNode:
+    def __init__(self,isbn,title,author):
+        self.isbn=isbn; self.title=title; self.author=author
+        self.left=None; self.right=None
+    def __str__(self): return f'"{self.title}" by {self.author} ({self.isbn})'
 
-    # --- PUBLIC METHODS ---
+class Library:
+    def __init__(self): self.root=None
+    def add(self,isbn,title,author): self.root=self._insert(self.root,isbn,title,author)
+    def remove(self,isbn): self.root=self._delete(self.root,isbn)
+    def display(self): self._inorder(self.root); print("END")
 
-    def add_book(self, isbn, title, author):
-        """Public method to add a new book to the library."""
-        self.root = self._insert_helper(self.root, isbn, title, author)
-    
-    def remove_book(self, isbn):
-        """Public method to remove a book from the library by its ISBN."""
-        self.root = self._delete_helper(self.root, isbn)
-        
-    def find_book(self, isbn):
-        """Public method to find a book by its ISBN."""
-        return self._search_helper(self.root, isbn)
-
-    # --- TRAVERSAL METHODS ---
-
-    def display_inorder(self):
-        """Displays the library catalog sorted by ISBN."""
-        print("\\n--- 📊 In-order Traversal (Sorted by ISBN) ---")
-        self._inorder_traversal(self.root)
-        print("END")
-
-    def display_preorder(self):
-        """Displays the library catalog in pre-order."""
-        print("\\n--- 🌿 Pre-order Traversal (Root-L-R) ---")
-        self._preorder_traversal(self.root)
-        print("END")
-
-    def display_postorder(self):
-        """Displays the library catalog in post-order."""
-        print("\\n--- 🍃 Post-order Traversal (L-R-Root) ---")
-        self._postorder_traversal(self.root)
-        print("END")
-
-    # --- PRIVATE HELPER METHODS ---
-
-    def _insert_helper(self, node, isbn, title, author):
-        """Recursively finds the correct spot and inserts the new node."""
-        if node is None:
-            print(f"📚 Added: {title}")
-            return BookNode(isbn, title, author)
-        
-        if isbn < node.isbn:
-            node.left = self._insert_helper(node.left, isbn, title, author)
-        elif isbn > node.isbn:
-            node.right = self._insert_helper(node.right, isbn, title, author)
-        else:
-            print(f"⚠️ Book with ISBN {isbn} already exists!")
-        return node
-        
-    def _search_helper(self, node, isbn):
-        """Recursively searches for a node with the given ISBN."""
-        if node is None or node.isbn == isbn:
-            return node
-        
-        print(f"-> Checking node: {node.isbn}")
-        if isbn < node.isbn:
-            return self._search_helper(node.left, isbn)
-        else:
-            return self._search_helper(node.right, isbn)
-
-    def _find_min(self, node):
-        """Finds the node with the smallest key in a subtree."""
-        current = node
-        while current.left is not None:
-            current = current.left
-        return current
-
-    def _delete_helper(self, node, isbn):
-        """Recursively finds and deletes the node with the given ISBN."""
-        if node is None:
-            print(f"⚠️ Book with ISBN {isbn} not found!")
-            return node
-        
-        if isbn < node.isbn:
-            node.left = self._delete_helper(node.left, isbn)
-        elif isbn > node.isbn:
-            node.right = self._delete_helper(node.right, isbn)
-        else: # Node to be deleted is found
-            print(f"🗑️ Removing: {node}")
-            # Case 1: Node has 0 or 1 child
-            if node.left is None:
-                return node.right
-            elif node.right is None:
-                return node.left
-            
-            # Case 2: Node has two children
-            # Find the in-order successor (smallest node in the right subtree)
-            successor = self._find_min(node.right)
-            # Copy the successor's data to this node
-            node.isbn, node.title, node.author = successor.isbn, successor.title, successor.author
-            # Delete the successor from the right subtree
-            node.right = self._delete_helper(node.right, successor.isbn)
+    def _insert(self,node,isbn,t,a):
+        if not node: return BookNode(isbn,t,a)
+        if isbn&lt;node.isbn: node.left=self._insert(node.left,isbn,t,a)
+        elif isbn&gt;node.isbn: node.right=self._insert(node.right,isbn,t,a)
         return node
 
-    def _inorder_traversal(self, node):
-        if node:
-            self._inorder_traversal(node.left)
-            print(f"-> {node}")
-            self._inorder_traversal(node.right)
-            
-    def _preorder_traversal(self, node):
-        if node:
-            print(f"-> {node}")
-            self._preorder_traversal(node.left)
-            self._preorder_traversal(node.right)
+    def _findMin(self,node):
+        while node.left: node=node.left
+        return node
 
-    def _postorder_traversal(self, node):
-        if node:
-            self._postorder_traversal(node.left)
-            self._postorder_traversal(node.right)
-            print(f"-> {node}")
+    def _delete(self,node,isbn):
+        if not node: return node
+        if isbn&lt;node.isbn: node.left=self._delete(node.left,isbn)
+        elif isbn&gt;node.isbn: node.right=self._delete(node.right,isbn)
+        else:
+            if not node.left: return node.right
+            if not node.right: return node.left
+            s=self._findMin(node.right)
+            node.isbn,node.title,node.author=s.isbn,s.title,s.author
+            node.right=self._delete(node.right,s.isbn)
+        return node
 
-# --- Example Usage ---
-if __name__ == "__main__":
-    library = LibrarySystem()
-    library.add_book(500, "Data Structures 101", "John Doe")
-    library.add_book(250, "The Python Path", "Jane Smith")
-    library.add_book(750, "Learning AI", "Bob Wilson")
-    
-    library.display_inorder()
-    library.display_preorder()
-    library.display_postorder()
+    def _inorder(self,node):
+        if node: self._inorder(node.left); print("-&gt;",node); self._inorder(node.right)
 
-    print("\\n🔍 Searching for book with ISBN 750...")
-    found_book = library.find_book(750)
-    if found_book:
-        print(f"✅ Found: {found_book}")
-    else:
-        print("❌ Book not found.")
-        
-    library.remove_book(250)
-    print("\\n--- Library after removing ISBN 250 ---")
-    library.display_inorder()
-`,
-      javascript: `// JavaScript Binary Search Tree Implementation - Task Priority Manager
+if __name__=="__main__":
+    lib=Library()
+    lib.add(500,"Data Structures","John")
+    lib.add(250,"Python","Jane")
+    lib.add(750,"AI","Bob")
+    lib.display()
+    lib.remove(250)
+    lib.display()` ,
 
-/**
- * Represents a single node in the tree.
- * Each task has a priority which acts as the key.
- */
-class TaskNode {
-    constructor(priority, description) {
-        this.priority = priority;
-        this.description = description;
-        this.left = null;
-        this.right = null;
-    }
+  javascript: `class TaskNode { constructor(p,d){this.priority=p;this.description=d;this.left=null;this.right=null;} }
+class TaskMgr {
+    constructor(){this.root=null;}
+    add(p,d){this.root=this._ins(this.root,p,d);} remove(p){this.root=this._del(this.root,p);} display(){this._in(this.root);} 
+    _ins(n,p,d){ if(!n) return new TaskNode(p,d); if(p&lt;n.priority) n.left=this._ins(n.left,p,d); else if(p&gt;n.priority) n.right=this._ins(n.right,p,d); return n; }
+    _findMin(n){ while(n.left) n=n.left; return n; }
+    _del(n,p){ if(!n) return null; if(p&lt;n.priority) n.left=this._del(n.left,p); else if(p&gt;n.priority) n.right=this._del(n.right,p); else { if(!n.left) return n.right; if(!n.right) return n.left; const s=this._findMin(n.right); n.priority=s.priority; n.description=s.description; n.right=this._del(n.right,s.priority);} return n; }
+    _in(n){ if(n){this._in(n.left); console.log("-&gt; ["+n.priority+"] "+n.description); this._in(n.right);} }
 }
 
-/**
- * Manages the entire tree of tasks.
- */
-class TaskManager {
-    constructor() {
-        this.root = null;
-    }
-
-    // --- PUBLIC METHODS ---
-
-    /**
-     * Adds a new task to the manager.
-     * @param {number} priority - The priority of the task (the key).
-     * @param {string} description - The description of the task.
-     */
-    addTask(priority, description) {
-        this.root = this._insertHelper(this.root, priority, description);
-    }
-
-    /**
-     * Removes a task from the manager by its priority.
-     * @param {number} priority - The priority of the task to remove.
-     */
-    removeTask(priority) {
-        this.root = this._deleteHelper(this.root, priority);
-    }
-    
-    // --- TRAVERSAL METHODS ---
-
-    displayInorder() {
-        console.log('\\n--- 📊 In-order Traversal (Sorted by Priority) ---');
-        this._inorderHelper(this.root);
-    }
-    displayPreorder() {
-        console.log('\\n--- 🌿 Pre-order Traversal (Root-L-R) ---');
-        this._preorderHelper(this.root);
-    }
-    displayPostorder() {
-        console.log('\\n--- 🍃 Post-order Traversal (L-R-Root) ---');
-        this._postorderHelper(this.root);
-    }
-
-    // --- PRIVATE HELPER METHODS ---
-
-    _insertHelper(node, priority, description) {
-        if (node === null) {
-            console.log(\`✅ Added task: [\${priority}] \${description}\`);
-            return new TaskNode(priority, description);
-        }
-
-        if (priority < node.priority) {
-            node.left = this._insertHelper(node.left, priority, description);
-        } else if (priority > node.priority) {
-            node.right = this._insertHelper(node.right, priority, description);
-        } else {
-            console.log(\`⚠️ Task with priority \${priority} already exists!\`);
-        }
-        return node;
-    }
-
-    _findMin(node) {
-        while (node.left !== null) {
-            node = node.left;
-        }
-        return node;
-    }
-
-    _deleteHelper(node, priority) {
-        if (node === null) {
-            console.log(\`⚠️ Task with priority \${priority} not found!\`);
-            return null;
-        }
-
-        if (priority < node.priority) {
-            node.left = this._deleteHelper(node.left, priority);
-        } else if (priority > node.priority) {
-            node.right = this._deleteHelper(node.right, priority);
-        } else { // Node to delete is found
-            console.log(\`🗑️ Removing task: [\${node.priority}] \${node.description}\`);
-            if (node.left === null) return node.right;
-            if (node.right === null) return node.left;
-            
-            const successor = this._findMin(node.right);
-            node.priority = successor.priority;
-            node.description = successor.description;
-            node.right = this._deleteHelper(node.right, successor.priority);
-        }
-        return node;
-    }
-
-    _inorderHelper(node) {
-        if (node !== null) {
-            this._inorderHelper(node.left);
-            console.log(\`-> [\${node.priority}] \${node.description}\`);
-            this._inorderHelper(node.right);
-        }
-    }
-    _preorderHelper(node) {
-        if (node !== null) {
-            console.log(\`-> [\${node.priority}] \${node.description}\`);
-            this._preorderHelper(node.left);
-            this._preorderHelper(node.right);
-        }
-    }
-    _postorderHelper(node) {
-        if (node !== null) {
-            this._postorderHelper(node.left);
-            this._postorderHelper(node.right);
-            console.log(\`-> [\${node.priority}] \${node.description}\`);
-        }
-    }
-}
-
-// --- Example Usage ---
-const taskManager = new TaskManager();
-
-taskManager.addTask(85, "Complete project proposal");
-taskManager.addTask(92, "Submit tax documents");
-taskManager.addTask(78, "Buy groceries");
-taskManager.addTask(88, "Schedule dentist appointment");
-
-taskManager.displayInorder();
-taskManager.displayPreorder();
-taskManager.displayPostorder();
-
-console.log("\\n--- Removing task [78] ---");
-taskManager.removeTask(78);
-taskManager.displayInorder();`
+const t=new TaskMgr();
+t.add(85,"Proposal"); t.add(92,"Taxes"); t.add(78,"Groceries");
+t.display(); t.remove(78); t.display();`
 },
+
+
+
+  
+
+
 
     interview_questions: [
       {
@@ -1125,19 +566,33 @@ export default function EnhancedBinaryTreePage() {
   };
 
   // Tree visualization component
-  const TreeVisualization = () => {
-    const sortedNodes = [...treeNodes].sort((a, b) => a - b);
-    
-    const treeStructure = (nodes) => {
-      if (nodes.length === 0) return null;
-      const mid = Math.floor(nodes.length / 2);
-      const root = nodes[mid];
-      const left = nodes.slice(0, mid);
-      const right = nodes.slice(mid + 1);
 
-      return (
-        <div className="flex flex-col items-center">
-          <div className={`w-12 h-12 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-all duration-500 transform ${
+
+// Keep your surrounding state/handlers the same: treeNodes, inputValue, setInputValue,
+// insertNode, deleteNode, searchValue, setSearchValue, searchNode, performTraversal,
+// animatingNode, operation, searchResult, searchPath, traversalOrder, currentTraversal.
+
+const TreeVisualization = () => {
+  const sortedNodes = [...treeNodes].sort((a, b) => a - b);
+
+  // Refs to measure node positions + the container
+  const containerRef = React.useRef(null);
+  const nodeRefs = React.useRef({});
+  const [lines, setLines] = React.useState([]);
+
+  // Build the visual tree (same look/feel), but attach refs to each node
+  const treeStructure = (nodes) => {
+    if (nodes.length === 0) return null;
+    const mid = Math.floor(nodes.length / 2);
+    const root = nodes[mid];
+    const left = nodes.slice(0, mid);
+    const right = nodes.slice(mid + 1);
+
+    return (
+      <div className="flex flex-col items-center w-full">
+        <div
+          ref={(el) => (nodeRefs.current[root] = el)}
+          className={`w-12 h-12 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-all duration-500 transform ${
             animatingNode === root
               ? operation === "INSERT"
                 ? "bg-green-400 border-green-500 animate-pulse scale-125"
@@ -1149,195 +604,283 @@ export default function EnhancedBinaryTreePage() {
               : traversalOrder.includes(root)
               ? "bg-blue-400 border-blue-500 animate-pulse scale-110"
               : "bg-purple-200 dark:bg-purple-700 border-purple-400 dark:border-purple-600"
-          } text-purple-800 dark:text-purple-200`}>
-            {root}
-          </div>
-          {(left.length > 0 || right.length > 0) && (
-            <div className="flex justify-between w-full mt-4">
-              <div className="flex-1 text-center border-t-2 border-dashed border-gray-300 dark:border-gray-600 pt-4 relative">
-                <div className="absolute top-0 left-1/2 w-px h-full bg-transparent"></div>
-                {treeStructure(left)}
-              </div>
-              <div className="flex-1 text-center border-t-2 border-dashed border-gray-300 dark:border-gray-600 pt-4 relative">
-                <div className="absolute top-0 left-1/2 w-px h-full bg-transparent"></div>
-                {treeStructure(right)}
-              </div>
-            </div>
-          )}
+          } text-purple-800 dark:text-purple-200`}
+        >
+          {root}
         </div>
-      );
+
+        {(left.length > 0 || right.length > 0) && (
+          <div className="flex justify-between w-full mt-4 gap-2">
+            <div className="flex-1 text-center pt-4">{treeStructure(left)}</div>
+            <div className="flex-1 text-center pt-4">{treeStructure(right)}</div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Collect edges (parent -> child) that match how treeStructure splits the array
+  const edges = React.useMemo(() => {
+    const out = [];
+    const walk = (nodes) => {
+      if (!nodes || nodes.length === 0) return;
+      const mid = Math.floor(nodes.length / 2);
+      const root = nodes[mid];
+      const left = nodes.slice(0, mid);
+      const right = nodes.slice(mid + 1);
+      if (left.length) {
+        out.push([root, left[Math.floor(left.length / 2)]]);
+        walk(left);
+      }
+      if (right.length) {
+        out.push([root, right[Math.floor(right.length / 2)]]);
+        walk(right);
+      }
+    };
+    walk(sortedNodes);
+    return out;
+  }, [sortedNodes]);
+
+  // Recalculate line positions relative to the container
+  React.useEffect(() => {
+    const recalc = () => {
+      const container = containerRef.current;
+      if (!container) return;
+      const cRect = container.getBoundingClientRect();
+
+      const newLines = edges
+        .map(([p, c]) => {
+          const pEl = nodeRefs.current[p];
+          const cEl = nodeRefs.current[c];
+          if (!pEl || !cEl) return null;
+          const pRect = pEl.getBoundingClientRect();
+          const cRect2 = cEl.getBoundingClientRect();
+          return {
+            x1: pRect.left + pRect.width / 2 - cRect.left,
+            y1: pRect.top + pRect.height / 2 - cRect.top,
+            x2: cRect2.left + cRect2.width / 2 - cRect.left,
+            y2: cRect2.top + cRect2.height / 2 - cRect.top,
+          };
+        })
+        .filter(Boolean);
+      setLines(newLines);
     };
 
-    return (
-      <div className="p-6 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-purple-200 dark:border-purple-800">
-        <h3 className="text-2xl font-bold mb-6 text-center text-purple-800 dark:text-purple-200">
-          🌳 Binary Search Tree Interactive Demo
-        </h3>
-        
-        {/* Tree Visual */}
-        <div className="flex justify-center mb-6">
-          <div className="relative w-full h-auto p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 overflow-hidden min-h-[200px]">
-            {sortedNodes.length === 0 ? (
-              <div className="flex items-center justify-center h-full">
-                <span className="text-gray-500 dark:text-gray-400 text-lg">Empty Tree</span>
-              </div>
-            ) : (
-              treeStructure(sortedNodes)
+    // Measure after layout/animations settle
+    const id = requestAnimationFrame(recalc);
+    window.addEventListener("resize", recalc);
+    window.addEventListener("scroll", recalc, true);
+
+    return () => {
+      cancelAnimationFrame(id);
+      window.removeEventListener("resize", recalc);
+      window.removeEventListener("scroll", recalc, true);
+    };
+  }, [edges, treeNodes, animatingNode, operation]);
+
+  return (
+    <div className="p-4 sm:p-6 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-purple-200 dark:border-purple-800">
+      <h3 className="text-xl sm:text-2xl font-bold mb-6 text-center text-purple-800 dark:text-purple-200">
+        🌳 Binary Search Tree Interactive Demo
+      </h3>
+
+      {/* Tree Visual */}
+      <div className="flex justify-center mb-6 overflow-x-auto">
+        <div
+          ref={containerRef}
+          className="relative w-full max-w-4xl h-auto p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 overflow-hidden min-h-[200px]"
+        >
+          {/* SVG overlay for connectors */}
+          <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
+            {lines.map((l, i) => (
+              <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke="gray" strokeWidth="2" />
+            ))}
+          </svg>
+
+          {sortedNodes.length === 0 ? (
+            <div className="flex items-center justify-center h-full">
+              <span className="text-gray-500 dark:text-gray-400 text-lg">Empty Tree</span>
+            </div>
+          ) : (
+            treeStructure(sortedNodes)
+          )}
+        </div>
+      </div>
+
+      {/* Operation Status */}
+      {operation && (
+        <div className="text-center mb-4">
+          <span
+            className={`px-4 py-2 rounded-lg font-bold text-white shadow-md ${
+              operation?.includes("INSERT")
+                ? "bg-green-500"
+                : operation?.includes("DELETE")
+                ? "bg-red-500"
+                : operation?.includes("SEARCH")
+                ? "bg-blue-500"
+                : operation?.includes("TRAVERSAL")
+                ? "bg-indigo-500"
+                : operation === "DUPLICATE"
+                ? "bg-yellow-500"
+                : operation === "NOT_FOUND"
+                ? "bg-red-500"
+                : "bg-purple-500"
+            }`}
+          >
+            {operation === "DUPLICATE"
+              ? "Value Already Exists!"
+              : operation === "NOT_FOUND"
+              ? "Value Not Found!"
+              : operation?.includes("TRAVERSAL")
+              ? `${currentTraversal.toUpperCase()} Traversal`
+              : `${operation} Operation`}
+          </span>
+        </div>
+      )}
+
+      {/* Search Result */}
+      {operation === "SEARCH" && (
+        <div className="text-center mb-4">
+          <div
+            className={`p-3 rounded-lg ${
+              searchResult
+                ? "bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300"
+                : "bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300"
+            }`}
+          >
+            {searchResult ? `✅ Found ${searchResult}!` : `❌ Value ${searchValue} not found`}
+            {searchPath.length > 0 && (
+              <div className="text-sm mt-1">Search path: {searchPath.join(" → ")}</div>
             )}
           </div>
         </div>
+      )}
 
-        {/* Operation Status */}
-        {operation && (
-          <div className="text-center mb-4">
-            <span className={`px-4 py-2 rounded-lg font-bold text-white ${
-              operation.includes("INSERT") ? "bg-green-500" :
-              operation.includes("DELETE") ? "bg-red-500" :
-              operation.includes("SEARCH") ? "bg-blue-500" :
-              operation.includes("TRAVERSAL") ? "bg-indigo-500" :
-              operation === "DUPLICATE" ? "bg-yellow-500" :
-              operation === "NOT_FOUND" ? "bg-red-500" : "bg-purple-500"
-            }`}>
-              {operation === "DUPLICATE" ? "Value Already Exists!" :
-               operation === "NOT_FOUND" ? "Value Not Found!" :
-               operation.includes("TRAVERSAL") ? `${currentTraversal.toUpperCase()} Traversal` :
-               `${operation} Operation`}
-            </span>
-          </div>
-        )}
-
-        {/* Search Result */}
-        {operation === "SEARCH" && (
-          <div className="text-center mb-4">
-            <div className={`p-3 rounded-lg ${searchResult ? "bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300" : "bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300"}`}>
-              {searchResult ? `✅ Found ${searchResult}!` : `❌ Value ${searchValue} not found`}
-              {searchPath.length > 0 && (
-                <div className="text-sm mt-1">
-                  Search path: {searchPath.join(" → ")}
-                </div>
-              )}
+      {/* Traversal Result (FIXED: safe optional chaining) */}
+      {operation?.includes("TRAVERSAL") && traversalOrder.length > 0 && (
+        <div className="text-center mb-4">
+          <div className="p-3 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300 rounded-lg">
+            <div className="font-bold">
+              {currentTraversal.charAt(0).toUpperCase() + currentTraversal.slice(1)} Traversal:
             </div>
-          </div>
-        )}
-
-        {/* Traversal Result */}
-        {operation.includes("TRAVERSAL") && traversalOrder.length > 0 && (
-          <div className="text-center mb-4">
-            <div className="p-3 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300 rounded-lg">
-              <div className="font-bold">{currentTraversal.charAt(0).toUpperCase() + currentTraversal.slice(1)} Traversal:</div>
-              <div className="text-sm mt-1">{traversalOrder.join(" → ")}</div>
-            </div>
-          </div>
-        )}
-
-        {/* Tree Info */}
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow mb-4">
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-center">
-            <div>
-              <span className="text-sm text-gray-500">Nodes</span>
-              <div className="text-2xl font-bold text-purple-600">{treeNodes.length}</div>
-            </div>
-            <div>
-              <span className="text-sm text-gray-500">Root</span>
-              <div className="text-2xl font-bold text-purple-600">
-                {treeNodes.length > 0 ? sortedNodes[Math.floor(sortedNodes.length / 2)] : "None"}
-              </div>
-            </div>
-            <div>
-              <span className="text-sm text-gray-500">Height</span>
-              <div className="text-2xl font-bold text-purple-600">
-                {treeNodes.length > 0 ? Math.ceil(Math.log2(treeNodes.length + 1)) : 0}
-              </div>
-            </div>
-            <div>
-              <span className="text-sm text-gray-500">Balance</span>
-              <div className="text-lg font-bold text-purple-600">
-                {treeNodes.length > 0 ? "Balanced" : "Empty"}
-              </div>
-            </div>
+            <div className="text-sm mt-1">{traversalOrder.join(" → ")}</div>
           </div>
         </div>
+      )}
 
-        {/* Tree Operations */}
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow space-y-4">
-          <h4 className="text-lg font-bold text-center">Binary Tree Operations</h4>
-          
-          {/* Insert & Delete */}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-            <input
-              type="number"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Enter value"
-              className="px-4 py-2 border-2 border-purple-300 dark:border-purple-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-purple-500 transition-colors duration-200"
-            />
-            <div className="flex gap-2">
-              <button
-                onClick={insertNode}
-                disabled={!inputValue}
-                className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-              >
-                🌱 Insert
-              </button>
-              <button
-                onClick={deleteNode}
-                disabled={!inputValue || treeNodes.length === 0}
-                className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-              >
-                🗑️ Delete
-              </button>
+      {/* Tree Info */}
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow mb-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+          <div>
+            <span className="text-sm text-gray-500">Nodes</span>
+            <div className="text-2xl font-bold text-purple-600">{treeNodes.length}</div>
+          </div>
+          <div>
+            <span className="text-sm text-gray-500">Root</span>
+            <div className="text-2xl font-bold text-purple-600">
+              {treeNodes.length > 0 ? sortedNodes[Math.floor(sortedNodes.length / 2)] : "None"}
             </div>
           </div>
-          
-          {/* Search */}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-            <input
-              type="number"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              placeholder="Search value"
-              className="px-4 py-2 border-2 border-blue-300 dark:border-blue-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-blue-500 transition-colors duration-200"
-            />
-            <button
-              onClick={searchNode}
-              disabled={!searchValue || treeNodes.length === 0}
-              className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-            >
-              🔍 Search
-            </button>
+          <div>
+            <span className="text-sm text-gray-500">Height</span>
+            <div className="text-2xl font-bold text-purple-600">
+              {treeNodes.length > 0 ? Math.ceil(Math.log2(treeNodes.length + 1)) : 0}
+            </div>
           </div>
-
-          {/* Traversal Operations */}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-2">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Traversals:</span>
-            <div className="flex gap-2">
-              <button
-                onClick={() => performTraversal('inorder')}
-                disabled={treeNodes.length === 0}
-                className="px-3 py-2 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-lg hover:from-indigo-600 hover:to-indigo-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-              >
-                📊 Inorder
-              </button>
-              <button
-                onClick={() => performTraversal('preorder')}
-                disabled={treeNodes.length === 0}
-                className="px-3 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:from-purple-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-              >
-                🌿 Preorder
-              </button>
-              <button
-                onClick={() => performTraversal('postorder')}
-                disabled={treeNodes.length === 0}
-                className="px-3 py-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg hover:from-teal-600 hover:to-teal-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-              >
-                🍃 Postorder
-              </button>
+          <div>
+            <span className="text-sm text-gray-500">Balance</span>
+            <div className="text-lg font-bold text-purple-600">
+              {treeNodes.length > 0 ? "Balanced" : "Empty"}
             </div>
           </div>
         </div>
       </div>
-    );
-  };
+
+      {/* Tree Operations */}
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow space-y-4">
+        <h4 className="text-lg font-bold text-center">Binary Tree Operations</h4>
+
+        {/* Insert & Delete */}
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+          <input
+            type="number"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Enter value"
+            className="px-4 py-2 border-2 border-purple-300 dark:border-purple-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-purple-500 transition-colors duration-200 w-full sm:w-auto"
+          />
+          <div className="flex gap-2">
+            <button
+              onClick={insertNode}
+              disabled={!inputValue}
+              className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+            >
+              🌱 Insert
+            </button>
+            <button
+              onClick={deleteNode}
+              disabled={!inputValue || treeNodes.length === 0}
+              className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+            >
+              🗑️ Delete
+            </button>
+          </div>
+        </div>
+
+        {/* Search */}
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+          <input
+            type="number"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            placeholder="Search value"
+            className="px-4 py-2 border-2 border-blue-300 dark:border-blue-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-blue-500 transition-colors duration-200 w-full sm:w-auto"
+          />
+          <button
+            onClick={searchNode}
+            disabled={!searchValue || treeNodes.length === 0}
+            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+          >
+            🔍 Search
+          </button>
+        </div>
+
+        {/* Traversal Operations */}
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-2">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Traversals:</span>
+          <div className="flex gap-2 flex-wrap">
+            <button
+              onClick={() => performTraversal("inorder")}
+              disabled={treeNodes.length === 0}
+              className="px-3 py-2 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-lg hover:from-indigo-600 hover:to-indigo-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+            >
+              📊 Inorder
+            </button>
+            <button
+              onClick={() => performTraversal("preorder")}
+              disabled={treeNodes.length === 0}
+              className="px-3 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:from-purple-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+            >
+              🌿 Preorder
+            </button>
+            <button
+              onClick={() => performTraversal("postorder")}
+              disabled={treeNodes.length === 0}
+              className="px-3 py-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg hover:from-teal-600 hover:to-teal-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+            >
+              🍃 Postorder
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+// export default TreeVisualization;
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-indigo-900/20 text-gray-900 dark:text-white">

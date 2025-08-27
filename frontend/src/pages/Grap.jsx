@@ -168,13 +168,84 @@ const graphData = {
       },
     ],
     
-    code_examples: {
-      python: `# Python Graph Implementation - Social Media Influence Network...`,
-      javascript: `// JavaScript Graph Implementation - Website Link Analysis...`,
-      java: `// Java Graph Implementation - Course Prerequisites System...`,
-      cpp: `// C++ Graph Implementation - City Road Network...`,
-      c: `// C Graph Implementation - Social Network...`,
-    },
+    code_examples : {
+  c: `#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define MAX_VERTICES 5
+
+int graph[MAX_VERTICES][MAX_VERTICES] = {0};
+
+void addEdge(int u, int v) { graph[u][v] = 1; graph[v][u] = 1; }
+void displayGraph() {
+    for(int i=0;i&lt;MAX_VERTICES;i++){ for(int j=0;j&lt;MAX_VERTICES;j++) printf("%d ",graph[i][j]); printf("\n");}
+}
+
+int main(){
+    addEdge(0,1); addEdge(0,2); addEdge(1,3); addEdge(3,4);
+    displayGraph();
+    return 0;
+}`,
+
+  cpp: `#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+class Graph {
+    int V;
+    vector&lt;vector&lt;int&gt;&gt; adj;
+public:
+    Graph(int v): V(v), adj(v) {}
+    void addEdge(int u,int v){ adj[u].push_back(v); adj[v].push_back(u); }
+    void display(){ for(int i=0;i&lt;V;i++){ cout &lt;&lt; i &lt;&lt; ": "; for(int j:adj[i]) cout &lt;&lt; j &lt;&lt; " "; cout &lt;&lt; endl; }}
+};
+
+int main(){
+    Graph g(5);
+    g.addEdge(0,1); g.addEdge(0,2); g.addEdge(1,3); g.addEdge(3,4);
+    g.display();
+    return 0;
+}`,
+
+  java: `import java.util.*;
+
+class Graph {
+    private List&lt;List&lt;Integer&gt;&gt; adj;
+    Graph(int V){ adj = new ArrayList&lt;&gt;(); for(int i=0;i&lt;V;i++) adj.add(new ArrayList&lt;&gt;()); }
+    void addEdge(int u,int v){ adj.get(u).add(v); adj.get(v).add(u); }
+    void display(){ for(int i=0;i&lt;adj.size();i++){ System.out.print(i+": "); for(int v:adj.get(i)) System.out.print(v+" "); System.out.println();}}
+}
+
+public class GraphDemo {
+    public static void main(String[] args){
+        Graph g = new Graph(5);
+        g.addEdge(0,1); g.addEdge(0,2); g.addEdge(1,3); g.addEdge(3,4);
+        g.display();
+    }
+}`,
+
+  python: `class Graph:
+    def __init__(self,V): self.adj=[[] for _ in range(V)]
+    def add_edge(self,u,v): self.adj[u].append(v); self.adj[v].append(u)
+    def display(self):
+        for i,l in enumerate(self.adj): print(f"{i}: {l}")
+
+if __name__=="__main__":
+    g=Graph(5)
+    g.add_edge(0,1); g.add_edge(0,2); g.add_edge(1,3); g.add_edge(3,4)
+    g.display()`,
+
+  javascript: `class Graph {
+    constructor(V){ this.adj=Array.from({length:V},()=>[]); }
+    addEdge(u,v){ this.adj[u].push(v); this.adj[v].push(u); }
+    display(){ this.adj.forEach((l,i)=>console.log(i+": "+l.join(" "))); }
+}
+
+const g = new Graph(5);
+g.addEdge(0,1); g.addEdge(0,2); g.addEdge(1,3); g.addEdge(3,4);
+g.display();`
+},
+
+
   },
 };
 

@@ -400,14 +400,54 @@ export default function EnhancedArrayPage() {
     }
   };
 
-  const ArrayVisualization1D = () => (
+const ArrayVisualization1D = () => {
+  const [arrayValues, setArrayValues] = React.useState([10, 20, 30, 40, 50]);
+  const [selectedArrayIndex, setSelectedArrayIndex] = React.useState(0);
+  const [animatingIndex, setAnimatingIndex] = React.useState(null);
+  const [inputValue, setInputValue] = React.useState("");
+
+  const handleArrayUpdate = () => {
+    const numbers = inputValue
+      .split(/[\s,]+/) // split by space or comma
+      .map((num) => Number(num))
+      .filter((n) => !isNaN(n));
+
+    if (numbers.length === 1) {
+      const newArray = [...arrayValues];
+      newArray[selectedArrayIndex] = numbers[0];
+      setArrayValues(newArray);
+    }
+    setInputValue("");
+  };
+
+  const addElement = () => {
+    const numbers = inputValue
+      .split(/[\s,]+/)
+      .map((num) => Number(num))
+      .filter((n) => !isNaN(n));
+
+    setArrayValues([...arrayValues, ...numbers]);
+    setInputValue("");
+  };
+
+  const removeElement = () => {
+    if (arrayValues.length > 0) {
+      const newArray = arrayValues.filter(
+        (_, index) => index !== selectedArrayIndex
+      );
+      setArrayValues(newArray);
+      setSelectedArrayIndex(Math.max(0, selectedArrayIndex - 1));
+    }
+  };
+
+  return (
     <div className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-blue-200 dark:border-blue-800">
       <h3 className="text-2xl font-bold mb-6 text-center">
-    📊
-    <span className="text-blue-800 dark:text-blue-200">
-        1D Array Interactive Demo
-    </span>
-</h3>
+        📊
+        <span className="text-blue-800 dark:text-blue-200">
+          1D Array Interactive Demo
+        </span>
+      </h3>
       
       <div className="flex flex-wrap justify-center gap-3 mb-6">
         {arrayValues.map((value, index) => (
@@ -461,10 +501,10 @@ export default function EnhancedArrayPage() {
         <h4 className="text-lg font-bold mb-3 text-center">Array Operations</h4>
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
           <input
-            type="number"
+            type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Enter value"
+            placeholder="Enter values (e.g. 10 20 30)"
             className="px-4 py-2 border-2 border-blue-300 dark:border-blue-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-blue-500 transition-colors duration-200"
           />
           <div className="flex gap-2">
@@ -491,6 +531,8 @@ export default function EnhancedArrayPage() {
       </div>
     </div>
   );
+};
+
 
   const ArrayVisualization2D = () => (
     <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border-2 border-green-200 dark:border-green-800">
@@ -634,9 +676,12 @@ export default function EnhancedArrayPage() {
       <main className="max-w-7xl mx-auto px-6 py-12 space-y-16">
         {/* Student Hook */}
         <section className="transform hover:scale-105 transition-transform duration-300">
-          <h2 className="text-4xl font-bold mb-6 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            🎯 Why Arrays Matter
-          </h2>
+        <h2 className="text-4xl font-bold mb-6 text-center">
+    🎯
+    <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        Why Arrays Matter
+    </span>
+</h2>
           <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border-l-8 border-blue-500">
             <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-200 italic">
               {sections.student_hook}

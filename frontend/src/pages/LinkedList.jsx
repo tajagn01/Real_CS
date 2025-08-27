@@ -1233,110 +1233,122 @@ export default function EnhancedLinkedListPage() {
         Visual & Interactive Demo
     </span>
 </h2>
-          <div className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-blue-200 dark:border-blue-800">
-            <div className="flex flex-wrap justify-center items-center gap-2 mb-8">
-              <div className="flex flex-col items-center">
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="Value"
-                  className="px-4 py-2 w-28 text-center border-2 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-blue-500 transition-colors duration-200"
-                />
-              </div>
-              <div className="flex flex-col items-center">
-                <input
-                  type="number"
-                  value={inputIndex}
-                  onChange={(e) => setInputIndex(e.target.value)}
-                  placeholder="Index"
-                  className="px-4 py-2 w-28 text-center border-2 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-blue-500 transition-colors duration-200"
-                />
-              </div>
-              <div className="flex flex-col sm:flex-row justify-center items-center gap-2 mt-4 sm:mt-0">
-                <button
-                  onClick={() => inputValue && activeTabProps.addNode(inputValue, 'head')}
-                  className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-                >
-                  Add Head
-                </button>
-                <button
-                  onClick={() => inputValue && activeTabProps.addNode(inputValue, 'end')}
-                  className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-                >
-                  Add End
-                </button>
-                <button
-                  onClick={() => inputValue && inputIndex && activeTabProps.addNode(inputValue, inputIndex)}
-                  className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-                >
-                  Add Middle
-                </button>
-                <button
-                  onClick={() => activeTabProps.deleteNode('head')}
-                  className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-                >
-                  Del Head
-                </button>
-                <button
-                  onClick={() => activeTabProps.deleteNode('end')}
-                  className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-                >
-                  Del End
-                </button>
-                <button
-                  onClick={() => inputIndex && activeTabProps.deleteNode(inputIndex)}
-                  className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-                >
-                  Del Middle
-                </button>
-              </div>
-            </div>
+<div className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-blue-200 dark:border-blue-800">
+  <div className="flex flex-wrap justify-center items-center gap-2 mb-8">
+    <div className="flex flex-col items-center">
+      <input
+        type="text"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        placeholder="Value"
+        className="px-4 py-2 w-28 text-center border-2 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-blue-500 transition-colors duration-200"
+      />
+    </div>
+    <div className="flex flex-col items-center">
+      <input
+        type="number"
+        value={inputIndex}
+        onChange={(e) => setInputIndex(e.target.value)}
+        placeholder="Index"
+        className="px-4 py-2 w-28 text-center border-2 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-blue-500 transition-colors duration-200"
+      />
+    </div>
+    <div className="flex flex-col sm:flex-row justify-center items-center gap-2 mt-4 sm:mt-0">
+      <button
+        onClick={() => inputValue && activeTabProps.addNode(inputValue, 'head')}
+        className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+      >
+        Add Head
+      </button>
+      <button
+        onClick={() => inputValue && activeTabProps.addNode(inputValue, 'end')}
+        className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+      >
+        Add End
+      </button>
+      <button
+        onClick={() => inputValue && inputIndex && activeTabProps.addNode(inputValue, inputIndex)}
+        className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+      >
+        Add Middle
+      </button>
+      <button
+        onClick={() => activeTabProps.deleteNode('head')}
+        className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+      >
+        Del Head
+      </button>
+      <button
+        onClick={() => activeTabProps.deleteNode('end')}
+        className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+      >
+        Del End
+      </button>
+      <button
+        onClick={() => inputIndex && activeTabProps.deleteNode(inputIndex)}
+        className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+      >
+        Del Middle
+      </button>
+    </div>
+  </div>
 
-            
-            <div className="relative flex flex-wrap justify-center items-start pt-8">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 text-lg font-bold">
-                {activeTabProps.nodes.length > 0 ? (
-                  <div className="flex items-center space-x-2">
-                    <span className="px-4 py-1 rounded-full bg-blue-500 text-white">Head</span>
-                    {activeTab === 'singly' || activeTab === 'doubly' && (
-                        <span className="px-4 py-1 rounded-full bg-orange-500 text-white">Tail</span>
-                    )}
-                  </div>
-                ) : (
-                  <span className="text-gray-500">List is empty.</span>
-                )}
-              </div>
-              <div className="flex flex-wrap justify-center items-start pt-12 space-x-4">
-                {activeTabProps.nodes.map((node, index) => (
-                  <div
-                    key={index}
-                    className={`flex flex-col items-center transform transition-all duration-500 ${activeTabProps.animatingIndex === index 
-                        ? (activeTabProps.lastOperation === 'add' 
-                            ? 'scale-110' 
-                            : 'opacity-0 scale-50') 
-                        : ''
-                    }`}
-                  >
-                    <div className={`p-4 rounded-xl shadow-lg border-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200`}>
-                      <div className="font-bold text-lg text-center">{node.value}</div>
-                      <div className="text-xs text-gray-500 text-center">{node.address}</div>
-                      <div className="mt-2 text-center text-xs text-blue-500">
-                          {activeTab === 'singly' && <span className="font-mono">next</span>}
-                          {activeTab === 'doubly' && <span className="font-mono">prev | next</span>}
-                      </div>
-                    </div>
-                    {index < activeTabProps.nodes.length - 1 && (
-                      <span className="my-2 text-gray-500 text-2xl">{activeTab === 'doubly' ? '↔️' : '→'}</span>
-                    )}
-                    {index === activeTabProps.nodes.length - 1 && activeTab === 'circular' && (
-                        <span className="my-2 text-gray-500 text-2xl">🔄</span>
-                    )}
-              </div>
-              ))}
-            </div>
-          </div>
+  {/* Nodes + Head/Tail Labels */}
+  <div className="relative flex flex-wrap justify-center items-start pt-8">
+    {activeTabProps.nodes.length === 0 && (
+      <span className="text-gray-500">List is empty.</span>
+    )}
+
+    <div className="flex flex-wrap justify-center items-start pt-12 space-x-4">
+      {activeTabProps.nodes.map((node, index) => (
+        <div
+          key={index}
+          className={`flex flex-col items-center transform transition-all duration-500 ${
+            activeTabProps.animatingIndex === index
+              ? activeTabProps.lastOperation === 'add'
+                ? 'scale-110'
+                : 'opacity-0 scale-50'
+              : ''
+          }`}
+        >
+          {/* Node box */}
+          <div className="p-4 rounded-xl shadow-lg border-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 relative">
+            {/* Head & Tail badges */}
+            {index === 0 && (
+              <span className="absolute -top-6 left-1/2 -translate-x-1/2 px-2 py-1 text-xs rounded-full bg-blue-500 text-white">
+                Head
+              </span>
+            )}
+            {index === activeTabProps.nodes.length - 1 &&
+              (activeTab === 'singly' || activeTab === 'doubly') && (
+                <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 px-2 py-1 text-xs rounded-full bg-orange-500 text-white">
+                  Tail
+                </span>
+              )}
+
+            <div className="font-bold text-lg text-center">{node.value}</div>
+            <div className="text-xs text-gray-500 text-center">{node.address}</div>
+            <div className="mt-2 text-center text-xs text-blue-500">
+              {activeTab === 'singly' && <span className="font-mono">next</span>}
+              {activeTab === 'doubly' && <span className="font-mono">prev | next</span>}
+            </div>
+          </div>
+
+          {/* Connector arrows */}
+          {index < activeTabProps.nodes.length - 1 && (
+            <span className="my-2 text-gray-500 text-2xl">
+              {activeTab === 'doubly' ? '↔️' : '→'}
+            </span>
+          )}
+          {index === activeTabProps.nodes.length - 1 && activeTab === 'circular' && (
+            <span className="my-2 text-gray-500 text-2xl">🔄</span>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
 </div>
+
         </section>
 
         {activeTab === "singly" && (

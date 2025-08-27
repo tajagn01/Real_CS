@@ -59,283 +59,147 @@ const hashTableData = {
       "🌐 DNS Resolution - Mapping domain names (keys) to IP addresses (values).",
     ],
 
-    code_examples: {
-      javascript: `// JavaScript Hash Table Example - User Profile Cache
+code_examples : {
+  javascript: `// JavaScript Hash Table Example - simple user cache
 class UserCache {
-    constructor() {
-        // In JavaScript, Objects and Maps are high-level implementations of hash tables.
-        this.cache = new Map();
-        console.log("User cache initialized.");
-    }
+  constructor() {
+    // In JS, Map is a common hash-table-like structure
+    this.cache = new Map();
+  }
 
-    // Insert/Update operation (O(1) on average)
-    addUser(userId, userData) {
-        this.cache.set(userId, userData);
-        console.log(\`✅ User '\${userId}' added/updated. Cache size: \${this.cache.size}\`);
-    }
+  addUser(id, data) { // Insert / Update (avg O(1))
+    this.cache.set(id, data);
+  }
 
-    // Search operation (O(1) on average)
-    getUser(userId) {
-        if (this.cache.has(userId)) {
-            const user = this.cache.get(userId);
-            console.log(\`🔍 Found user '\${userId}':\`, user);
-            return user;
-        } else {
-            console.log(\`❌ User '\${userId}' not found in cache.\`);
-            return null;
-        }
-    }
+  getUser(id) { // Search (avg O(1))
+    return this.cache.has(id) ? this.cache.get(id) : null;
+  }
 
-    // Deletion operation (O(1) on average)
-    removeUser(userId) {
-        if (this.cache.delete(userId)) {
-            console.log(\`🗑️ User '\${userId}' removed from cache. New size: \${this.cache.size}\`);
-        } else {
-            console.log(\`🤷 User '\${userId}' was not in the cache.\`);
-        }
-    }
+  removeUser(id) { // Delete (avg O(1))
+    this.cache.delete(id);
+  }
 
-    displayCache() {
-        console.log("\\n--- Current User Cache ---");
-        this.cache.forEach((value, key) => {
-            console.log(\`\${key}: \${JSON.stringify(value)}\`);
-        });
-        console.log("------------------------\\n");
-    }
+  display() {
+    console.log('--- Cache ---');
+    for (const [k, v] of this.cache) console.log(k, v);
+    console.log('-------------');
+  }
 }
 
 // Demo
-const cache = new UserCache();
-cache.addUser('user123', { name: 'Alice', role: 'Admin' });
-cache.addUser('user456', { name: 'Bob', role: 'Editor' });
-cache.displayCache();
+const c = new UserCache();
+c.addUser('u1', {name: 'Alice'});
+c.addUser('u2', {name: 'Bob'});
+c.display();
+console.log(c.getUser('u1'));
+c.removeUser('u2');
+c.display();`,
 
-cache.getUser('user123');
-cache.getUser('user999'); // Not found
+  python: `# Python Hash Table Example - word count (simple)
+# Python dict is the built-in hash table
 
-cache.addUser('user123', { name: 'Alice Smith', role: 'Super Admin' }); // Update
-cache.getUser('user123');
-
-cache.removeUser('user456');
-cache.displayCache();`,
-      python: `# Python Hash Table Example - Word Frequency Counter
-def count_word_frequency(text):
-    # In Python, dictionaries are the primary implementation of hash tables.
-    frequency_map = {}
-    
-    # Clean and split the text into words
-    words = text.lower().split()
-    
-    print("--- Processing Text ---")
-    
-    # Insert/Update operation (O(1) on average)
-    for word in words:
-        # Remove punctuation for better counting
-        cleaned_word = ''.join(filter(str.isalnum, word))
-        if cleaned_word:
-            frequency_map[cleaned_word] = frequency_map.get(cleaned_word, 0) + 1
-            
-    print("✅ Text processing complete.\\n")
-    return frequency_map
-
-def display_frequencies(freq_map):
-    print("--- Word Frequencies ---")
-    # Search/Retrieval operation (O(1) on average)
-    for word, count in sorted(freq_map.items()):
-        print(f"'{word}': {count}")
-    print("------------------------")
+def count_words(text):
+    freq = {}
+    for token in text.lower().split():
+        word = ''.join(ch for ch in token if ch.isalnum())
+        if not word: continue
+        freq[word] = freq.get(word, 0) + 1
+    return freq
 
 # Demo
-document = "A hash table is a data structure. A hash table uses a hash function to map keys to values."
+text = "Hash table is simple. Hash table maps keys to values."
+print(count_words(text))`,
 
-# Create the hash table
-word_counts = count_word_frequency(document)
-display_frequencies(word_counts)
-
-# Search for a specific word
-search_word = "table"
-if search_word in word_counts:
-    print(f"\\n🔍 The word '{search_word}' appears {word_counts[search_word]} times.")
-
-# Delete a word (less common for this use case, but possible)
-del word_counts["a"]
-print(f"🗑️ Removed 'a' from the count.")
-display_frequencies(word_counts)
-`,
-      java: `// Java Hash Table Example - Product Inventory
+  java: `// Java Hash Table Example - simple inventory
 import java.util.HashMap;
 import java.util.Map;
 
-public class InventoryManager {
+public class InventorySimple {
     public static void main(String[] args) {
-        // In Java, HashMap is a common implementation of a hash table.
-        Map<String, Integer> inventory = new HashMap<>();
-
-        System.out.println("--- Initializing Inventory ---");
-        
-        // Insert operation (O(1) on average)
-        inventory.put("APL01", 150); // Apple
-        inventory.put("ORG02", 200); // Orange
-        inventory.put("BAN03", 250); // Banana
-        System.out.println("✅ Initial inventory loaded.\\n");
-
-        displayInventory(inventory);
-
-        // Search operation (O(1) on average)
-        String searchSku = "ORG02";
-        if (inventory.containsKey(searchSku)) {
-            System.out.printf("🔍 Stock for %s: %d units\\n", searchSku, inventory.get(searchSku));
-        }
-
-        // Update operation (also using put)
-        String updateSku = "APL01";
-        int newQuantity = inventory.get(updateSku) - 20; // Sold 20 apples
-        inventory.put(updateSku, newQuantity);
-        System.out.printf("🔄 Updated stock for %s to %d units.\\n\\n", updateSku, newQuantity);
-
-        displayInventory(inventory);
-
-        // Deletion operation (O(1) on average)
-        String removeSku = "BAN03";
-        inventory.remove(removeSku);
-        System.out.printf("🗑️ Product %s removed from inventory.\\n\\n", removeSku);
-        
-        displayInventory(inventory);
-    }
-
-    public static void displayInventory(Map<String, Integer> map) {
-        System.out.println("--- Current Inventory Report ---");
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            System.out.printf("SKU: %s, Quantity: %d%n", entry.getKey(), entry.getValue());
-        }
-        System.out.println("------------------------------");
+        // HashMap is a hash-table implementation
+        Map&lt;String, Integer&gt; inv = new HashMap&lt;&gt;();
+        inv.put("apple", 10);
+        inv.put("orange", 5);
+        System.out.println("apple: " + inv.get("apple"));
+        inv.put("apple", inv.get("apple") - 2); // update
+        inv.remove("orange"); // delete
+        System.out.println(inv);
     }
 }`,
-    cpp: `// C++ Hash Table Example - Student Gradebook
-#include <iostream>
-#include <string>
-#include <unordered_map>
 
-// Helper function to print the gradebook
-void printGradebook(const std::unordered_map<std::string, int>& gradebook) {
-    std::cout << "--- Current Gradebook ---" << std::endl;
-    for (const auto& pair : gradebook) {
-        std::cout << "Student: " << pair.first << ", Grade: " << pair.second << "%" << std::endl;
-    }
-    std::cout << "-----------------------" << std::endl;
-}
+  cpp: `// C++ Hash Table Example - simple gradebook
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;unordered_map&gt;
 
 int main() {
-    // In C++, std::unordered_map is the hash table implementation.
-    std::unordered_map<std::string, int> gradebook;
+    // std::unordered_map is the hash table
+    std::unordered_map&lt;std::string, int&gt; grades;
+    grades["Alice"] = 90;
+    grades["Bob"] = 82;
 
-    // Insert operation (O(1) on average)
-    gradebook["Alice"] = 92;
-    gradebook["Bob"] = 85;
-    gradebook["Charlie"] = 78;
-    std::cout << "✅ Initial grades added." << std::endl;
-    printGradebook(gradebook);
+    // print
+    std::cout &lt;&lt; "Alice: " &lt;&lt; grades["Alice"] &lt;&lt; std::endl;
 
-    // Search operation (O(1) on average)
-    std::string student_to_find = "Bob";
-    if (gradebook.count(student_to_find)) {
-        std::cout << "🔍 " << student_to_find << "'s grade is " << gradebook[student_to_find] << "%" << std::endl;
-    } else {
-        std::cout << "Student " << student_to_find << " not found." << std::endl;
-    }
-    
-    // Update operation
-    gradebook["Alice"] = 95; // Alice improved her grade
-    std::cout << "🔄 Alice's grade updated." << std::endl;
-    printGradebook(gradebook);
+    // update
+    grades["Bob"] = 85;
 
-    // Deletion operation (O(1) on average)
-    gradebook.erase("Charlie");
-    std::cout << "🗑️ Charlie's grade removed." << std::endl;
-    printGradebook(gradebook);
+    // delete
+    grades.erase("Alice");
 
     return 0;
 }`,
- c: `// C Hash Table Example - Simple Symbol Table (Separate Chaining)
-// NOTE: C does not have a built-in hash table. This is a manual implementation.
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-#define TABLE_SIZE 10
+  c: `// C Hash Table Example - very simple symbol table (separate chaining)
+// C has no built-in hash table; this shows a tiny manual example
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
 
-// Node for the linked list in each bucket
+#define TABLE_SIZE 5
+
 typedef struct Node {
     char* key;
     int value;
     struct Node* next;
 } Node;
 
-// Hash Table structure
-Node* hashTable[TABLE_SIZE];
+Node* table[TABLE_SIZE] = {0};
 
-// Simple hash function
-unsigned int hash(const char* key) {
-    unsigned int hashValue = 0;
-    while (*key) {
-        hashValue = (hashValue << 5) + *key++;
-    }
-    return hashValue % TABLE_SIZE;
+unsigned int hash(const char* s) {
+    unsigned int h = 0;
+    while (*s) h = h * 31 + (unsigned char)*s++;
+    return h % TABLE_SIZE;
 }
 
-// Insert a key-value pair
-void insert(const char* key, int value) {
-    unsigned int index = hash(key);
-    
-    // Create new node
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    newNode->key = strdup(key);
-    newNode->value = value;
-    newNode->next = NULL;
-    
-    // Insert into bucket (handle collision with chaining)
-    if (hashTable[index] == NULL) {
-        hashTable[index] = newNode;
-    } else {
-        newNode->next = hashTable[index];
-        hashTable[index] = newNode;
-    }
-    printf("Inserted ('%s', %d) at index %u\\n", key, value, index);
+void insert(const char* k, int v) {
+    unsigned int i = hash(k);
+    Node* n = malloc(sizeof(Node));
+    n->key = strdup(k);
+    n->value = v;
+    n->next = table[i];
+    table[i] = n;
 }
 
-// Search for a key
-Node* search(const char* key) {
-    unsigned int index = hash(key);
-    Node* current = hashTable[index];
-    while (current != NULL) {
-        if (strcmp(current->key, key) == 0) {
-            printf("Found '%s' at index %u\\n", key, index);
-            return current;
-        }
-        current = current->next;
+Node* search(const char* k) {
+    unsigned int i = hash(k);
+    for (Node* cur = table[i]; cur; cur = cur->next) {
+        if (strcmp(cur->key, k) == 0) return cur;
     }
-    printf("'%s' not found.\\n", key);
     return NULL;
 }
 
 int main() {
-    // Initialize hash table
-    for(int i = 0; i < TABLE_SIZE; i++) {
-        hashTable[i] = NULL;
-    }
-
-    insert("apple", 5);
-    insert("banana", 10);
-    insert("orange", 15); // Potential collision with 'apple'
-    
-    search("banana");
-    search("apple");
-    search("grape");
-
-    // Memory cleanup would be needed in a full application
+    insert("one", 1);
+    insert("two", 2);
+    Node* r = search("two");
+    if (r) printf("found %s = %d\n", r->key, r->value);
     return 0;
 }`
-    },
+},
+
+
+
 
     interview_questions: [
       {
@@ -518,66 +382,189 @@ export default function HashTablePage() {
         }
     };
 
-    const HashTableVisualization = () => (
-        <div className="p-6 bg-[#1a2233] rounded-xl border-2 border-blue-800">
-            <h3 className="text-2xl font-bold mb-6 text-center text-blue-300">
-                🔑 Interactive Hash Table
-            </h3>
 
-            {/* Controls */}
-            <div className="bg-gray-900/50 p-4 rounded-lg shadow-lg mb-6">
-                <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                    <input
-                        type="text" value={keyInput} onChange={(e) => setKeyInput(e.target.value)}
-                        placeholder="Enter Key"
-                        className="px-4 py-2 w-full sm:w-auto border-2 border-gray-600 rounded-lg bg-gray-700 text-gray-200 focus:outline-none focus:border-blue-500 transition-colors"
-                    />
-                    <input
-                        type="text" value={valueInput} onChange={(e) => setValueInput(e.target.value)}
-                        placeholder="Enter Value"
-                        className="px-4 py-2 w-full sm:w-auto border-2 border-gray-600 rounded-lg bg-gray-700 text-gray-200 focus:outline-none focus:border-blue-500 transition-colors"
-                    />
-                    <div className="flex gap-2">
-                        <button onClick={handleInsert} className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transform hover:scale-105 shadow-lg text-sm">Insert</button>
-                        <button onClick={handleSearch} className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 shadow-lg text-sm">Search</button>
-                        <button onClick={handleDelete} className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transform hover:scale-105 shadow-lg text-sm">Delete</button>
-                    </div>
-                </div>
-            </div>
-            
-            {/* Operation Info */}
-            <div className={`p-3 rounded-lg mb-6 text-center font-medium ${
-                operationInfo.type === 'success' ? 'bg-green-900/30 text-green-300' :
-                operationInfo.type === 'error' ? 'bg-red-900/30 text-red-300' :
-                'bg-blue-900/30 text-blue-300'
-            }`}>
-                {keyInput && `hash("${keyInput}") % ${TABLE_SIZE} = ${simpleHash(keyInput, TABLE_SIZE)}`}<br/>
-                {operationInfo.message} {foundValue && `-> Value: "${foundValue}"`}
-            </div>
 
-            {/* Hash Table Visualization */}
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
-                {hashTable.map((bucket, index) => (
-                    <div key={index} className={`p-2 rounded-lg border-2 transition-all duration-500 min-h-[120px] ${
-                        animatingIndex === index ? 'border-blue-500 scale-105 bg-blue-900/40 shadow-lg' : 'border-gray-700 bg-gray-800'
-                    }`}>
-                        <div className="text-center font-bold text-sm mb-2 pb-1 border-b-2 border-gray-700 text-blue-400">
-                           Index {index}
-                        </div>
-                        <div className="space-y-1">
-                            {bucket.map((pair, pairIndex) => (
-                                <div key={pairIndex} className={`p-1 rounded text-xs text-center transition-all duration-300 ${
-                                    animatingIndex === index && foundValue === pair.value ? 'bg-green-500 text-white font-bold' : 'bg-gray-700 text-gray-200'
-                                }`}>
-                                    <span className="font-semibold">{pair.key}</span>: {pair.value}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                ))}
-            </div>
+// const TABLE_SIZE = 16;
+
+// const simpleHash = (key, size) => {
+//   let hash = 0;
+//   for (let i = 0; i < key.length; i++) {
+//     hash += key.charCodeAt(i);
+//   }
+//   return hash % size;
+// };
+
+const HashTableVisualization = () => {
+  const [hashTable, setHashTable] = React.useState(
+    Array.from({ length: TABLE_SIZE }, () => [])
+  );
+  const [keyInput, setKeyInput] = React.useState("");
+  const [valueInput, setValueInput] = React.useState("");
+  const [foundValue, setFoundValue] = React.useState(null);
+  const [operationInfo, setOperationInfo] = React.useState({ type: "", message: "" });
+  const [animatingIndex, setAnimatingIndex] = React.useState(null);
+
+  const handleInsert = () => {
+    if (!keyInput || !valueInput) return;
+
+    const index = simpleHash(keyInput, TABLE_SIZE);
+    const bucket = [...hashTable[index]];
+
+    const existing = bucket.find((pair) => pair.key === keyInput);
+    if (existing) {
+      setOperationInfo({ type: "error", message: `Key "${keyInput}" already exists!` });
+      setAnimatingIndex(index);
+      setTimeout(() => setAnimatingIndex(null), 1000);
+      return;
+    }
+
+    bucket.push({ key: keyInput, value: valueInput });
+    const newTable = [...hashTable];
+    newTable[index] = bucket;
+    setHashTable(newTable);
+    setOperationInfo({ type: "success", message: `Inserted key "${keyInput}"` });
+    setAnimatingIndex(index);
+    setTimeout(() => setAnimatingIndex(null), 1000);
+
+    setKeyInput("");
+    setValueInput("");
+  };
+
+  const handleSearch = () => {
+    if (!keyInput) return;
+    const index = simpleHash(keyInput, TABLE_SIZE);
+    const bucket = hashTable[index];
+    const found = bucket.find((pair) => pair.key === keyInput);
+    setFoundValue(found ? found.value : null);
+    setOperationInfo({
+      type: found ? "success" : "error",
+      message: found ? `Found key "${keyInput}"` : `Key "${keyInput}" not found`,
+    });
+    setAnimatingIndex(index);
+    setTimeout(() => setAnimatingIndex(null), 1000);
+  };
+
+  const handleDelete = () => {
+    if (!keyInput) return;
+    const index = simpleHash(keyInput, TABLE_SIZE);
+    const bucket = hashTable[index];
+    const found = bucket.find((pair) => pair.key === keyInput);
+    if (!found) {
+      setOperationInfo({ type: "error", message: `Key "${keyInput}" not found` });
+      setAnimatingIndex(index);
+      setTimeout(() => setAnimatingIndex(null), 1000);
+      return;
+    }
+
+    const newBucket = bucket.filter((pair) => pair.key !== keyInput);
+    const newTable = [...hashTable];
+    newTable[index] = newBucket;
+    setHashTable(newTable);
+    setOperationInfo({ type: "success", message: `Deleted key "${keyInput}"` });
+    setAnimatingIndex(index);
+    setTimeout(() => setAnimatingIndex(null), 1000);
+
+    setKeyInput("");
+    setValueInput("");
+    setFoundValue(null);
+  };
+
+  return (
+    <div className="p-6 bg-[#1a2233] rounded-xl border-2 border-blue-800">
+      <h3 className="text-2xl font-bold mb-6 text-center text-blue-300">
+        🔑 Interactive Hash Table
+      </h3>
+
+      {/* Controls */}
+      <div className="bg-gray-900/50 p-4 rounded-lg shadow-lg mb-6">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+          <input
+            type="text"
+            value={keyInput}
+            onChange={(e) => setKeyInput(e.target.value)}
+            placeholder="Enter Key"
+            className="px-4 py-2 w-full sm:w-auto border-2 border-gray-600 rounded-lg bg-gray-700 text-gray-200 focus:outline-none focus:border-blue-500 transition-colors"
+          />
+          <input
+            type="text"
+            value={valueInput}
+            onChange={(e) => setValueInput(e.target.value)}
+            placeholder="Enter Value"
+            className="px-4 py-2 w-full sm:w-auto border-2 border-gray-600 rounded-lg bg-gray-700 text-gray-200 focus:outline-none focus:border-blue-500 transition-colors"
+          />
+          <div className="flex gap-2">
+            <button
+              onClick={handleInsert}
+              className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transform hover:scale-105 shadow-lg text-sm"
+            >
+              Insert
+            </button>
+            <button
+              onClick={handleSearch}
+              className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 shadow-lg text-sm"
+            >
+              Search
+            </button>
+            <button
+              onClick={handleDelete}
+              className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transform hover:scale-105 shadow-lg text-sm"
+            >
+              Delete
+            </button>
+          </div>
         </div>
-    );
+      </div>
+
+      {/* Operation Info */}
+      <div
+        className={`p-3 rounded-lg mb-6 text-center font-medium ${
+          operationInfo.type === "success"
+            ? "bg-green-900/30 text-green-300"
+            : operationInfo.type === "error"
+            ? "bg-red-900/30 text-red-300"
+            : "bg-blue-900/30 text-blue-300"
+        }`}
+      >
+        {keyInput && `hash("${keyInput}") % ${TABLE_SIZE} = ${simpleHash(keyInput, TABLE_SIZE)}`}
+        <br />
+        {operationInfo.message} {foundValue && `-> Value: "${foundValue}"`}
+      </div>
+
+      {/* Hash Table Visualization */}
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+        {hashTable.map((bucket, index) => (
+          <div
+            key={index}
+            className={`p-2 rounded-lg border-2 transition-all duration-500 min-h-[120px] ${
+              animatingIndex === index ? "border-blue-500 scale-105 bg-blue-900/40 shadow-lg" : "border-gray-700 bg-gray-800"
+            }`}
+          >
+            <div className="text-center font-bold text-sm mb-2 pb-1 border-b-2 border-gray-700 text-blue-400">
+              Index {index}
+            </div>
+            <div className="space-y-1">
+              {bucket.map((pair, pairIndex) => (
+                <div
+                  key={pairIndex}
+                  className={`p-1 rounded text-xs text-center transition-all duration-300 ${
+                    animatingIndex === index && foundValue === pair.value
+                      ? "bg-green-500 text-white font-bold"
+                      : "bg-gray-700 text-gray-200"
+                  }`}
+                >
+                  <span className="font-semibold">{pair.key}</span>: {pair.value}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+
+
 
     return (
         <div className="min-h-screen bg-[#111827] text-gray-200">
