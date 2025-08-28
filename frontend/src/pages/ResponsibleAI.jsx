@@ -5,33 +5,33 @@ const rai = {
   category: "Fairness, Transparency, Safety",
   sections: {
     student_hook:
-      "Responsible AI ensures models help more than they harm—fair, explainable, safe, and compliant.",
+      "Responsible AI ensures systems help more than they harm—fair, explainable, safe, private, and compliant from design to deployment.",
     fairness: {
       concept:
-        "Bias can enter from data, modeling, or objectives. Fairness metrics (EO, DP, EOpp) quantify disparities; mitigation reduces them.",
+        "Bias arises from data, modeling choices, and objectives. Fairness metrics (EO, DP, EOpp) quantify disparities; mitigations (reweighing, constraints, post-processing) reduce them.",
       realWorldExample:
-        "Loan models audited for demographic parity ensure similar approval rates across groups (within legal bounds).",
-      industry_applications: ["🏦 Credit scoring","👔 Hiring","🏥 Healthcare triage","🚓 Public policy"],
-      advantages: ["⚖️ Equity goals","🔍 Measurable","🧰 Mitigation methods","📜 Compliance support"],
-      disadvantages: ["📏 Metric trade-offs","🧪 Data gaps","🔐 Sensitive attributes","⚖️ Legal nuance"],
+        "Loan models audited for demographic parity and equal opportunity ensure bounded disparities across protected groups (within legal and policy limits).",
+      industry_applications: ["🏦 Credit scoring","👔 Hiring","🏥 Healthcare triage","🚓 Public policy","🏫 Education"],
+      advantages: ["⚖️ Equity goals","🔍 Measurable","🧰 Mitigation methods","📜 Compliance support","🤝 Trust building"],
+      disadvantages: ["📏 Metric trade-offs","🧪 Data gaps","🔐 Sensitive attributes","⚖️ Legal nuance","🧮 Small group stats"],
     },
     explainability: {
       concept:
-        "Explainability builds trust via model cards, XAI (SHAP/LIME), interpretable models, and transparency reporting.",
+        "Explainability builds trust through model cards, XAI (SHAP/LIME), interpretable-by-design models, and transparency reporting integrated into the ML lifecycle.",
       realWorldExample:
-        "Clinicians review SHAP values explaining risk predictions before acting.",
-      industry_applications: ["🧬 Diagnostics","🧾 Auditing","📈 Finance","🛡️ Trust & safety"],
-      advantages: ["🔎 Insights","🛠️ Debuggability","🤝 Trust","📜 Accountability"],
-      disadvantages: ["🧮 Approximate methods","🧱 Complexity","🔐 Privacy concerns","🧪 Misuse risk"],
+        "Clinicians review SHAP values explaining risk predictions before acting and record rationale in the EHR.",
+      industry_applications: ["🧬 Diagnostics","🧾 Auditing","📈 Finance","🛡️ Trust & safety","🧭 RegTech"],
+      advantages: ["🔎 Insights","🛠️ Debuggability","🤝 Trust","📜 Accountability","🧭 Human oversight"],
+      disadvantages: ["🧮 Approximate methods","🧱 Complexity","🔐 Privacy concerns","🧪 Misuse risk","📈 Cognitive overload"],
     },
     governance: {
       concept:
-        "Governance sets policies: risk assessments, model cards, privacy (GDPR/DP), audit trails, and alignment with AI Acts.",
+        "Governance provides policies and controls: risk assessments, privacy (GDPR/DP), audit trails, model registries, and compliance with emerging AI acts and standards.",
       realWorldExample:
-        "A model registry enforces approvals, documentation, and monitoring before production.",
-      industry_applications: ["🏛️ Regulated industries","🏢 Enterprise platforms","☁️ Cloud ML","🧭 Public policy"],
-      advantages: ["📋 Standardization","🧭 Risk control","🧾 Traceability","🔁 Continuous monitoring"],
-      disadvantages: ["🧱 Bureaucracy","🐢 Slower rollout","💸 Cost","🔧 Tooling overlap"],
+        "A gated model registry enforces approvals, documentation, evaluations, and monitoring before production deployment.",
+      industry_applications: ["🏛️ Regulated industries","🏢 Enterprise platforms","☁️ Cloud ML","🧭 Public policy","🧾 Compliance ops"],
+      advantages: ["📋 Standardization","🧭 Risk control","🧾 Traceability","🔁 Continuous monitoring","🧮 Accountability"],
+      disadvantages: ["🧱 Bureaucracy","🐢 Slower rollout","💸 Cost","🔧 Tooling overlap","🧩 Process friction"],
     },
     code_examples: {
       python: `# SHAP example (conceptual)\nimport shap\nexplainer = shap.TreeExplainer(model)\nshap_values = explainer.shap_values(X)`,
@@ -43,13 +43,15 @@ const rai = {
     interview_questions: [
       { question: "EO vs DP vs EOpp?", difficulty: "Medium", answer: "EO: equal FPR/TPR; DP: equal positive rates; EOpp: equal TPR—choose per context/policy." },
       { question: "When to use SHAP vs LIME?", difficulty: "Medium", answer: "SHAP has strong theoretical grounding; LIME is simpler/local but less stable." },
+      { question: "Privacy by design?", difficulty: "Easy", answer: "Minimize data, protect with anonymization/DP, limit access, and document purposes." }
     ],
     project_ideas: [
       { title: "Fairness Dashboard", difficulty: "Beginner", description: "Compute metrics (DP/EO/EOpp) and visualize disparities.", technologies: ["Python","Plotly","Aequitas"] },
       { title: "Model Cards CI", difficulty: "Intermediate", description: "Generate model cards automatically in CI/CD.", technologies: ["Markdown","CI","Registry"] },
+      { title: "PII Scanner", difficulty: "Intermediate", description: "Detect and redact sensitive fields in logs and datasets.", technologies: ["Python","Regex","OpenDP"] }
     ],
   },
-  tools: ["SHAP","LIME","WhyLabs","Fiddler","Aequitas","Fairlearn"],
+  tools: ["SHAP","LIME","WhyLabs","Fiddler","Aequitas","Fairlearn","Evidently","OpenDP","What-If Tool","IBM AIF360"],
 };
 
 const highlightSyntax = (code, language) => {

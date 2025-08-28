@@ -5,33 +5,97 @@ const biz = {
   category: "Strategy, Product, Growth",
   sections: {
     student_hook:
-      "AI creates leverage. Start with ROI-backed use cases, build the right product, scale with data and systems.",
+      "AI is a force multiplier for revenue, margin, and speed. Start from measurable outcomes, pick the smallest viable use case, instrument everything, and scale what works across products, markets, and geographies.",
     value: {
       concept:
-        "Value strategy identifies ROI, decides buy vs build, and designs data moats and platform plays.",
+        "Value strategy quantifies ROI, prioritizes use cases, decides buy vs build, and designs durable advantages such as data moats, network effects, and platform plays aligned to the operating model.",
       realWorldExample:
-        "A SaaS adds an AI assistant increasing retention and upsells.",
-      industry_applications: ["💼 Sales assist","📞 Support automation","📈 Lead scoring","🧾 Document AI"],
-      advantages: ["💰 ROI focus","⚙️ Fast wins","📊 Metrics driven","🧭 Clear roadmap"],
-      disadvantages: ["🎯 Mis-scoping risk","🔗 Vendor lock-in","🧩 Data access","🧱 Change mgmt"],
+        "A B2B SaaS adds an AI sales copilot that drafts emails and follow-ups, lifting SDR productivity by 25% and increasing expansion revenue via targeted upsell prompts.",
+      industry_applications: [
+        "💼 Sales assist",
+        "📞 Support automation",
+        "📈 Lead scoring",
+        "🧾 Document AI",
+        "🧮 Revenue forecasting",
+        "🏭 Predictive maintenance",
+        "🤝 Procurement intelligence"
+      ],
+      advantages: [
+        "💰 ROI focus",
+        "⚙️ Fast wins",
+        "📊 Metrics driven",
+        "🧭 Clear roadmap",
+        "🧱 Defensible data",
+        "🔁 Compounding loops"
+      ],
+      disadvantages: [
+        "🎯 Mis-scoping risk",
+        "🔗 Vendor lock-in",
+        "🧩 Data access",
+        "🧱 Change mgmt",
+        "📏 Benefits attribution",
+        "🧪 Evaluation blind spots"
+      ],
     },
     product: {
       concept:
-        "Copilots, recommendations, and risk tools drive productivity and personalization.",
+        "Copilots, recommendations, risk intelligence, and decision support improve productivity and personalization when paired with quality data, feedback loops, and human-in-the-loop design.",
       realWorldExample:
-        "An e-commerce site boosts revenue via personalized bundles.",
-      industry_applications: ["🤖 Copilots","🎯 Personalization","🛡️ Risk","📦 Ops analytics"],
-      advantages: ["⚡ Productivity","🧠 Personalization","🛡️ Risk reduction","📈 Predictive ops"],
-      disadvantages: ["🧪 Eval difficulty","🔐 PII/Compliance","💸 Inference cost","🧱 Scalability"],
+        "An e-commerce marketplace ships individualized bundles and incentives, raising AOV by 8% and improving conversion on long-tail inventory.",
+      industry_applications: [
+        "🤖 Copilots",
+        "🎯 Personalization",
+        "🛡️ Risk",
+        "📦 Ops analytics",
+        "🔎 Search & retrieval",
+        "🖼️ Creative generation"
+      ],
+      advantages: [
+        "⚡ Productivity",
+        "🧠 Personalization",
+        "🛡️ Risk reduction",
+        "📈 Predictive ops",
+        "🔁 Learning systems",
+        "📣 Better CX"
+      ],
+      disadvantages: [
+        "🧪 Eval difficulty",
+        "🔐 PII/Compliance",
+        "💸 Inference cost",
+        "🧱 Scalability",
+        "🧮 Long-horizon impact",
+        "🔧 Integration debt"
+      ],
     },
     startup: {
       concept:
-        "Prototype quickly with LLMs/no-code, secure data partnerships, ensure unit economics and enterprise readiness.",
+        "Prototype quickly (LLMs/no-code), validate with paying users, negotiate data partnerships, and ensure unit economics and enterprise readiness (security, SSO, SOC2) before scaling.",
       realWorldExample:
-        "A startup ships an MVP with LLM APIs then migrates to finetuned models to reduce cost.",
-      industry_applications: ["🚀 MVPs","🤝 Partnerships","📉 Unit economics","🏢 Enterprise"],
-      advantages: ["⏱️ Speed","🧰 Flexibility","📈 Scale path","🤝 Trust"],
-      disadvantages: ["💸 Cost early","🔒 Security reviews","🧩 Vendor limits","🧪 Evaluation"],
+        "A startup ships an LLM-powered MVP in 4 weeks, proves value with 10 design partners, then migrates to fine-tuned models and vectorized caches to cut cost by 60%.",
+      industry_applications: [
+        "🚀 MVPs",
+        "🤝 Partnerships",
+        "📉 Unit economics",
+        "🏢 Enterprise",
+        "🧱 Data network effects",
+        "🧭 GTM playbooks"
+      ],
+      advantages: [
+        "⏱️ Speed",
+        "🧰 Flexibility",
+        "📈 Scale path",
+        "🤝 Trust",
+        "🔁 Fast iteration",
+        "🧪 Hypothesis testing"
+      ],
+      disadvantages: [
+        "💸 Cost early",
+        "🔒 Security reviews",
+        "🧩 Vendor limits",
+        "🧪 Evaluation",
+        "📉 Churn risk",
+        "🧱 Enterprise lift"
+      ],
     },
     code_examples: {
       javascript: `// ROI calc (simple)\nfunction roi(gain,cost){return (gain-cost)/cost;}`,
@@ -43,12 +107,23 @@ const biz = {
     interview_questions: [
       { question: "Buy vs build?", difficulty: "Medium", answer: "Consider time-to-value, differentiation, cost at scale, compliance, and team skills." },
       { question: "Measuring ROI?", difficulty: "Easy", answer: "A/B tests, uplift, productivity metrics, cost savings, CAC/LTV impact." },
+      { question: "How to price AI features?", difficulty: "Medium", answer: "Test willingness-to-pay via packaging experiments; consider usage-based pricing to align value and cost." },
+      { question: "What is a data moat?", difficulty: "Easy", answer: "Proprietary, high-signal data that improves models over time and is hard for competitors to replicate." }
     ],
     project_ideas: [
       { title: "AI Copilot MVP", difficulty: "Beginner", description: "Prototype an internal copilot for support tickets.", technologies: ["LLM API","RAG","Guardrails"] },
       { title: "Pricing Optimizer", difficulty: "Intermediate", description: "Elasticity-aware pricing with constrained optimization.", technologies: ["Python","NumPy","SciPy"] },
+      { title: "Lead Scoring Model", difficulty: "Intermediate", description: "Propensity scoring with uplift testing and lead routing.", technologies: ["scikit-learn","XGBoost","Airflow"] }
     ],
-    cases: ["Algorithmic trading","Manufacturing optimization","AI SaaS","Agentic workflows"],
+    cases: [
+      "Algorithmic trading",
+      "Manufacturing optimization",
+      "AI SaaS",
+      "Agentic workflows",
+      "Financial forecasting",
+      "Customer 360 & churn",
+      "Marketing content ops"
+    ],
   },
 };
 
