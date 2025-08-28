@@ -5,36 +5,36 @@ const ds = {
   category: "Insights, Forecasts, Decisions",
   sections: {
     student_hook:
-      "AI supercharges analytics: better features, better forecasts, and better business decisions.",
+      "AI amplifies analytics with automation, richer features, probabilistic forecasting, and causal inference—turning raw data into decisions that move KPIs.",
 
     analytics: {
       concept:
-        "From feature engineering to forecasting, supervised learning powers churn, propensity, and demand models.",
+        "From feature engineering to time-series forecasting, supervised learning powers churn, propensity, and demand models; causal methods help estimate uplift and optimize interventions.",
       realWorldExample:
-        "A telco reduces churn by predicting risk and triggering targeted offers.",
-      industry_applications: ["📈 Churn prediction", "🛒 Upsell propensity", "📦 Demand forecasting", "🧪 Causal uplift"],
-      advantages: ["🎯 Measurable impact", "🧮 Mature tooling", "🔁 Pipelines", "📊 Clear metrics"],
-      disadvantages: ["🧩 Leakage risk", "📉 Non-stationarity", "🔀 Data drift", "🧪 Selection bias"],
+        "A telco reduces churn by predicting risk and triggering targeted offers; impact validated via uplift modeling and holdout tests.",
+      industry_applications: ["📈 Churn prediction", "🛒 Upsell propensity", "📦 Demand forecasting", "🧪 Causal uplift", "💳 Fraud detection", "📣 Marketing attribution"],
+      advantages: ["🎯 Measurable impact", "🧮 Mature tooling", "🔁 Pipelines", "📊 Clear metrics", "🧪 Experimentation ready", "📈 Iterative improvement"],
+      disadvantages: ["🧩 Leakage risk", "📉 Non-stationarity", "🔀 Data drift", "🧪 Selection bias", "📏 Attribution noise", "🔐 PII constraints"],
     },
 
     platforms: {
       concept:
-        "Modern data platforms (lakehouse/warehouse) and big data engines enable large-scale ML and streaming.",
+        "Modern data platforms (lakehouse/warehouse) with batch/streaming engines enable large-scale ML, real-time features, and unified governance with lineage and data contracts.",
       realWorldExample:
-        "A retailer streams transactions to update real-time recommendations.",
-      industry_applications: ["☁️ Lakehouse ML", "⚡ Streaming inference", "📊 BI + ML", "🧱 Governance"],
-      advantages: ["🧮 Scale", "🔗 Integrations", "🧭 Observability", "🧰 ELT compatibility"],
-      disadvantages: ["💸 Cost", "🧱 Complexity", "🔐 Access controls", "🧹 Data quality"],
+        "A retailer streams transactions and inventory to update real-time recommendations and availability-aware pricing.",
+      industry_applications: ["☁️ Lakehouse ML", "⚡ Streaming inference", "📊 BI + ML", "🧱 Governance", "🧩 Feature stores", "🔗 Data sharing"],
+      advantages: ["🧮 Scale", "🔗 Integrations", "🧭 Observability", "🧰 ELT compatibility", "🧱 Lineage", "🔁 Reuse"],
+      disadvantages: ["💸 Cost", "🧱 Complexity", "🔐 Access controls", "🧹 Data quality", "🧰 Tool sprawl", "⏱️ Latency budgets"],
     },
 
     usecases: {
       concept:
-        "Common DS use cases combine ML with analytics to drive revenue, reduce cost, and manage risk.",
+        "Bread-and-butter DS use cases mix ML and analytics to drive revenue, reduce cost, and manage risk across customer, operations, and finance domains.",
       realWorldExample:
-        "Dynamic pricing balances conversion and margin using demand forecasts.",
-      industry_applications: ["💳 Fraud detection", "💲 Pricing", "📣 Marketing mix", "👥 Segmentation"],
-      advantages: ["💰 ROI-focused", "🔁 Iterative", "📈 KPI-driven", "🧩 Cross-functional"],
-      disadvantages: ["📏 Attribution issues", "🧪 Confounding", "🔀 Changing markets", "📉 Data lags"],
+        "Dynamic pricing balances conversion and margin using demand forecasts and inventory constraints.",
+      industry_applications: ["💳 Fraud detection", "💲 Pricing", "📣 Marketing mix", "👥 Segmentation", "🏭 Supply forecasting", "🧾 Cash flow risk"],
+      advantages: ["💰 ROI-focused", "🔁 Iterative", "📈 KPI-driven", "🧩 Cross-functional", "🧠 Decision support", "🧮 Scenario planning"],
+      disadvantages: ["📏 Attribution issues", "🧪 Confounding", "🔀 Changing markets", "📉 Data lags", "🧩 Data silos", "🔐 Privacy limits"],
     },
 
     code_examples: {
@@ -48,14 +48,17 @@ const ds = {
     interview_questions: [
       { question: "Prevent leakage how?", difficulty: "Medium", answer: "Separation in time, proper folds, pipeline transforms inside CV, no target info in features." },
       { question: "When forecast vs classify?", difficulty: "Medium", answer: "Forecast continuous quantities; classify binary/multi-class outcomes; sometimes reframe appropriately." },
+      { question: "Causal vs predictive?", difficulty: "Medium", answer: "Predictive targets accuracy on outcomes; causal targets effect estimation under interventions—use RCTs or quasi-experiments." },
+      { question: "Handle drift?", difficulty: "Easy", answer: "Monitor input/score distributions and performance; retrain on schedule or triggers; use robust features." }
     ],
 
     project_ideas: [
       { title: "Churn Dashboard", difficulty: "Beginner", description: "End-to-end churn pipeline with model + BI.", technologies: ["pandas","sklearn","Dash"] },
       { title: "Demand Forecaster", difficulty: "Intermediate", description: "Hierarchical forecasts with evaluation and MAPE.", technologies: ["statsmodels","prophet"] },
+      { title: "Marketing Uplift", difficulty: "Intermediate", description: "Two-model uplift with policy evaluation.", technologies: ["pandas","xgboost","EconML"] }
     ],
   },
-  tools: ["pandas", "scikit-learn", "XGBoost", "Spark MLlib", "dbt", "Airflow"],
+  tools: ["pandas", "scikit-learn", "XGBoost", "Spark MLlib", "dbt", "Airflow", "Polars", "DuckDB", "Great Expectations", "Evidently"],
 };
 
 const highlightSyntax = (code, language) => {

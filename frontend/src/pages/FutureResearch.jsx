@@ -5,33 +5,33 @@ const future = {
   category: "Beyond Today's Deep Learning",
   sections: {
     student_hook:
-      "What comes after current deep learning? New compute, better reasoning, agentic systems, and safer alignment.",
+      "Beyond today's deep learning lies new compute, richer world models, tool-using agents, and safer alignment—unlocking scientific discovery and more capable systems.",
     compute: {
       concept:
-        "Neuromorphic, quantum, efficient accelerators, and analog/in-memory promise new capabilities and efficiency.",
+        "Neuromorphic chips, quantum kernels, efficient accelerators, and analog/in-memory computing promise step-changes in capability, energy, and latency across cloud and edge.",
       realWorldExample:
-        "Analog accelerators perform matrix ops with far less energy.",
-      industry_applications: ["⚡ Low-power edge","🧮 Faster training","🧱 Scaling limits","🔋 Efficiency"],
-      advantages: ["🔋 Energy savings","⚡ Throughput","🧩 New paradigms","🧱 Unlock scaling"],
-      disadvantages: ["🔧 Hardware maturity","🧪 Programming models","🧰 Tooling gaps","📐 Precision limits"],
+        "Analog accelerators perform matrix ops with orders-of-magnitude less energy; neuromorphic sensors enable always-on edge AI.",
+      industry_applications: ["⚡ Low-power edge","🧮 Faster training","🧱 Scaling limits","🔋 Efficiency","📶 On-device AI"],
+      advantages: ["🔋 Energy savings","⚡ Throughput","🧩 New paradigms","🧱 Unlock scaling","📉 Cost per token"],
+      disadvantages: ["🔧 Hardware maturity","🧪 Programming models","🧰 Tooling gaps","📐 Precision limits","🧵 Vendor fragmentation"],
     },
     reasoning: {
       concept:
-        "World models, planning, tool-use, program synthesis, and multi-agent systems aim at stronger reasoning.",
+        "World models, search/planning, program synthesis, and multi-agent cooperation improve long-horizon reasoning, tool use, and robust decision-making.",
       realWorldExample:
-        "Agents plan with tools (search, code) to solve multi-step tasks.",
-      industry_applications: ["🤖 Agents","🧠 Planning","🛠️ Tool-use","🧩 Program synthesis"],
-      advantages: ["🧠 Better generalization","🧭 Long-horizon","🧰 Compositionality","🔗 External tools"],
-      disadvantages: ["🧪 Eval challenges","🧮 Complexity","🧱 Reliability","🔍 Verification"],
+        "Agents plan with tools (search, code, simulators) to solve multi-step tasks with self-reflection and memory.",
+      industry_applications: ["🤖 Agents","🧠 Planning","🛠️ Tool-use","🧩 Program synthesis","🔎 Scientific discovery"],
+      advantages: ["🧠 Better generalization","🧭 Long-horizon","🧰 Compositionality","🔗 External tools","🧮 Sample efficiency"],
+      disadvantages: ["🧪 Eval challenges","🧮 Complexity","🧱 Reliability","🔍 Verification","🧰 Prompt brittleness"],
     },
     safety: {
       concept:
-        "RLHF, constitutional AI, oversight, and governance shape safe AI. Science discovery accelerates with AI.",
+        "RLHF, constitutional AI, scalable oversight, interpretability, and governance aim to reduce harm, improve robustness, and ensure beneficial deployment.",
       realWorldExample:
-        "Constitutional principles reduce unsafe outputs without human labels.",
-      industry_applications: ["🛡️ Safety","📜 Policy","🧬 Science","🤝 Governance"],
-      advantages: ["🛡️ Safer models","📜 Accountability","🔬 Discovery","🤝 Coordination"],
-      disadvantages: ["⚖️ Trade-offs","🧪 Eval difficulty","🧱 Enforcement","🌐 Global alignment"],
+        "Constitutional principles steer models away from unsafe outputs; oversight systems escalate ambiguous cases to humans.",
+      industry_applications: ["🛡️ Safety","📜 Policy","🧬 Science","🤝 Governance","🧾 Compliance"],
+      advantages: ["🛡️ Safer models","📜 Accountability","🔬 Discovery","🤝 Coordination","🧭 Public trust"],
+      disadvantages: ["⚖️ Trade-offs","🧪 Eval difficulty","🧱 Enforcement","🌐 Global alignment","🧮 Cost of oversight"],
     },
     code_examples: {
       python: `# Quantum kernel (conceptual)\n# map data to Hilbert space; compute kernel`,
@@ -43,10 +43,12 @@ const future = {
     interview_questions: [
       { question: "Why world models?", difficulty: "Medium", answer: "They capture dynamics enabling planning and sample efficiency." },
       { question: "Frontier risks?", difficulty: "Hard", answer: "Scalable oversight, misuse, economic shifts; requires policy and technical solutions." },
+      { question: "Why neuromorphic?", difficulty: "Medium", answer: "Spiking architectures promise ultra-low-power inference and always-on sensing at the edge." }
     ],
     project_ideas: [
       { title: "Tool-using Agent", difficulty: "Intermediate", description: "Agent that calls tools (search/code) to solve tasks.", technologies: ["LLM API","Planning","Tools"] },
       { title: "Quantum-inspired Kernel", difficulty: "Advanced", description: "Prototype kernel features for small problems.", technologies: ["Python","NumPy"] },
+      { title: "World Model Toy", difficulty: "Intermediate", description: "Learn simple dynamics and plan with MPC.", technologies: ["PyTorch","Gymnasium"] }
     ],
   },
 };

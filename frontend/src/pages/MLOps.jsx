@@ -5,36 +5,36 @@ const mlops = {
   category: "Data, Training, Serving",
   sections: {
     student_hook:
-      "MLOps turns models into products: reproducible data, reliable training, safe serving, and continuous improvement.",
+      "MLOps is the discipline that turns notebooks into products: reproducible data, reliable training, safe serving, and continuous improvement with monitoring and automation.",
 
     data: {
       concept:
-        "Manage datasets with lineage, versioning, and governance. Features are shared via feature stores.",
+        "Manage datasets with lineage, versioning, contracts, and governance. Share reliable features via feature stores and enforce quality gates pre-training.",
       realWorldExample:
-        "Anomaly is traced to a specific dataset version; rollback and re-train are automatic.",
-      industry_applications: ["📦 Feature stores", "🧾 Compliance", "🔐 PII handling", "🧪 Data contracts"],
-      advantages: ["🧭 Reproducibility", "🧩 Reuse", "🧱 Strong governance", "📊 Observability"],
-      disadvantages: ["⚙️ Infra overhead", "🧮 Storage costs", "🔗 Integration complexity", "🧱 Policy friction"],
+        "A performance drop is traced to a dataset version with schema drift; automatic rollback and retrain restore KPIs.",
+      industry_applications: ["📦 Feature stores", "🧾 Compliance", "🔐 PII handling", "🧪 Data contracts", "🧰 Data quality checks", "🔗 Lineage tracking"],
+      advantages: ["🧭 Reproducibility", "🧩 Reuse", "🧱 Strong governance", "📊 Observability", "🧹 Better data hygiene", "🔁 Faster onboarding"],
+      disadvantages: ["⚙️ Infra overhead", "🧮 Storage costs", "🔗 Integration complexity", "🧱 Policy friction", "🧰 Tool fragmentation", "⏱️ Latency trade-offs"],
     },
 
     training: {
       concept:
-        "Track experiments (params, metrics, artifacts). Scale with schedulers and distributed training.",
+        "Track experiments (params, metrics, artifacts), manage datasets and model versions, and scale with schedulers and distributed training on GPUs/TPUs with cost controls.",
       realWorldExample:
-        "Auto-tuning finds optimal hyperparameters with early stopping to save cost.",
-      industry_applications: ["🧪 Exp tracking", "⚡ Schedulers", "☁️ Distributed", "💸 Cost control"],
-      advantages: ["📈 Faster iteration", "🧰 Rich metadata", "🧮 Scale-out", "🧪 Reproducible"],
-      disadvantages: ["🔧 Setup complexity", "🧱 Vendor lock-in", "💸 Cost spikes", "🧹 Artifact sprawl"],
+        "Auto-tuning finds optimal hyperparameters with early stopping and spot instances to reduce cost by 40%.",
+      industry_applications: ["🧪 Exp tracking", "⚡ Schedulers", "☁️ Distributed", "💸 Cost control", "🧱 Model registry", "🔁 CT (continuous training)"],
+      advantages: ["📈 Faster iteration", "🧰 Rich metadata", "🧮 Scale-out", "🧪 Reproducible", "🔁 Rollback/compare", "🧭 Auditable"],
+      disadvantages: ["🔧 Setup complexity", "🧱 Vendor lock-in", "💸 Cost spikes", "🧹 Artifact sprawl", "🧰 Pipeline brittleness", "📦 Dependency hell"],
     },
 
     serving: {
       concept:
-        "Batch and online serving with A/B/canary. Monitor drift, performance, and bias; automate feedback loops.",
+        "Batch and online serving with A/B/canary; scale autoserved endpoints; monitor drift, latency, cost, and bias; close the loop with feedback and auto-retraining.",
       realWorldExample:
-        "Shadow deployments validate new models without impacting users before canary rollout.",
-      industry_applications: ["🚀 Online inference", "📦 Batch scoring", "📊 Monitoring", "🔁 CT/CA"],
-      advantages: ["🧪 Safer rollouts", "📉 Measured impact", "🛡️ Guardrails", "🔁 Auto-retrain"],
-      disadvantages: ["📈 Metric noise", "🧰 Tool sprawl", "🧮 Latency budgets", "🔐 Access controls"],
+        "Shadow deployments validate new models against production before canary; automatic rollback triggers on metric regression.",
+      industry_applications: ["🚀 Online inference", "📦 Batch scoring", "📊 Monitoring", "🔁 CT/CA", "🧭 Feature logging", "🛡️ Safety filters"],
+      advantages: ["🧪 Safer rollouts", "📉 Measured impact", "🛡️ Guardrails", "🔁 Auto-retrain", "⚡ Elastic scaling", "💸 Cost visibility"],
+      disadvantages: ["📈 Metric noise", "🧰 Tool sprawl", "🧮 Latency budgets", "🔐 Access controls", "🔁 Feedback loops complexity", "🧱 Multi-region ops"],
     },
 
     code_examples: {
@@ -48,14 +48,17 @@ const mlops = {
     interview_questions: [
       { question: "Shadow vs canary?", difficulty: "Easy", answer: "Shadow mirrors traffic without affecting users; canary serves a fraction of live traffic." },
       { question: "Monitor model drift how?", difficulty: "Medium", answer: "Track input/score distributions, PSI/KS tests, performance decay, alert thresholds." },
+      { question: "What belongs in a model card?", difficulty: "Easy", answer: "Intended use, training data, metrics, ethical considerations, limitations, and evaluation context." },
+      { question: "Blue/green vs canary?", difficulty: "Medium", answer: "Blue/green swaps 100% traffic between two environments; canary shifts gradually based on health metrics." }
     ],
 
     project_ideas: [
       { title: "Experiment Tracker", difficulty: "Beginner", description: "Log params/metrics and compare runs.", technologies: ["MLflow","Weights & Biases"] },
       { title: "Canary Deployer", difficulty: "Intermediate", description: "Automate canary with rollback on metric regression.", technologies: ["Kubernetes","Istio"] },
+      { title: "Drift Monitor", difficulty: "Intermediate", description: "Monitor PSI/KS with alerts and dashboards.", technologies: ["Evidently","Prometheus","Grafana"] }
     ],
   },
-  tools: ["MLflow", "Weights & Biases", "Kubeflow", "Ray", "SageMaker", "Vertex AI"],
+  tools: ["MLflow", "Weights & Biases", "Kubeflow", "Ray", "SageMaker", "Vertex AI", "Argo", "Airflow", "Feast", "Kafka", "KServe", "Seldon", "Prometheus", "Grafana"],
 };
 
 const highlightSyntax = (code, language) => {
