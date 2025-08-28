@@ -47,6 +47,21 @@ import Tree from './Tree'
 
 import Graph from './Grap';
 import { Import } from 'lucide-react';
+// Cybersecurity pages
+import WhatIsCybersecurity from './WhatIsCybersecurity';
+import CyberIndustrialApplications from './CyberIndustrialApplications';
+import CybersecurityRoadmap from './CybersecurityRoadmap';
+import NetworkSecurity from './NetworkSecurity';
+import ApplicationSecurity from './ApplicationSecurity';
+import Cryptography from './Cryptography';
+import EthicalHacking from './EthicalHacking';
+import IncidentResponse from './IncidentResponse';
+import CloudSecurity from './CloudSecurity';
+import IAM from './IAM';
+import SecurityTools from './SecurityTools';
+import Compliance from './Compliance';
+import SecurityArchitecture from './SecurityArchitecture';
+import FutureCybersecurity from './FutureCybersecurity';
 
 const dataMapping = {
   dsa: dsaData,
@@ -123,6 +138,49 @@ case 'hashTable':
       break;
     case 'graph':
       if (domain === 'dsa') return <Graph />;
+      break;
+    // Cybersecurity custom pages
+    case 'what-is-cybersecurity':
+      if (domain === 'cybersecurity') return <WhatIsCybersecurity concept={concept} domain={domain} domainData={domainData} />;
+      break;
+    case 'industrial-applications':
+      if (domain === 'cybersecurity') return <CyberIndustrialApplications concept={concept} domain={domain} domainData={domainData} />;
+      break;
+    case 'cybersecurity-roadmap':
+      if (domain === 'cybersecurity') return <CybersecurityRoadmap concept={concept} domain={domain} domainData={domainData} />;
+      break;
+    case 'network-security':
+      if (domain === 'cybersecurity') return <NetworkSecurity concept={concept} domain={domain} domainData={domainData} />;
+      break;
+    case 'application-security':
+      if (domain === 'cybersecurity') return <ApplicationSecurity concept={concept} domain={domain} domainData={domainData} />;
+      break;
+    case 'cryptography':
+      if (domain === 'cybersecurity') return <Cryptography concept={concept} domain={domain} domainData={domainData} />;
+      break;
+    case 'ethical-hacking':
+      if (domain === 'cybersecurity') return <EthicalHacking concept={concept} domain={domain} domainData={domainData} />;
+      break;
+    case 'incident-response':
+      if (domain === 'cybersecurity') return <IncidentResponse concept={concept} domain={domain} domainData={domainData} />;
+      break;
+    case 'cloud-security':
+      if (domain === 'cybersecurity') return <CloudSecurity concept={concept} domain={domain} domainData={domainData} />;
+      break;
+    case 'identity-access':
+      if (domain === 'cybersecurity') return <IAM concept={concept} domain={domain} domainData={domainData} />;
+      break;
+    case 'security-tools':
+      if (domain === 'cybersecurity') return <SecurityTools concept={concept} domain={domain} domainData={domainData} />;
+      break;
+    case 'compliance':
+      if (domain === 'cybersecurity') return <Compliance concept={concept} domain={domain} domainData={domainData} />;
+      break;
+    case 'security-architecture':
+      if (domain === 'cybersecurity') return <SecurityArchitecture concept={concept} domain={domain} domainData={domainData} />;
+      break;
+    case 'future-cybersecurity':
+      if (domain === 'cybersecurity') return <FutureCybersecurity concept={concept} domain={domain} domainData={domainData} />;
       break;
     case 'what-is-ai-ml':
       if (domain === 'aiml') return <WhatIsAIML />
